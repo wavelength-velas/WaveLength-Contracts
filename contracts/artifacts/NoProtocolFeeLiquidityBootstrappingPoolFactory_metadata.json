@@ -1,0 +1,266 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "contract IVault",
+						"name": "vault",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [],
+				"name": "FactoryDisabled",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "pool",
+						"type": "address"
+					}
+				],
+				"name": "PoolCreated",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "symbol",
+						"type": "string"
+					},
+					{
+						"internalType": "contract IERC20[]",
+						"name": "tokens",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "weights",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "swapFeePercentage",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "swapEnabledOnStart",
+						"type": "bool"
+					}
+				],
+				"name": "create",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "disable",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes4",
+						"name": "selector",
+						"type": "bytes4"
+					}
+				],
+				"name": "getActionId",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getCreationCode",
+				"outputs": [
+					{
+						"internalType": "bytes",
+						"name": "",
+						"type": "bytes"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getCreationCodeContracts",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "contractA",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "contractB",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getPauseConfiguration",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "pauseWindowDuration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bufferPeriodDuration",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getVault",
+				"outputs": [
+					{
+						"internalType": "contract IVault",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "isDisabled",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "pool",
+						"type": "address"
+					}
+				],
+				"name": "isPoolFromFactory",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"create(string,string,address[],uint256[],uint256,address,bool)": {
+					"details": "Deploys a new `NoProtocolFeeLiquidityBootstrappingPool`."
+				},
+				"getActionId(bytes4)": {
+					"details": "Returns the action identifier associated with the external function described by `selector`."
+				},
+				"getCreationCode()": {
+					"details": "Returns the creation code of the contract this factory creates."
+				},
+				"getCreationCodeContracts()": {
+					"details": "Returns the two addresses where the creation code of the contract crated by this factory is stored."
+				},
+				"getPauseConfiguration()": {
+					"details": "Returns the current `TemporarilyPausable` configuration that will be applied to Pools created by this factory. `pauseWindowDuration` will decrease over time until it reaches zero, at which point both it and `bufferPeriodDuration` will be zero forever, meaning deployed Pools will not be pausable."
+				},
+				"getVault()": {
+					"details": "Returns the Vault's address."
+				},
+				"isPoolFromFactory(address)": {
+					"details": "Returns true if `pool` was created by this factory."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/NoProtocolFeeLiquidityBootstrappingPoolFactory.sol": "NoProtocolFeeLiquidityBootstrappingPoolFactory"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/NoProtocolFeeLiquidityBootstrappingPoolFactory.sol": {
+			"keccak256": "0xf7d653f766e0c3e564f45bab629066b8d255570d61e01c3a046418ad27c249b4",
+			"urls": [
+				"bzz-raw://4a7bb57f05136be0fa4e231afa0fcef6084671485489d742b795d67b89365cf9",
+				"dweb:/ipfs/Qmd1EJ6SfMiK9wi2NkeBrHwwqdsenDaCAVgtXf7fR28Z5V"
+			]
+		}
+	},
+	"version": 1
+}

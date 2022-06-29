@@ -1,0 +1,46 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"details": "This library provides functions to help manipulating samples for Pool Price Oracles. It handles updates, encoding, and decoding of samples. Each sample holds the timestamp of its last update, plus information about three pieces of data: the price pair, the price of BPT (the associated Pool token), and the invariant. Prices and invariant are not stored directly: instead, we store their logarithm. These are known as the 'instant' values: the exact value at that timestamp. Additionally, for each value we keep an accumulator with the sum of all past values, each weighted by the time elapsed since the previous update. This lets us later subtract accumulators at different points in time and divide by the time elapsed between them, arriving at the geometric mean of the values (also known as log-average). All samples are stored in a single 256 bit word with the following structure: [    log pair price     |        bpt price      |       invariant       ] [ instant | accumulator | instant | accumulator | instant | accumulator |  timestamp ] [  int22  |    int53    |  int22  |    int53    |  int22  |    int53    |    uint31  ] MSB                                                                                LSB Assuming the timestamp doesn't overflow (which holds until the year 2038), the largest elapsed time is 2^31, which means the largest possible accumulator value is 2^21 * 2^31, which can be represented using a signed 53 bit integer.",
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/WeightedPool2TokensFactory.sol": "Samples"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/WeightedPool2TokensFactory.sol": {
+			"keccak256": "0xe231741eeab56bb41a4e9b9fa79cecb39a55bb27cd6d519e345dfc162d972bfd",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://7c3c554377b0c371432a9ba54f0ebb832682e24c043d5a3723397708faff449d",
+				"dweb:/ipfs/QmQNbWzfhFHf3tjTxNCkVAoFXu1aDQsHrVi1T5RG7tLX7m"
+			]
+		}
+	},
+	"version": 1
+}

@@ -1,0 +1,243 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastChangeBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "protocolSwapFeePercentage",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes",
+						"name": "userData",
+						"type": "bytes"
+					}
+				],
+				"name": "onExitPool",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "amountsOut",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "dueProtocolFeeAmounts",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastChangeBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "protocolSwapFeePercentage",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes",
+						"name": "userData",
+						"type": "bytes"
+					}
+				],
+				"name": "onJoinPool",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "amountsIn",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "dueProtocolFeeAmounts",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "enum IVault.SwapKind",
+								"name": "kind",
+								"type": "uint8"
+							},
+							{
+								"internalType": "contract IERC20",
+								"name": "tokenIn",
+								"type": "address"
+							},
+							{
+								"internalType": "contract IERC20",
+								"name": "tokenOut",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "poolId",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "uint256",
+								"name": "lastChangeBlock",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "from",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "to",
+								"type": "address"
+							},
+							{
+								"internalType": "bytes",
+								"name": "userData",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct IPoolSwapStructs.SwapRequest",
+						"name": "swapRequest",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "indexIn",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "indexOut",
+						"type": "uint256"
+					}
+				],
+				"name": "onSwap",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "IPools with the General specialization setting should implement this interface. This is called by the Vault when a user calls `IVault.swap` or `IVault.batchSwap` to swap with this Pool. Returns the number of tokens the Pool will grant to the user in a 'given in' swap, or that the user will grant to the pool in a 'given out' swap. This can often be implemented by a `view` function, since many pricing algorithms don't need to track state changes in swaps. However, contracts implementing this in non-view functions should check that the caller is indeed the Vault.",
+			"kind": "dev",
+			"methods": {
+				"onExitPool(bytes32,address,address,uint256[],uint256,uint256,bytes)": {
+					"details": "Called by the Vault when a user calls `IVault.exitPool` to remove liquidity from this Pool. Returns how many tokens the Vault should deduct from the Pool's balances, as well as the amount of protocol fees the Pool owes to the Vault. The Vault will then take tokens from the Pool's balances and send them to `recipient`, as well as collect the reported amount in protocol fees, which the Pool should calculate based on `protocolSwapFeePercentage`. Protocol fees are charged on exit events to guarantee that users exiting the Pool have paid their share. `sender` is the account performing the exit (typically the pool shareholder), and `recipient` is the account to which the Vault will send the proceeds. `currentBalances` contains the total token balances for each token the Pool registered in the Vault, in the same order that `IVault.getPoolTokens` would return. `lastChangeBlock` is the last block in which *any* of the Pool's registered tokens last changed its total balance. `userData` contains any pool-specific instructions needed to perform the calculations, such as the type of exit (e.g., proportional given an amount of pool shares, single-asset, multi-asset, etc.) Contracts implementing this function should check that the caller is indeed the Vault before performing any state-changing operations, such as burning pool shares."
+				},
+				"onJoinPool(bytes32,address,address,uint256[],uint256,uint256,bytes)": {
+					"details": "Called by the Vault when a user calls `IVault.joinPool` to add liquidity to this Pool. Returns how many of each registered token the user should provide, as well as the amount of protocol fees the Pool owes to the Vault. The Vault will then take tokens from `sender` and add them to the Pool's balances, as well as collect the reported amount in protocol fees, which the pool should calculate based on `protocolSwapFeePercentage`. Protocol fees are reported and charged on join events so that the Pool is free of debt whenever new users join. `sender` is the account performing the join (from which tokens will be withdrawn), and `recipient` is the account designated to receive any benefits (typically pool shares). `currentBalances` contains the total balances for each token the Pool registered in the Vault, in the same order that `IVault.getPoolTokens` would return. `lastChangeBlock` is the last block in which *any* of the Pool's registered tokens last changed its total balance. `userData` contains any pool-specific instructions needed to perform the calculations, such as the type of join (e.g., proportional given an amount of pool shares, single-asset, multi-asset, etc.) Contracts implementing this function should check that the caller is indeed the Vault before performing any state-changing operations, such as minting pool shares."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Vault.sol": "IGeneralPool"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Vault.sol": {
+			"keccak256": "0x220cae9151436fac748594c76906636400f6188aa266151f985158b587cccf52",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f7f88b33f55d69db00010f6c0fb18b2da6ef7f701218a0f3ed8ed7be46f37fca",
+				"dweb:/ipfs/QmcmhVEpqEsKbxnhVhTTeY2PS1jEjkSNDX7Hmysg6yWAkD"
+			]
+		}
+	},
+	"version": 1
+}

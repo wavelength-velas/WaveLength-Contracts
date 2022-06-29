@@ -1,0 +1,78 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "contract IERC20[]",
+						"name": "tokens",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "amounts",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "feeAmounts",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "bytes",
+						"name": "userData",
+						"type": "bytes"
+					}
+				],
+				"name": "receiveFlashLoan",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"receiveFlashLoan(address[],uint256[],uint256[],bytes)": {
+					"details": "When `flashLoan` is called on the Vault, it invokes the `receiveFlashLoan` hook on the recipient. At the time of the call, the Vault will have transferred `amounts` for `tokens` to the recipient. Before this call returns, the recipient must have transferred `amounts` plus `feeAmounts` for each token back to the Vault, or else the entire flash loan will revert. `userData` is the same value passed in the `IVault.flashLoan` call."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Vault.sol": "IFlashLoanRecipient"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Vault.sol": {
+			"keccak256": "0x220cae9151436fac748594c76906636400f6188aa266151f985158b587cccf52",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f7f88b33f55d69db00010f6c0fb18b2da6ef7f701218a0f3ed8ed7be46f37fca",
+				"dweb:/ipfs/QmcmhVEpqEsKbxnhVhTTeY2PS1jEjkSNDX7Hmysg6yWAkD"
+			]
+		}
+	},
+	"version": 1
+}

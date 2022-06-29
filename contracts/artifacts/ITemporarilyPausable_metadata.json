@@ -1,0 +1,92 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "paused",
+						"type": "bool"
+					}
+				],
+				"name": "PausedStateChanged",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "getPausedState",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "paused",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "pauseWindowEndTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bufferPeriodEndTime",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "Interface for the TemporarilyPausable helper.",
+			"events": {
+				"PausedStateChanged(bool)": {
+					"details": "Emitted every time the pause state changes by `_setPaused`."
+				}
+			},
+			"kind": "dev",
+			"methods": {
+				"getPausedState()": {
+					"details": "Returns the current paused state."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Vault.sol": "ITemporarilyPausable"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Vault.sol": {
+			"keccak256": "0x220cae9151436fac748594c76906636400f6188aa266151f985158b587cccf52",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f7f88b33f55d69db00010f6c0fb18b2da6ef7f701218a0f3ed8ed7be46f37fca",
+				"dweb:/ipfs/QmcmhVEpqEsKbxnhVhTTeY2PS1jEjkSNDX7Hmysg6yWAkD"
+			]
+		}
+	},
+	"version": 1
+}

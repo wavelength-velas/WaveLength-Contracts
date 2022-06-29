@@ -1,0 +1,47 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"author": "Fernando Martinelli - @fernandomartinelliSergio Yuhjtman - @sergioyuhjtmanDaniel Fernandez - @dmf7z",
+			"details": "Exponentiation and logarithm functions for 18 decimal fixed point numbers (both base and exponent/argument). Exponentiation and logarithm with arbitrary bases (x^y and log_x(y)) are implemented by conversion to natural exponentiation and logarithm (where the base is Euler's number).",
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Vault.sol": "LogExpMath"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Vault.sol": {
+			"keccak256": "0x220cae9151436fac748594c76906636400f6188aa266151f985158b587cccf52",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f7f88b33f55d69db00010f6c0fb18b2da6ef7f701218a0f3ed8ed7be46f37fca",
+				"dweb:/ipfs/QmcmhVEpqEsKbxnhVhTTeY2PS1jEjkSNDX7Hmysg6yWAkD"
+			]
+		}
+	},
+	"version": 1
+}

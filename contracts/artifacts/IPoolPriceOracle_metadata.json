@@ -1,0 +1,114 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "getSample",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "logPairPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "accLogPairPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "logBptPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "accLogBptPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "logInvariant",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "accLogInvariant",
+						"type": "int256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getTotalSamples",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"getSample(uint256)": {
+					"details": "Returns the raw data of the sample at `index`."
+				},
+				"getTotalSamples()": {
+					"details": "Returns the total number of samples."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/NoProtocolFeeLiquidityBootstrappingPoolFactory.sol": "IPoolPriceOracle"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/NoProtocolFeeLiquidityBootstrappingPoolFactory.sol": {
+			"keccak256": "0xf7d653f766e0c3e564f45bab629066b8d255570d61e01c3a046418ad27c249b4",
+			"urls": [
+				"bzz-raw://4a7bb57f05136be0fa4e231afa0fcef6084671485489d742b795d67b89365cf9",
+				"dweb:/ipfs/Qmd1EJ6SfMiK9wi2NkeBrHwwqdsenDaCAVgtXf7fR28Z5V"
+			]
+		}
+	},
+	"version": 1
+}

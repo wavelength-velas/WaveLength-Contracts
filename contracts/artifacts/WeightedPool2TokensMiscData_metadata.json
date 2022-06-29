@@ -1,0 +1,46 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"details": "This module provides an interface to store seemingly unrelated pieces of information, in particular used by Weighted Pools of 2 tokens with a price oracle. These pieces of information are all kept together in a single storage slot to reduce the number of storage reads. In particular, we not only store configuration values (such as the swap fee percentage), but also cache reduced-precision versions of the total BPT supply and invariant, which lets us not access nor compute these values when producing oracle updates during a swap. Data is stored with the following structure: [ swap fee pct | oracle enabled | oracle index | oracle sample initial timestamp | log supply | log invariant ] [    uint64    |      bool      |    uint10    |              uint31             |    int22   |     int22     ] Note that we are not using the most-significant 106 bits.",
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/WeightedPool2TokensFactory.sol": "WeightedPool2TokensMiscData"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/WeightedPool2TokensFactory.sol": {
+			"keccak256": "0xe231741eeab56bb41a4e9b9fa79cecb39a55bb27cd6d519e345dfc162d972bfd",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://7c3c554377b0c371432a9ba54f0ebb832682e24c043d5a3723397708faff449d",
+				"dweb:/ipfs/QmQNbWzfhFHf3tjTxNCkVAoFXu1aDQsHrVi1T5RG7tLX7m"
+			]
+		}
+	},
+	"version": 1
+}

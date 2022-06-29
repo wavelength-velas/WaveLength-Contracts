@@ -1,0 +1,809 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "contract Timelock",
+						"name": "_timelock",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_masterChef",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "admin",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "stagingAdmin",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "role",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "previousAdminRole",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "newAdminRole",
+						"type": "bytes32"
+					}
+				],
+				"name": "RoleAdminChanged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "role",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					}
+				],
+				"name": "RoleGranted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "role",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					}
+				],
+				"name": "RoleRevoked",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "COMMIT_ROLE",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "DEFAULT_ADMIN_ROLE",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "STAGE_ROLE",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "acceptTimelockAdmin",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "target",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "signature",
+						"type": "string"
+					},
+					{
+						"internalType": "bytes",
+						"name": "data",
+						"type": "bytes"
+					},
+					{
+						"internalType": "uint256",
+						"name": "eta",
+						"type": "uint256"
+					}
+				],
+				"name": "cancelTransaction",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "beetsPerBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "eta",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum MasterChefOperator.TransactionType",
+						"name": "txType",
+						"type": "uint8"
+					}
+				],
+				"name": "commitEmissionChange",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "eta",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum MasterChefOperator.TransactionType",
+						"name": "txType",
+						"type": "uint8"
+					}
+				],
+				"name": "commitFarmChanges",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "admin",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "eta",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum MasterChefOperator.TransactionType",
+						"name": "txType",
+						"type": "uint8"
+					}
+				],
+				"name": "commitSetPendingTimelockAdmin",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "treasury",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "eta",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum MasterChefOperator.TransactionType",
+						"name": "txType",
+						"type": "uint8"
+					}
+				],
+				"name": "commitSetTreasuryAddress",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "target",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "signature",
+						"type": "string"
+					},
+					{
+						"internalType": "bytes",
+						"name": "data",
+						"type": "bytes"
+					},
+					{
+						"internalType": "uint256",
+						"name": "eta",
+						"type": "uint256"
+					}
+				],
+				"name": "executeTransaction",
+				"outputs": [
+					{
+						"internalType": "bytes",
+						"name": "",
+						"type": "bytes"
+					}
+				],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "farmAdditions",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "lpToken",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "allocationPoints",
+						"type": "uint256"
+					},
+					{
+						"internalType": "contract IRewarder",
+						"name": "rewarder",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "eta",
+						"type": "uint256"
+					}
+				],
+				"name": "farmAdditionsForEta",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "contract IERC20",
+								"name": "lpToken",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "allocationPoints",
+								"type": "uint256"
+							},
+							{
+								"internalType": "contract IRewarder",
+								"name": "rewarder",
+								"type": "address"
+							}
+						],
+						"internalType": "struct MasterChefOperator.FarmAddition[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "farmModifications",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "pid",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "allocationPoints",
+						"type": "uint256"
+					},
+					{
+						"internalType": "contract IRewarder",
+						"name": "rewarder",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "overwriteRewarder",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "eta",
+						"type": "uint256"
+					}
+				],
+				"name": "farmModificationsForEta",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "pid",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "allocationPoints",
+								"type": "uint256"
+							},
+							{
+								"internalType": "contract IRewarder",
+								"name": "rewarder",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "overwriteRewarder",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct MasterChefOperator.FarmModification[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "role",
+						"type": "bytes32"
+					}
+				],
+				"name": "getRoleAdmin",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "role",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "grantRole",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "role",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "hasRole",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "masterChef",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "target",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "signature",
+						"type": "string"
+					},
+					{
+						"internalType": "bytes",
+						"name": "data",
+						"type": "bytes"
+					},
+					{
+						"internalType": "uint256",
+						"name": "eta",
+						"type": "uint256"
+					}
+				],
+				"name": "queueTransaction",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "queuedFarmChangeEtas",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "role",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "renounceRole",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "role",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "revokeRole",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "contract IERC20",
+								"name": "lpToken",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "allocationPoints",
+								"type": "uint256"
+							},
+							{
+								"internalType": "contract IRewarder",
+								"name": "rewarder",
+								"type": "address"
+							}
+						],
+						"internalType": "struct MasterChefOperator.FarmAddition[]",
+						"name": "farmsToAdd",
+						"type": "tuple[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "eta",
+						"type": "uint256"
+					}
+				],
+				"name": "stageFarmAdditions",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "pid",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "allocationPoints",
+								"type": "uint256"
+							},
+							{
+								"internalType": "contract IRewarder",
+								"name": "rewarder",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "overwriteRewarder",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct MasterChefOperator.FarmModification[]",
+						"name": "farmsToEdit",
+						"type": "tuple[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "eta",
+						"type": "uint256"
+					}
+				],
+				"name": "stageFarmModifications",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes4",
+						"name": "interfaceId",
+						"type": "bytes4"
+					}
+				],
+				"name": "supportsInterface",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "timelock",
+				"outputs": [
+					{
+						"internalType": "contract Timelock",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "usedFarmChangeEtas",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"getRoleAdmin(bytes32)": {
+					"details": "Returns the admin role that controls `role`. See {grantRole} and {revokeRole}. To change a role's admin, use {_setRoleAdmin}."
+				},
+				"grantRole(bytes32,address)": {
+					"details": "Grants `role` to `account`. If `account` had not been already granted `role`, emits a {RoleGranted} event. Requirements: - the caller must have ``role``'s admin role."
+				},
+				"hasRole(bytes32,address)": {
+					"details": "Returns `true` if `account` has been granted `role`."
+				},
+				"renounceRole(bytes32,address)": {
+					"details": "Revokes `role` from the calling account. Roles are often managed via {grantRole} and {revokeRole}: this function's purpose is to provide a mechanism for accounts to lose their privileges if they are compromised (such as when a trusted device is misplaced). If the calling account had been granted `role`, emits a {RoleRevoked} event. Requirements: - the caller must be `account`."
+				},
+				"revokeRole(bytes32,address)": {
+					"details": "Revokes `role` from `account`. If `account` had been granted `role`, emits a {RoleRevoked} event. Requirements: - the caller must have ``role``'s admin role."
+				},
+				"supportsInterface(bytes4)": {
+					"details": "See {IERC165-supportsInterface}."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/MasterChefOperator.sol": "MasterChefOperator"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/MasterChefOperator.sol": {
+			"keccak256": "0x12c0cb94bfd1c449db6293476d1cb57217b12c159e157c49ae8a03af2049c7ff",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b1adc3d8030c460882c534f14a0ed10496404ed71c9c1485943b3e6185e89950",
+				"dweb:/ipfs/QmPnjtEzQnqbrRJyowkpgPwg2SZSV2Ma2pcVLjzX8WeFQB"
+			]
+		}
+	},
+	"version": 1
+}

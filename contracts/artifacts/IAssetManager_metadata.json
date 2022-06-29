@@ -1,0 +1,277 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					}
+				],
+				"name": "Rebalance",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "capitalOut",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					}
+				],
+				"name": "getAUM",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					}
+				],
+				"name": "getPoolBalances",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "poolCash",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "poolManaged",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getToken",
+				"outputs": [
+					{
+						"internalType": "contract IERC20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					}
+				],
+				"name": "maxInvestableBalance",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "",
+						"type": "int256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "bool",
+						"name": "force",
+						"type": "bool"
+					}
+				],
+				"name": "rebalance",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "bytes",
+						"name": "config",
+						"type": "bytes"
+					}
+				],
+				"name": "setConfig",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "cash",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "managed",
+						"type": "uint256"
+					}
+				],
+				"name": "shouldRebalance",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					}
+				],
+				"name": "updateBalanceOfPool",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"capitalOut(bytes32,uint256)": {
+					"params": {
+						"amount": "- the amount of tokens to withdraw back to the pool",
+						"poolId": "- the poolId of the pool to withdraw funds back to"
+					}
+				},
+				"getAUM(bytes32)": {
+					"returns": {
+						"_0": "the current assets under management of this asset manager"
+					}
+				},
+				"getPoolBalances(bytes32)": {
+					"returns": {
+						"poolCash": "- The up-to-date cash balance of the pool",
+						"poolManaged": "- The up-to-date managed balance of the pool"
+					}
+				},
+				"maxInvestableBalance(bytes32)": {
+					"returns": {
+						"_0": "The difference in tokens between the target investment and the currently invested amount (i.e. the amount that can be invested)"
+					}
+				},
+				"rebalance(bytes32,bool)": {
+					"params": {
+						"force": "- a boolean representing whether a rebalance should be forced even when the pool is near balance",
+						"poolId": "- the poolId of the pool to be rebalanced"
+					}
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"events": {
+				"Rebalance(bytes32)": {
+					"notice": "Emitted when asset manager is rebalanced"
+				}
+			},
+			"kind": "user",
+			"methods": {
+				"capitalOut(bytes32,uint256)": {
+					"notice": "allows an authorized rebalancer to remove capital to facilitate large withdrawals"
+				},
+				"getToken()": {
+					"notice": "Returns the asset manager's token"
+				},
+				"rebalance(bytes32,bool)": {
+					"notice": "Rebalances funds between the pool and the asset manager to maintain target investment percentage."
+				},
+				"setConfig(bytes32,bytes)": {
+					"notice": "Sets the config"
+				},
+				"shouldRebalance(uint256,uint256)": {
+					"notice": "Determines whether the pool should rebalance given the provided balances"
+				},
+				"updateBalanceOfPool(bytes32)": {
+					"notice": "Updates the Vault on the value of the pool's investment returns"
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/StablePhantomPoolFactory.sol": "IAssetManager"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/StablePhantomPoolFactory.sol": {
+			"keccak256": "0x45c157fd10a3b3d3d4925a111cd0e367e7852123ef18815a88e5dfbab23d93b0",
+			"urls": [
+				"bzz-raw://fdc6c1c5f828365ca267e77c1de88f88f58705be2964ec3f4ae62d6d4ddd7b09",
+				"dweb:/ipfs/Qmcsfxtji1VCJBdgw3hRHerQeopvRfPrH6FTVLVSttCzsq"
+			]
+		}
+	},
+	"version": 1
+}

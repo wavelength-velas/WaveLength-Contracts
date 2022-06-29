@@ -1,0 +1,134 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"ropsten:3": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"rinkeby:4": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"kovan:42": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"görli:5": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"generatedSources": [],
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"deployedBytecode": {
+			"generatedSources": [],
+			"immutableReferences": {},
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"gasEstimates": null,
+		"methodIdentifiers": {
+			"getCreationCode()": "00c194db",
+			"getCreationCodeContracts()": "174481fa",
+			"getVault()": "8d928af8",
+			"isPoolFromFactory(address)": "6634b753"
+		}
+	},
+	"abi": [
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "pool",
+					"type": "address"
+				}
+			],
+			"name": "PoolCreated",
+			"type": "event"
+		},
+		{
+			"inputs": [],
+			"name": "getCreationCode",
+			"outputs": [
+				{
+					"internalType": "bytes",
+					"name": "",
+					"type": "bytes"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getCreationCodeContracts",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "contractA",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "contractB",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getVault",
+			"outputs": [
+				{
+					"internalType": "contract IVault",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "pool",
+					"type": "address"
+				}
+			],
+			"name": "isPoolFromFactory",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		}
+	]
+}

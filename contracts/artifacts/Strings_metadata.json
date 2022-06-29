@@ -1,0 +1,46 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"details": "String operations.",
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/MasterChefOperator.sol": "Strings"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/MasterChefOperator.sol": {
+			"keccak256": "0x12c0cb94bfd1c449db6293476d1cb57217b12c159e157c49ae8a03af2049c7ff",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b1adc3d8030c460882c534f14a0ed10496404ed71c9c1485943b3e6185e89950",
+				"dweb:/ipfs/QmPnjtEzQnqbrRJyowkpgPwg2SZSV2Ma2pcVLjzX8WeFQB"
+			]
+		}
+	},
+	"version": 1
+}

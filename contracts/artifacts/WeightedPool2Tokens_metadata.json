@@ -1,0 +1,1259 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "contract IVault",
+								"name": "vault",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "symbol",
+								"type": "string"
+							},
+							{
+								"internalType": "contract IERC20",
+								"name": "token0",
+								"type": "address"
+							},
+							{
+								"internalType": "contract IERC20",
+								"name": "token1",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "normalizedWeight0",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "normalizedWeight1",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "swapFeePercentage",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "pauseWindowDuration",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "bufferPeriodDuration",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bool",
+								"name": "oracleEnabled",
+								"type": "bool"
+							},
+							{
+								"internalType": "address",
+								"name": "owner",
+								"type": "address"
+							}
+						],
+						"internalType": "struct WeightedPool2Tokens.NewPoolParams",
+						"name": "params",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "spender",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					}
+				],
+				"name": "Approval",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "enabled",
+						"type": "bool"
+					}
+				],
+				"name": "OracleEnabledChanged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "paused",
+						"type": "bool"
+					}
+				],
+				"name": "PausedStateChanged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "swapFeePercentage",
+						"type": "uint256"
+					}
+				],
+				"name": "SwapFeePercentageChanged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					}
+				],
+				"name": "Transfer",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "DOMAIN_SEPARATOR",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "spender",
+						"type": "address"
+					}
+				],
+				"name": "allowance",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "spender",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "approve",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "balanceOf",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "decimals",
+				"outputs": [
+					{
+						"internalType": "uint8",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "spender",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "decreaseApproval",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "enableOracle",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes4",
+						"name": "selector",
+						"type": "bytes4"
+					}
+				],
+				"name": "getActionId",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAuthorizer",
+				"outputs": [
+					{
+						"internalType": "contract IAuthorizer",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getInvariant",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getLargestSafeQueryWindow",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getLastInvariant",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "enum IPriceOracle.Variable",
+						"name": "variable",
+						"type": "uint8"
+					}
+				],
+				"name": "getLatest",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getMiscData",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "logInvariant",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "logTotalSupply",
+						"type": "int256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "oracleSampleCreationTimestamp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "oracleIndex",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "oracleEnabled",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "swapFeePercentage",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getNormalizedWeights",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getOwner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "enum IPriceOracle.Variable",
+								"name": "variable",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint256",
+								"name": "ago",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct IPriceOracle.OracleAccumulatorQuery[]",
+						"name": "queries",
+						"type": "tuple[]"
+					}
+				],
+				"name": "getPastAccumulators",
+				"outputs": [
+					{
+						"internalType": "int256[]",
+						"name": "results",
+						"type": "int256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getPausedState",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "paused",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "pauseWindowEndTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bufferPeriodEndTime",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getPoolId",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getRate",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "getSample",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "logPairPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "accLogPairPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "logBptPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "accLogBptPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "logInvariant",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "accLogInvariant",
+						"type": "int256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getSwapFeePercentage",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "enum IPriceOracle.Variable",
+								"name": "variable",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint256",
+								"name": "secs",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "ago",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct IPriceOracle.OracleAverageQuery[]",
+						"name": "queries",
+						"type": "tuple[]"
+					}
+				],
+				"name": "getTimeWeightedAverage",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "results",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getTotalSamples",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getVault",
+				"outputs": [
+					{
+						"internalType": "contract IVault",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "spender",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "increaseApproval",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "name",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"name": "nonces",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastChangeBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "protocolSwapFeePercentage",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes",
+						"name": "userData",
+						"type": "bytes"
+					}
+				],
+				"name": "onExitPool",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastChangeBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "protocolSwapFeePercentage",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes",
+						"name": "userData",
+						"type": "bytes"
+					}
+				],
+				"name": "onJoinPool",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "amountsIn",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "dueProtocolFeeAmounts",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "enum IVault.SwapKind",
+								"name": "kind",
+								"type": "uint8"
+							},
+							{
+								"internalType": "contract IERC20",
+								"name": "tokenIn",
+								"type": "address"
+							},
+							{
+								"internalType": "contract IERC20",
+								"name": "tokenOut",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "poolId",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "uint256",
+								"name": "lastChangeBlock",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "from",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "to",
+								"type": "address"
+							},
+							{
+								"internalType": "bytes",
+								"name": "userData",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct IPoolSwapStructs.SwapRequest",
+						"name": "request",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "balanceTokenIn",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "balanceTokenOut",
+						"type": "uint256"
+					}
+				],
+				"name": "onSwap",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "spender",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deadline",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint8",
+						"name": "v",
+						"type": "uint8"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "r",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "bytes32",
+						"name": "s",
+						"type": "bytes32"
+					}
+				],
+				"name": "permit",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastChangeBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "protocolSwapFeePercentage",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes",
+						"name": "userData",
+						"type": "bytes"
+					}
+				],
+				"name": "queryExit",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "bptIn",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "amountsOut",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastChangeBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "protocolSwapFeePercentage",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes",
+						"name": "userData",
+						"type": "bytes"
+					}
+				],
+				"name": "queryJoin",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "bptOut",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "amountsIn",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bool",
+						"name": "paused",
+						"type": "bool"
+					}
+				],
+				"name": "setPaused",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "swapFeePercentage",
+						"type": "uint256"
+					}
+				],
+				"name": "setSwapFeePercentage",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "symbol",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalSupply",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "transfer",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "transferFrom",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"DOMAIN_SEPARATOR()": {
+					"details": "Returns the domain separator used in the encoding of the signature for `permit`, as defined by {EIP712}."
+				},
+				"allowance(address,address)": {
+					"details": "Returns the remaining number of tokens that `spender` will be allowed to spend on behalf of `owner` through {transferFrom}. This is zero by default. This value changes when {approve} or {transferFrom} are called."
+				},
+				"approve(address,uint256)": {
+					"details": "Sets `amount` as the allowance of `spender` over the caller's tokens. Returns a boolean value indicating whether the operation succeeded. IMPORTANT: Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729 Emits an {Approval} event."
+				},
+				"balanceOf(address)": {
+					"details": "Returns the amount of tokens owned by `account`."
+				},
+				"enableOracle()": {
+					"details": "Balancer Governance can always enable the Oracle, even if it was originally not enabled. This allows for Pools that unexpectedly drive much more volume and liquidity than expected to serve as Price Oracles. Note that the Oracle can only be enabled - it can never be disabled."
+				},
+				"getActionId(bytes4)": {
+					"details": "Returns the action identifier associated with the external function described by `selector`."
+				},
+				"getInvariant()": {
+					"details": "Returns the current value of the invariant."
+				},
+				"getLargestSafeQueryWindow()": {
+					"details": "Returns largest time window that can be safely queried, where 'safely' means the Oracle is guaranteed to be able to produce a result and not revert. If a query has a non-zero `ago` value, then `secs + ago` (the oldest point in time) must be smaller than this value for 'safe' queries."
+				},
+				"getLatest(uint8)": {
+					"details": "Returns latest sample of `variable`. Prices are represented as 18 decimal fixed point values."
+				},
+				"getPastAccumulators((uint8,uint256)[])": {
+					"details": "Returns the accumulators corresponding to each of `queries`."
+				},
+				"getPausedState()": {
+					"details": "Returns the current contract pause status, as well as the end times of the Pause Window and Buffer Period."
+				},
+				"getRate()": {
+					"details": "This function returns the appreciation of one BPT relative to the underlying tokens. This starts at 1 when the pool is created and grows over time"
+				},
+				"getSample(uint256)": {
+					"details": "Returns the raw data of the sample at `index`."
+				},
+				"getTimeWeightedAverage((uint8,uint256,uint256)[])": {
+					"details": "Returns the time average weighted price corresponding to each of `queries`. Prices are represented as 18 decimal fixed point values."
+				},
+				"getTotalSamples()": {
+					"details": "Returns the total number of samples."
+				},
+				"nonces(address)": {
+					"details": "Returns the current nonce for `owner`. This value must be included whenever a signature is generated for {permit}. Every successful call to {permit} increases ``owner``'s nonce by one. This prevents a signature from being used multiple times."
+				},
+				"onExitPool(bytes32,address,address,uint256[],uint256,uint256,bytes)": {
+					"details": "Called by the Vault when a user calls `IVault.exitPool` to remove liquidity from this Pool. Returns how many tokens the Vault should deduct from the Pool's balances, as well as the amount of protocol fees the Pool owes to the Vault. The Vault will then take tokens from the Pool's balances and send them to `recipient`, as well as collect the reported amount in protocol fees, which the Pool should calculate based on `protocolSwapFeePercentage`. Protocol fees are charged on exit events to guarantee that users exiting the Pool have paid their share. `sender` is the account performing the exit (typically the pool shareholder), and `recipient` is the account to which the Vault will send the proceeds. `currentBalances` contains the total token balances for each token the Pool registered in the Vault, in the same order that `IVault.getPoolTokens` would return. `lastChangeBlock` is the last block in which *any* of the Pool's registered tokens last changed its total balance. `userData` contains any pool-specific instructions needed to perform the calculations, such as the type of exit (e.g., proportional given an amount of pool shares, single-asset, multi-asset, etc.) Contracts implementing this function should check that the caller is indeed the Vault before performing any state-changing operations, such as burning pool shares."
+				},
+				"onJoinPool(bytes32,address,address,uint256[],uint256,uint256,bytes)": {
+					"details": "Called by the Vault when a user calls `IVault.joinPool` to add liquidity to this Pool. Returns how many of each registered token the user should provide, as well as the amount of protocol fees the Pool owes to the Vault. The Vault will then take tokens from `sender` and add them to the Pool's balances, as well as collect the reported amount in protocol fees, which the pool should calculate based on `protocolSwapFeePercentage`. Protocol fees are reported and charged on join events so that the Pool is free of debt whenever new users join. `sender` is the account performing the join (from which tokens will be withdrawn), and `recipient` is the account designated to receive any benefits (typically pool shares). `currentBalances` contains the total balances for each token the Pool registered in the Vault, in the same order that `IVault.getPoolTokens` would return. `lastChangeBlock` is the last block in which *any* of the Pool's registered tokens last changed its total balance. `userData` contains any pool-specific instructions needed to perform the calculations, such as the type of join (e.g., proportional given an amount of pool shares, single-asset, multi-asset, etc.) Contracts implementing this function should check that the caller is indeed the Vault before performing any state-changing operations, such as minting pool shares."
+				},
+				"permit(address,address,uint256,uint256,uint8,bytes32,bytes32)": {
+					"details": "Sets `value` as the allowance of `spender` over `owner`'s tokens, given `owner`'s signed approval. IMPORTANT: The same issues {IERC20-approve} has related to transaction ordering also apply here. Emits an {Approval} event. Requirements: - `spender` cannot be the zero address. - `deadline` must be a timestamp in the future. - `v`, `r` and `s` must be a valid `secp256k1` signature from `owner` over the EIP712-formatted function arguments. - the signature must use ``owner``'s current nonce (see {nonces}). For more information on the signature format, see the https://eips.ethereum.org/EIPS/eip-2612#specification[relevant EIP section]."
+				},
+				"queryExit(bytes32,address,address,uint256[],uint256,uint256,bytes)": {
+					"details": "Returns the amount of BPT that would be burned from `sender` if the `onExitPool` hook were called by the Vault with the same arguments, along with the number of tokens `recipient` would receive. This function is not meant to be called directly, but rather from a helper contract that fetches current Vault data, such as the protocol swap fee percentage and Pool balances. Like `IVault.queryBatchSwap`, this function is not view due to internal implementation details: the caller must explicitly use eth_call instead of eth_sendTransaction."
+				},
+				"queryJoin(bytes32,address,address,uint256[],uint256,uint256,bytes)": {
+					"details": "Returns the amount of BPT that would be granted to `recipient` if the `onJoinPool` hook were called by the Vault with the same arguments, along with the number of tokens `sender` would have to supply. This function is not meant to be called directly, but rather from a helper contract that fetches current Vault data, such as the protocol swap fee percentage and Pool balances. Like `IVault.queryBatchSwap`, this function is not view due to internal implementation details: the caller must explicitly use eth_call instead of eth_sendTransaction."
+				},
+				"totalSupply()": {
+					"details": "Returns the amount of tokens in existence."
+				},
+				"transfer(address,uint256)": {
+					"details": "Moves `amount` tokens from the caller's account to `recipient`. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."
+				},
+				"transferFrom(address,address,uint256)": {
+					"details": "Moves `amount` tokens from `sender` to `recipient` using the allowance mechanism. `amount` is then deducted from the caller's allowance. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/WeightedPool2TokensFactory.sol": "WeightedPool2Tokens"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/WeightedPool2TokensFactory.sol": {
+			"keccak256": "0xe231741eeab56bb41a4e9b9fa79cecb39a55bb27cd6d519e345dfc162d972bfd",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://7c3c554377b0c371432a9ba54f0ebb832682e24c043d5a3723397708faff449d",
+				"dweb:/ipfs/QmQNbWzfhFHf3tjTxNCkVAoFXu1aDQsHrVi1T5RG7tLX7m"
+			]
+		}
+	},
+	"version": 1
+}

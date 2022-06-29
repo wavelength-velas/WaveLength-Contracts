@@ -1,0 +1,208 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"ropsten:3": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"rinkeby:4": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"kovan:42": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"görli:5": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"generatedSources": [],
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"deployedBytecode": {
+			"generatedSources": [],
+			"immutableReferences": {},
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"gasEstimates": null,
+		"methodIdentifiers": {
+			"getAuthorizer()": "aaabadc5",
+			"getCollectedFeeAmounts(address[])": "e42abf35",
+			"getFlashLoanFeePercentage()": "d877845c",
+			"getSwapFeePercentage()": "55c67628",
+			"setFlashLoanFeePercentage(uint256)": "6b6b9f69",
+			"setSwapFeePercentage(uint256)": "38e9922e",
+			"vault()": "fbfa77cf",
+			"withdrawCollectedFees(address[],uint256[],address)": "6daefab6"
+		}
+	},
+	"abi": [
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "newFlashLoanFeePercentage",
+					"type": "uint256"
+				}
+			],
+			"name": "FlashLoanFeePercentageChanged",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "newSwapFeePercentage",
+					"type": "uint256"
+				}
+			],
+			"name": "SwapFeePercentageChanged",
+			"type": "event"
+		},
+		{
+			"inputs": [],
+			"name": "getAuthorizer",
+			"outputs": [
+				{
+					"internalType": "contract IAuthorizer",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "contract IERC20[]",
+					"name": "tokens",
+					"type": "address[]"
+				}
+			],
+			"name": "getCollectedFeeAmounts",
+			"outputs": [
+				{
+					"internalType": "uint256[]",
+					"name": "feeAmounts",
+					"type": "uint256[]"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getFlashLoanFeePercentage",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getSwapFeePercentage",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "newFlashLoanFeePercentage",
+					"type": "uint256"
+				}
+			],
+			"name": "setFlashLoanFeePercentage",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "newSwapFeePercentage",
+					"type": "uint256"
+				}
+			],
+			"name": "setSwapFeePercentage",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "vault",
+			"outputs": [
+				{
+					"internalType": "contract IVault",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "contract IERC20[]",
+					"name": "tokens",
+					"type": "address[]"
+				},
+				{
+					"internalType": "uint256[]",
+					"name": "amounts",
+					"type": "uint256[]"
+				},
+				{
+					"internalType": "address",
+					"name": "recipient",
+					"type": "address"
+				}
+			],
+			"name": "withdrawCollectedFees",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		}
+	]
+}

@@ -1,0 +1,387 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "amountsOut",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bptTotalSupply",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "swapFee",
+						"type": "uint256"
+					}
+				],
+				"name": "bptInForExactTokensOut",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastInvariant",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenIndex",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "protocolSwapFeePercentage",
+						"type": "uint256"
+					}
+				],
+				"name": "calculateDueTokenProtocolSwapFeeAmount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenIndex",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bptAmountIn",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bptTotalSupply",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "swapFee",
+						"type": "uint256"
+					}
+				],
+				"name": "exactBPTInForTokenOut",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bptAmountIn",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bptTotalSupply",
+						"type": "uint256"
+					}
+				],
+				"name": "exactBPTInForTokensOut",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "amountsIn",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bptTotalSupply",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "swapFee",
+						"type": "uint256"
+					}
+				],
+				"name": "exactTokensInForBPTOut",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenIndexIn",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenIndexOut",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenAmountOut",
+						"type": "uint256"
+					}
+				],
+				"name": "inGivenOut",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "bool",
+						"name": "roundUp",
+						"type": "bool"
+					}
+				],
+				"name": "invariant",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenIndexIn",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenIndexOut",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenAmountIn",
+						"type": "uint256"
+					}
+				],
+				"name": "outGivenIn",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenIndex",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bptAmountOut",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bptTotalSupply",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "swapFee",
+						"type": "uint256"
+					}
+				],
+				"name": "tokenInForExactBPTOut",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/StablePoolFactory.sol": "MockStableMath"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/StablePoolFactory.sol": {
+			"keccak256": "0xd07bb6e895c13b0f6534cd01ffecc504f5e915322c2e74741db0f4c5788ad3ca",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://c1e8fc68b72eff514efb1c1815d228259f0adf7f052a0fde090469ae82f06fa5",
+				"dweb:/ipfs/QmeStRdv67xPnMXx4hzADUFLAYesrcokYC66if6xybnHnf"
+			]
+		}
+	},
+	"version": 1
+}

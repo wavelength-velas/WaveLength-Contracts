@@ -1,0 +1,64 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"ropsten:3": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"rinkeby:4": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"kovan:42": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"görli:5": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"generatedSources": [],
+			"linkReferences": {},
+			"object": "6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212207c287cadc8700344c5041c49f26a10cc3f5a5779bfc261f11bf66012ff4fd4e164736f6c63430007060033",
+			"opcodes": "PUSH1 0x80 PUSH1 0x40 MSTORE CALLVALUE DUP1 ISZERO PUSH1 0xF JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH1 0x3F DUP1 PUSH1 0x1D PUSH1 0x0 CODECOPY PUSH1 0x0 RETURN INVALID PUSH1 0x80 PUSH1 0x40 MSTORE PUSH1 0x0 DUP1 REVERT INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 PUSH29 0x287CADC8700344C5041C49F26A10CC3F5A5779BFC261F11BF66012FF4F 0xD4 0xE1 PUSH5 0x736F6C6343 STOP SMOD MOD STOP CALLER ",
+			"sourceMap": "82972:4054:0:-:0;;;;;;;;;;;;;;;;;;;"
+		},
+		"deployedBytecode": {
+			"generatedSources": [],
+			"immutableReferences": {},
+			"linkReferences": {},
+			"object": "6080604052600080fdfea26469706673582212207c287cadc8700344c5041c49f26a10cc3f5a5779bfc261f11bf66012ff4fd4e164736f6c63430007060033",
+			"opcodes": "PUSH1 0x80 PUSH1 0x40 MSTORE PUSH1 0x0 DUP1 REVERT INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 PUSH29 0x287CADC8700344C5041C49F26A10CC3F5A5779BFC261F11BF66012FF4F 0xD4 0xE1 PUSH5 0x736F6C6343 STOP SMOD MOD STOP CALLER ",
+			"sourceMap": "82972:4054:0:-:0;;;;;"
+		},
+		"gasEstimates": {
+			"creation": {
+				"codeDepositCost": "12600",
+				"executionCost": "66",
+				"totalCost": "12666"
+			},
+			"internal": {
+				"_calcLogBPTPrice(uint256,uint256,int256)": "infinite",
+				"_calcLogSpotPrice(uint256,uint256,uint256,uint256)": "infinite",
+				"_fromLowResLog(int256)": "infinite",
+				"_toLowResLog(uint256)": "infinite"
+			}
+		},
+		"methodIdentifiers": {}
+	},
+	"abi": []
+}

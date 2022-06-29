@@ -1,0 +1,45 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"details": "Library for encoding and decoding values stored inside a 256 bit word. Typically used to pack multiple values in a single storage slot, saving gas by performing less storage accesses. Each value is defined by its size and the least significant bit in the word, also known as offset. For example, two 128 bit values may be encoded in a word by assigning one an offset of 0, and the other an offset of 128. We could use Solidity structs to pack values together in a single storage slot instead of relying on a custom and error-prone library, but unfortunately Solidity only allows for structs to live in either storage, calldata or memory. Because a memory struct uses not just memory but also a slot in the stack (to store its memory location), using memory for word-sized values (i.e. of 256 bits or less) is strictly less gas performant, and doesn't even prevent stack-too-deep issues. This is compounded by the fact that Balancer contracts typically are memory-intensive, and the cost of accesing memory increases quadratically with the number of allocated words. Manual packing and unpacking is therefore the preferred approach.",
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/StablePhantomPoolFactory.sol": "WordCodec"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/StablePhantomPoolFactory.sol": {
+			"keccak256": "0x45c157fd10a3b3d3d4925a111cd0e367e7852123ef18815a88e5dfbab23d93b0",
+			"urls": [
+				"bzz-raw://fdc6c1c5f828365ca267e77c1de88f88f58705be2964ec3f4ae62d6d4ddd7b09",
+				"dweb:/ipfs/Qmcsfxtji1VCJBdgw3hRHerQeopvRfPrH6FTVLVSttCzsq"
+			]
+		}
+	},
+	"version": 1
+}

@@ -1,0 +1,233 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "sample",
+						"type": "bytes32"
+					}
+				],
+				"name": "decode",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "int256",
+								"name": "logPairPrice",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "accLogPairPrice",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "logBptPrice",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "accLogBptPrice",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "logInvariant",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "accLogInvariant",
+								"type": "int256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "timestamp",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct MockSamples.Sample",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "int256",
+								"name": "logPairPrice",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "accLogPairPrice",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "logBptPrice",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "accLogBptPrice",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "logInvariant",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "accLogInvariant",
+								"type": "int256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "timestamp",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct MockSamples.Sample",
+						"name": "sample",
+						"type": "tuple"
+					}
+				],
+				"name": "encode",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "sample",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "int256",
+						"name": "logPairPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "logBptPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "logInvariant",
+						"type": "int256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"name": "update",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "int256",
+								"name": "logPairPrice",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "accLogPairPrice",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "logBptPrice",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "accLogBptPrice",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "logInvariant",
+								"type": "int256"
+							},
+							{
+								"internalType": "int256",
+								"name": "accLogInvariant",
+								"type": "int256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "timestamp",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct MockSamples.Sample",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/NoProtocolFeeLiquidityBootstrappingPoolFactory.sol": "MockSamples"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/NoProtocolFeeLiquidityBootstrappingPoolFactory.sol": {
+			"keccak256": "0xf7d653f766e0c3e564f45bab629066b8d255570d61e01c3a046418ad27c249b4",
+			"urls": [
+				"bzz-raw://4a7bb57f05136be0fa4e231afa0fcef6084671485489d742b795d67b89365cf9",
+				"dweb:/ipfs/Qmd1EJ6SfMiK9wi2NkeBrHwwqdsenDaCAVgtXf7fR28Z5V"
+			]
+		}
+	},
+	"version": 1
+}

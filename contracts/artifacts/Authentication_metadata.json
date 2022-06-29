@@ -1,0 +1,73 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "bytes4",
+						"name": "selector",
+						"type": "bytes4"
+					}
+				],
+				"name": "getActionId",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "Building block for performing access control on external functions. This contract is used via the `authenticate` modifier (or the `_authenticateCaller` function), which can be applied to external functions to only make them callable by authorized accounts. Derived contracts must implement the `_canPerform` function, which holds the actual access control logic.",
+			"kind": "dev",
+			"methods": {
+				"constructor": {
+					"details": "The main purpose of the `actionIdDisambiguator` is to prevent accidental function selector collisions in multi contract systems. There are two main uses for it:  - if the contract is a singleton, any unique identifier can be used to make the associated action identifiers    unique. The contract's own address is a good option.  - if the contract belongs to a family that shares action identifiers for the same functions, an identifier    shared by the entire family (and no other contract) should be used instead."
+				},
+				"getActionId(bytes4)": {
+					"details": "Returns the action identifier associated with the external function described by `selector`."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Vault.sol": "Authentication"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Vault.sol": {
+			"keccak256": "0x220cae9151436fac748594c76906636400f6188aa266151f985158b587cccf52",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f7f88b33f55d69db00010f6c0fb18b2da6ef7f701218a0f3ed8ed7be46f37fca",
+				"dweb:/ipfs/QmcmhVEpqEsKbxnhVhTTeY2PS1jEjkSNDX7Hmysg6yWAkD"
+			]
+		}
+	},
+	"version": 1
+}

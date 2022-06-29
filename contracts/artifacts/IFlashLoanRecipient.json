@@ -1,0 +1,83 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"ropsten:3": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"rinkeby:4": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"kovan:42": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"görli:5": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"generatedSources": [],
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"deployedBytecode": {
+			"generatedSources": [],
+			"immutableReferences": {},
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"gasEstimates": null,
+		"methodIdentifiers": {
+			"receiveFlashLoan(address[],uint256[],uint256[],bytes)": "f04f2707"
+		}
+	},
+	"abi": [
+		{
+			"inputs": [
+				{
+					"internalType": "contract IERC20[]",
+					"name": "tokens",
+					"type": "address[]"
+				},
+				{
+					"internalType": "uint256[]",
+					"name": "amounts",
+					"type": "uint256[]"
+				},
+				{
+					"internalType": "uint256[]",
+					"name": "feeAmounts",
+					"type": "uint256[]"
+				},
+				{
+					"internalType": "bytes",
+					"name": "userData",
+					"type": "bytes"
+				}
+			],
+			"name": "receiveFlashLoan",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		}
+	]
+}

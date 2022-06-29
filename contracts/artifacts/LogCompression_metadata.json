@@ -1,0 +1,45 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"details": "Library for encoding and decoding values stored inside a 256 bit word. Typically used to pack multiple values in a single storage slot, saving gas by performing less storage accesses. Each value is defined by its size and the least significant bit in the word, also known as offset. For example, two 128 bit values may be encoded in a word by assigning one an offset of 0, and the other an offset of 128.",
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/NoProtocolFeeLiquidityBootstrappingPoolFactory.sol": "LogCompression"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/NoProtocolFeeLiquidityBootstrappingPoolFactory.sol": {
+			"keccak256": "0xf7d653f766e0c3e564f45bab629066b8d255570d61e01c3a046418ad27c249b4",
+			"urls": [
+				"bzz-raw://4a7bb57f05136be0fa4e231afa0fcef6084671485489d742b795d67b89365cf9",
+				"dweb:/ipfs/Qmd1EJ6SfMiK9wi2NkeBrHwwqdsenDaCAVgtXf7fR28Z5V"
+			]
+		}
+	},
+	"version": 1
+}

@@ -1,0 +1,44 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/StablePhantomPoolFactory.sol": "StablePhantomPoolUserDataHelpers"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/StablePhantomPoolFactory.sol": {
+			"keccak256": "0x45c157fd10a3b3d3d4925a111cd0e367e7852123ef18815a88e5dfbab23d93b0",
+			"urls": [
+				"bzz-raw://fdc6c1c5f828365ca267e77c1de88f88f58705be2964ec3f4ae62d6d4ddd7b09",
+				"dweb:/ipfs/Qmcsfxtji1VCJBdgw3hRHerQeopvRfPrH6FTVLVSttCzsq"
+			]
+		}
+	},
+	"version": 1
+}

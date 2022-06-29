@@ -1,0 +1,45 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/WeightedPool2TokensFactory.sol": "WeightedPoolUserDataHelpers"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/WeightedPool2TokensFactory.sol": {
+			"keccak256": "0xe231741eeab56bb41a4e9b9fa79cecb39a55bb27cd6d519e345dfc162d972bfd",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://7c3c554377b0c371432a9ba54f0ebb832682e24c043d5a3723397708faff449d",
+				"dweb:/ipfs/QmQNbWzfhFHf3tjTxNCkVAoFXu1aDQsHrVi1T5RG7tLX7m"
+			]
+		}
+	},
+	"version": 1
+}

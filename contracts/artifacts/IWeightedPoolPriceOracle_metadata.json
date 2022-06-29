@@ -1,0 +1,115 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "index",
+						"type": "uint256"
+					}
+				],
+				"name": "getSample",
+				"outputs": [
+					{
+						"internalType": "int256",
+						"name": "logPairPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "accLogPairPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "logBptPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "accLogBptPrice",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "logInvariant",
+						"type": "int256"
+					},
+					{
+						"internalType": "int256",
+						"name": "accLogInvariant",
+						"type": "int256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getTotalSamples",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"getSample(uint256)": {
+					"details": "Returns the raw data of the sample at `index`."
+				},
+				"getTotalSamples()": {
+					"details": "Returns the total number of samples."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/WeightedPool2TokensFactory.sol": "IWeightedPoolPriceOracle"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/WeightedPool2TokensFactory.sol": {
+			"keccak256": "0xe231741eeab56bb41a4e9b9fa79cecb39a55bb27cd6d519e345dfc162d972bfd",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://7c3c554377b0c371432a9ba54f0ebb832682e24c043d5a3723397708faff449d",
+				"dweb:/ipfs/QmQNbWzfhFHf3tjTxNCkVAoFXu1aDQsHrVi1T5RG7tLX7m"
+			]
+		}
+	},
+	"version": 1
+}

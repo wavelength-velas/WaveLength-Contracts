@@ -1,0 +1,45 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"details": "Library for compressing and uncompresing numbers by using smaller types. All values are 18 decimal fixed-point numbers in the [0.0, 1.0] range, so heavier compression (fewer bits) results in fewer decimals.",
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/NoProtocolFeeLiquidityBootstrappingPoolFactory.sol": "WeightCompression"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/NoProtocolFeeLiquidityBootstrappingPoolFactory.sol": {
+			"keccak256": "0xf7d653f766e0c3e564f45bab629066b8d255570d61e01c3a046418ad27c249b4",
+			"urls": [
+				"bzz-raw://4a7bb57f05136be0fa4e231afa0fcef6084671485489d742b795d67b89365cf9",
+				"dweb:/ipfs/Qmd1EJ6SfMiK9wi2NkeBrHwwqdsenDaCAVgtXf7fR28Z5V"
+			]
+		}
+	},
+	"version": 1
+}

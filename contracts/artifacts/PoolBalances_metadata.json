@@ -1,0 +1,1277 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "contract IAuthorizer",
+						"name": "newAuthorizer",
+						"type": "address"
+					}
+				],
+				"name": "AuthorizerChanged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "contract IERC20",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "ExternalBalanceTransfer",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "contract IFlashLoanRecipient",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "contract IERC20",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "feeAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "FlashLoan",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "contract IERC20",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "int256",
+						"name": "delta",
+						"type": "int256"
+					}
+				],
+				"name": "InternalBalanceChanged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "paused",
+						"type": "bool"
+					}
+				],
+				"name": "PausedStateChanged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "liquidityProvider",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "contract IERC20[]",
+						"name": "tokens",
+						"type": "address[]"
+					},
+					{
+						"indexed": false,
+						"internalType": "int256[]",
+						"name": "deltas",
+						"type": "int256[]"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256[]",
+						"name": "protocolFeeAmounts",
+						"type": "uint256[]"
+					}
+				],
+				"name": "PoolBalanceChanged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "assetManager",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "contract IERC20",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "int256",
+						"name": "cashDelta",
+						"type": "int256"
+					},
+					{
+						"indexed": false,
+						"internalType": "int256",
+						"name": "managedDelta",
+						"type": "int256"
+					}
+				],
+				"name": "PoolBalanceManaged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "poolAddress",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "enum IVault.PoolSpecialization",
+						"name": "specialization",
+						"type": "uint8"
+					}
+				],
+				"name": "PoolRegistered",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "relayer",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "approved",
+						"type": "bool"
+					}
+				],
+				"name": "RelayerApprovalChanged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"indexed": true,
+						"internalType": "contract IERC20",
+						"name": "tokenIn",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "contract IERC20",
+						"name": "tokenOut",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amountIn",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amountOut",
+						"type": "uint256"
+					}
+				],
+				"name": "Swap",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"indexed": false,
+						"internalType": "contract IERC20[]",
+						"name": "tokens",
+						"type": "address[]"
+					}
+				],
+				"name": "TokensDeregistered",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"indexed": false,
+						"internalType": "contract IERC20[]",
+						"name": "tokens",
+						"type": "address[]"
+					},
+					{
+						"indexed": false,
+						"internalType": "address[]",
+						"name": "assetManagers",
+						"type": "address[]"
+					}
+				],
+				"name": "TokensRegistered",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "WETH",
+				"outputs": [
+					{
+						"internalType": "contract IWETH",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "enum IVault.SwapKind",
+						"name": "kind",
+						"type": "uint8"
+					},
+					{
+						"components": [
+							{
+								"internalType": "bytes32",
+								"name": "poolId",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "uint256",
+								"name": "assetInIndex",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "assetOutIndex",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bytes",
+								"name": "userData",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct IVault.BatchSwapStep[]",
+						"name": "swaps",
+						"type": "tuple[]"
+					},
+					{
+						"internalType": "contract IAsset[]",
+						"name": "assets",
+						"type": "address[]"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "sender",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "fromInternalBalance",
+								"type": "bool"
+							},
+							{
+								"internalType": "address payable",
+								"name": "recipient",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "toInternalBalance",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct IVault.FundManagement",
+						"name": "funds",
+						"type": "tuple"
+					},
+					{
+						"internalType": "int256[]",
+						"name": "limits",
+						"type": "int256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deadline",
+						"type": "uint256"
+					}
+				],
+				"name": "batchSwap",
+				"outputs": [
+					{
+						"internalType": "int256[]",
+						"name": "",
+						"type": "int256[]"
+					}
+				],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "contract IERC20[]",
+						"name": "tokens",
+						"type": "address[]"
+					}
+				],
+				"name": "deregisterTokens",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address payable",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "contract IAsset[]",
+								"name": "assets",
+								"type": "address[]"
+							},
+							{
+								"internalType": "uint256[]",
+								"name": "minAmountsOut",
+								"type": "uint256[]"
+							},
+							{
+								"internalType": "bytes",
+								"name": "userData",
+								"type": "bytes"
+							},
+							{
+								"internalType": "bool",
+								"name": "toInternalBalance",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct IVault.ExitPoolRequest",
+						"name": "request",
+						"type": "tuple"
+					}
+				],
+				"name": "exitPool",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "contract IFlashLoanRecipient",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "contract IERC20[]",
+						"name": "tokens",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "amounts",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "bytes",
+						"name": "userData",
+						"type": "bytes"
+					}
+				],
+				"name": "flashLoan",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes4",
+						"name": "selector",
+						"type": "bytes4"
+					}
+				],
+				"name": "getActionId",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAuthorizer",
+				"outputs": [
+					{
+						"internalType": "contract IAuthorizer",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getDomainSeparator",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"internalType": "contract IERC20[]",
+						"name": "tokens",
+						"type": "address[]"
+					}
+				],
+				"name": "getInternalBalance",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					}
+				],
+				"name": "getNextNonce",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getPausedState",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "paused",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "pauseWindowEndTime",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "bufferPeriodEndTime",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					}
+				],
+				"name": "getPool",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"internalType": "enum IVault.PoolSpecialization",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "contract IERC20",
+						"name": "token",
+						"type": "address"
+					}
+				],
+				"name": "getPoolTokenInfo",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "cash",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "managed",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastChangeBlock",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "assetManager",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					}
+				],
+				"name": "getPoolTokens",
+				"outputs": [
+					{
+						"internalType": "contract IERC20[]",
+						"name": "tokens",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "balances",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastChangeBlock",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getProtocolFeesCollector",
+				"outputs": [
+					{
+						"internalType": "contract ProtocolFeesCollector",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "relayer",
+						"type": "address"
+					}
+				],
+				"name": "hasApprovedRelayer",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "contract IAsset[]",
+								"name": "assets",
+								"type": "address[]"
+							},
+							{
+								"internalType": "uint256[]",
+								"name": "maxAmountsIn",
+								"type": "uint256[]"
+							},
+							{
+								"internalType": "bytes",
+								"name": "userData",
+								"type": "bytes"
+							},
+							{
+								"internalType": "bool",
+								"name": "fromInternalBalance",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct IVault.JoinPoolRequest",
+						"name": "request",
+						"type": "tuple"
+					}
+				],
+				"name": "joinPool",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "enum IVault.PoolBalanceOpKind",
+								"name": "kind",
+								"type": "uint8"
+							},
+							{
+								"internalType": "bytes32",
+								"name": "poolId",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "contract IERC20",
+								"name": "token",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct IVault.PoolBalanceOp[]",
+						"name": "ops",
+						"type": "tuple[]"
+					}
+				],
+				"name": "managePoolBalance",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "enum IVault.UserBalanceOpKind",
+								"name": "kind",
+								"type": "uint8"
+							},
+							{
+								"internalType": "contract IAsset",
+								"name": "asset",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "sender",
+								"type": "address"
+							},
+							{
+								"internalType": "address payable",
+								"name": "recipient",
+								"type": "address"
+							}
+						],
+						"internalType": "struct IVault.UserBalanceOp[]",
+						"name": "ops",
+						"type": "tuple[]"
+					}
+				],
+				"name": "manageUserBalance",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "enum IVault.SwapKind",
+						"name": "kind",
+						"type": "uint8"
+					},
+					{
+						"components": [
+							{
+								"internalType": "bytes32",
+								"name": "poolId",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "uint256",
+								"name": "assetInIndex",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "assetOutIndex",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bytes",
+								"name": "userData",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct IVault.BatchSwapStep[]",
+						"name": "swaps",
+						"type": "tuple[]"
+					},
+					{
+						"internalType": "contract IAsset[]",
+						"name": "assets",
+						"type": "address[]"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "sender",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "fromInternalBalance",
+								"type": "bool"
+							},
+							{
+								"internalType": "address payable",
+								"name": "recipient",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "toInternalBalance",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct IVault.FundManagement",
+						"name": "funds",
+						"type": "tuple"
+					}
+				],
+				"name": "queryBatchSwap",
+				"outputs": [
+					{
+						"internalType": "int256[]",
+						"name": "assetDeltas",
+						"type": "int256[]"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "enum IVault.PoolSpecialization",
+						"name": "specialization",
+						"type": "uint8"
+					}
+				],
+				"name": "registerPool",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "poolId",
+						"type": "bytes32"
+					},
+					{
+						"internalType": "contract IERC20[]",
+						"name": "tokens",
+						"type": "address[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "assetManagers",
+						"type": "address[]"
+					}
+				],
+				"name": "registerTokens",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "contract IAuthorizer",
+						"name": "newAuthorizer",
+						"type": "address"
+					}
+				],
+				"name": "setAuthorizer",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bool",
+						"name": "paused",
+						"type": "bool"
+					}
+				],
+				"name": "setPaused",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "relayer",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "approved",
+						"type": "bool"
+					}
+				],
+				"name": "setRelayerApproval",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "bytes32",
+								"name": "poolId",
+								"type": "bytes32"
+							},
+							{
+								"internalType": "enum IVault.SwapKind",
+								"name": "kind",
+								"type": "uint8"
+							},
+							{
+								"internalType": "contract IAsset",
+								"name": "assetIn",
+								"type": "address"
+							},
+							{
+								"internalType": "contract IAsset",
+								"name": "assetOut",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
+								"internalType": "bytes",
+								"name": "userData",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct IVault.SingleSwap",
+						"name": "singleSwap",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "sender",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "fromInternalBalance",
+								"type": "bool"
+							},
+							{
+								"internalType": "address payable",
+								"name": "recipient",
+								"type": "address"
+							},
+							{
+								"internalType": "bool",
+								"name": "toInternalBalance",
+								"type": "bool"
+							}
+						],
+						"internalType": "struct IVault.FundManagement",
+						"name": "funds",
+						"type": "tuple"
+					},
+					{
+						"internalType": "uint256",
+						"name": "limit",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deadline",
+						"type": "uint256"
+					}
+				],
+				"name": "swap",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "receive"
+			}
+		],
+		"devdoc": {
+			"details": "Stores the Asset Managers (by Pool and token), and implements the top level Asset Manager and Pool interfaces, such as registering and deregistering tokens, joining and exiting Pools, and informational functions like `getPool` and `getPoolTokens`, delegating to specialization-specific functions as needed. `managePoolBalance` handles all Asset Manager interactions.",
+			"kind": "dev",
+			"methods": {
+				"WETH()": {
+					"details": "Returns the Vault's WETH instance."
+				},
+				"batchSwap(uint8,(bytes32,uint256,uint256,uint256,bytes)[],address[],(address,bool,address,bool),int256[],uint256)": {
+					"details": "Performs a series of swaps with one or multiple Pools. In each individual swap, the caller determines either the amount of tokens sent to or received from the Pool, depending on the `kind` value. Returns an array with the net Vault asset balance deltas. Positive amounts represent tokens (or ETH) sent to the Vault, and negative amounts represent tokens (or ETH) sent by the Vault. Each delta corresponds to the asset at the same index in the `assets` array. Swaps are executed sequentially, in the order specified by the `swaps` array. Each array element describes a Pool, the token to be sent to this Pool, the token to receive from it, and an amount that is either `amountIn` or `amountOut` depending on the swap kind. Multihop swaps can be executed by passing an `amount` value of zero for a swap. This will cause the amount in/out of the previous swap to be used as the amount in for the current one. In a 'given in' swap, 'tokenIn' must equal the previous swap's `tokenOut`. For a 'given out' swap, `tokenOut` must equal the previous swap's `tokenIn`. The `assets` array contains the addresses of all assets involved in the swaps. These are either token addresses, or the IAsset sentinel value for ETH (the zero address). Each entry in the `swaps` array specifies tokens in and out by referencing an index in `assets`. Note that Pools never interact with ETH directly: it will be wrapped to or unwrapped from WETH by the Vault. Internal Balance usage, sender, and recipient are determined by the `funds` struct. The `limits` array specifies the minimum or maximum amount of each token the vault is allowed to transfer. `batchSwap` can be used to make a single swap, like `swap` does, but doing so requires more gas than the equivalent `swap` call. Emits `Swap` events."
+				},
+				"deregisterTokens(bytes32,address[])": {
+					"details": "Deregisters `tokens` for the `poolId` Pool. Must be called by the Pool's contract. Only registered tokens (via `registerTokens`) can be deregistered. Additionally, they must have zero total balance. For Pools with the Two Token specialization, `tokens` must have a length of two, that is, both tokens must be deregistered in the same `deregisterTokens` call. A deregistered token can be re-registered later on, possibly with a different Asset Manager. Emits a `TokensDeregistered` event."
+				},
+				"exitPool(bytes32,address,address,(address[],uint256[],bytes,bool))": {
+					"details": "Called by users to exit a Pool, which transfers tokens from the Pool's balance to `recipient`. This will trigger custom Pool behavior, which will typically ask for something in return from `sender` - often tokenized Pool shares. The amount of tokens that can be withdrawn is limited by the Pool's `cash` balance (see `getPoolTokenInfo`). If the caller is not `sender`, it must be an authorized relayer for them. The `tokens` and `minAmountsOut` arrays must have the same length, and each entry in these indicates the minimum token amount to receive for each token contract. The amounts to send are decided by the Pool and not the Vault: it just enforces these minimums. If exiting a Pool that holds WETH, it is possible to receive ETH directly: the Vault will do the unwrapping. To enable this mechanism, the IAsset sentinel value (the zero address) must be passed in the `assets` array instead of the WETH address. Note that it is not possible to combine ETH and WETH in the same exit. `assets` must have the same length and order as the array returned by `getPoolTokens`. This prevents issues when interacting with Pools that register and deregister tokens frequently. If receiving ETH however, the array must be sorted *before* replacing the WETH address with the ETH sentinel value (the zero address), which means the final `assets` array might not be sorted. Pools with no registered tokens cannot be exited. If `toInternalBalance` is true, the tokens will be deposited to `recipient`'s Internal Balance. Otherwise, an ERC20 transfer will be performed. Note that ETH cannot be deposited to Internal Balance: attempting to do so will trigger a revert. `minAmountsOut` is the minimum amount of tokens the user expects to get out of the Pool, for each token in the `tokens` array. This array must match the Pool's registered tokens. This causes the Vault to call the `IBasePool.onExitPool` hook on the Pool's contract, where Pools implement their own custom logic. This typically requires additional information from the user (such as the expected number of Pool shares to return). This can be encoded in the `userData` argument, which is ignored by the Vault and passed directly to the Pool's contract. Emits a `PoolBalanceChanged` event."
+				},
+				"flashLoan(address,address[],uint256[],bytes)": {
+					"details": "Performs a 'flash loan', sending tokens to `recipient`, executing the `receiveFlashLoan` hook on it, and then reverting unless the tokens plus a proportional protocol fee have been returned. The `tokens` and `amounts` arrays must have the same length, and each entry in these indicates the loan amount for each token contract. `tokens` must be sorted in ascending order. The 'userData' field is ignored by the Vault, and forwarded as-is to `recipient` as part of the `receiveFlashLoan` call. Emits `FlashLoan` events."
+				},
+				"getActionId(bytes4)": {
+					"details": "Returns the action identifier associated with the external function described by `selector`."
+				},
+				"getAuthorizer()": {
+					"details": "Returns the Vault's Authorizer."
+				},
+				"getDomainSeparator()": {
+					"details": "Returns the EIP712 domain separator."
+				},
+				"getInternalBalance(address,address[])": {
+					"details": "Returns `user`'s Internal Balance for a set of tokens."
+				},
+				"getNextNonce(address)": {
+					"details": "Returns the next nonce used by an address to sign messages."
+				},
+				"getPausedState()": {
+					"details": "Returns the current contract pause status, as well as the end times of the Pause Window and Buffer Period."
+				},
+				"getPool(bytes32)": {
+					"details": "Returns a Pool's contract address and specialization setting."
+				},
+				"getPoolTokenInfo(bytes32,address)": {
+					"details": "Returns detailed information for a Pool's registered token. `cash` is the number of tokens the Vault currently holds for the Pool. `managed` is the number of tokens withdrawn and held outside the Vault by the Pool's token Asset Manager. The Pool's total balance for `token` equals the sum of `cash` and `managed`. Internally, `cash` and `managed` are stored using 112 bits. No action can ever cause a Pool's token `cash`, `managed` or `total` balance to be greater than 2^112 - 1. `lastChangeBlock` is the number of the block in which `token`'s total balance was last modified (via either a join, exit, swap, or Asset Manager update). This value is useful to avoid so-called 'sandwich attacks', for example when developing price oracles. A change of zero (e.g. caused by a swap with amount zero) is considered a change for this purpose, and will update `lastChangeBlock`. `assetManager` is the Pool's token Asset Manager."
+				},
+				"getPoolTokens(bytes32)": {
+					"details": "Returns a Pool's registered tokens, the total balance for each, and the latest block when *any* of the tokens' `balances` changed. The order of the `tokens` array is the same order that will be used in `joinPool`, `exitPool`, as well as in all Pool hooks (where applicable). Calls to `registerTokens` and `deregisterTokens` may change this order. If a Pool only registers tokens once, and these are sorted in ascending order, they will be stored in the same order as passed to `registerTokens`. Total balances include both tokens held by the Vault and those withdrawn by the Pool's Asset Managers. These are the amounts used by joins, exits and swaps. For a detailed breakdown of token balances, use `getPoolTokenInfo` instead."
+				},
+				"getProtocolFeesCollector()": {
+					"details": "Returns the current protocol fee module."
+				},
+				"hasApprovedRelayer(address,address)": {
+					"details": "Returns true if `user` has approved `relayer` to act as a relayer for them."
+				},
+				"joinPool(bytes32,address,address,(address[],uint256[],bytes,bool))": {
+					"details": "Called by users to join a Pool, which transfers tokens from `sender` into the Pool's balance. This will trigger custom Pool behavior, which will typically grant something in return to `recipient` - often tokenized Pool shares. If the caller is not `sender`, it must be an authorized relayer for them. The `assets` and `maxAmountsIn` arrays must have the same length, and each entry indicates the maximum amount to send for each asset. The amounts to send are decided by the Pool and not the Vault: it just enforces these maximums. If joining a Pool that holds WETH, it is possible to send ETH directly: the Vault will do the wrapping. To enable this mechanism, the IAsset sentinel value (the zero address) must be passed in the `assets` array instead of the WETH address. Note that it is not possible to combine ETH and WETH in the same join. Any excess ETH will be sent back to the caller (not the sender, which is important for relayers). `assets` must have the same length and order as the array returned by `getPoolTokens`. This prevents issues when interacting with Pools that register and deregister tokens frequently. If sending ETH however, the array must be sorted *before* replacing the WETH address with the ETH sentinel value (the zero address), which means the final `assets` array might not be sorted. Pools with no registered tokens cannot be joined. If `fromInternalBalance` is true, the caller's Internal Balance will be preferred: ERC20 transfers will only be made for the difference between the requested amount and Internal Balance (if any). Note that ETH cannot be withdrawn from Internal Balance: attempting to do so will trigger a revert. This causes the Vault to call the `IBasePool.onJoinPool` hook on the Pool's contract, where Pools implement their own custom logic. This typically requires additional information from the user (such as the expected number of Pool shares). This can be encoded in the `userData` argument, which is ignored by the Vault and passed directly to the Pool's contract, as is `recipient`. Emits a `PoolBalanceChanged` event."
+				},
+				"managePoolBalance((uint8,bytes32,address,uint256)[])": {
+					"details": "Performs a set of Pool balance operations, which may be either withdrawals, deposits or updates. Pool Balance management features batching, which means a single contract call can be used to perform multiple operations of different kinds, with different Pools and tokens, at once. For each operation, the caller must be registered as the Asset Manager for `token` in `poolId`."
+				},
+				"manageUserBalance((uint8,address,uint256,address,address)[])": {
+					"details": "Performs a set of user balance operations, which involve Internal Balance (deposit, withdraw or transfer) and plain ERC20 transfers using the Vault's allowance. This last feature is particularly useful for relayers, as it lets integrators reuse a user's Vault allowance. For each operation, if the caller is not `sender`, it must be an authorized relayer for them."
+				},
+				"queryBatchSwap(uint8,(bytes32,uint256,uint256,uint256,bytes)[],address[],(address,bool,address,bool))": {
+					"details": "Simulates a call to `batchSwap`, returning an array of Vault asset deltas. Calls to `swap` cannot be simulated directly, but an equivalent `batchSwap` call can and will yield the exact same result. Each element in the array corresponds to the asset at the same index, and indicates the number of tokens (or ETH) the Vault would take from the sender (if positive) or send to the recipient (if negative). The arguments it receives are the same that an equivalent `batchSwap` call would receive. Unlike `batchSwap`, this function performs no checks on the sender or recipient field in the `funds` struct. This makes it suitable to be called by off-chain applications via eth_call without needing to hold tokens, approve them for the Vault, or even know a user's address. Note that this function is not 'view' (due to implementation details): the client code must explicitly execute eth_call instead of eth_sendTransaction."
+				},
+				"registerPool(uint8)": {
+					"details": "Registers the caller account as a Pool with a given specialization setting. Returns the Pool's ID, which is used in all Pool-related functions. Pools cannot be deregistered, nor can the Pool's specialization be changed. The caller is expected to be a smart contract that implements either `IGeneralPool` or `IMinimalSwapInfoPool`, depending on the chosen specialization setting. This contract is known as the Pool's contract. Note that the same contract may register itself as multiple Pools with unique Pool IDs, or in other words, multiple Pools may share the same contract. Emits a `PoolRegistered` event."
+				},
+				"registerTokens(bytes32,address[],address[])": {
+					"details": "Registers `tokens` for the `poolId` Pool. Must be called by the Pool's contract. Pools can only interact with tokens they have registered. Users join a Pool by transferring registered tokens, exit by receiving registered tokens, and can only swap registered tokens. Each token can only be registered once. For Pools with the Two Token specialization, `tokens` must have a length of two, that is, both tokens must be registered in the same `registerTokens` call, and they must be sorted in ascending order. The `tokens` and `assetManagers` arrays must have the same length, and each entry in these indicates the Asset Manager for the corresponding token. Asset Managers can manage a Pool's tokens via `managePoolBalance`, depositing and withdrawing them directly, and can even set their balance to arbitrary amounts. They are therefore expected to be highly secured smart contracts with sound design principles, and the decision to register an Asset Manager should not be made lightly. Pools can choose not to assign an Asset Manager to a given token by passing in the zero address. Once an Asset Manager is set, it cannot be changed except by deregistering the associated token and registering again with a different Asset Manager. Emits a `TokensRegistered` event."
+				},
+				"setAuthorizer(address)": {
+					"details": "Sets a new Authorizer for the Vault. The caller must be allowed by the current Authorizer to do this. Emits an `AuthorizerChanged` event."
+				},
+				"setPaused(bool)": {
+					"details": "Safety mechanism to pause most Vault operations in the event of an emergency - typically detection of an error in some part of the system. The Vault can only be paused during an initial time period, after which pausing is forever disabled. While the contract is paused, the following features are disabled: - depositing and transferring internal balance - transferring external balance (using the Vault's allowance) - swaps - joining Pools - Asset Manager interactions Internal Balance can still be withdrawn, and Pools exited."
+				},
+				"setRelayerApproval(address,address,bool)": {
+					"details": "Allows `relayer` to act as a relayer for `sender` if `approved` is true, and disallows it otherwise. Emits a `RelayerApprovalChanged` event."
+				},
+				"swap((bytes32,uint8,address,address,uint256,bytes),(address,bool,address,bool),uint256,uint256)": {
+					"details": "Performs a swap with a single Pool. If the swap is 'given in' (the number of tokens to send to the Pool is known), it returns the amount of tokens taken from the Pool, which must be greater than or equal to `limit`. If the swap is 'given out' (the number of tokens to take from the Pool is known), it returns the amount of tokens sent to the Pool, which must be less than or equal to `limit`. Internal Balance usage and the recipient are determined by the `funds` struct. Emits a `Swap` event."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Vault.sol": "PoolBalances"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Vault.sol": {
+			"keccak256": "0x220cae9151436fac748594c76906636400f6188aa266151f985158b587cccf52",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f7f88b33f55d69db00010f6c0fb18b2da6ef7f701218a0f3ed8ed7be46f37fca",
+				"dweb:/ipfs/QmcmhVEpqEsKbxnhVhTTeY2PS1jEjkSNDX7Hmysg6yWAkD"
+			]
+		}
+	},
+	"version": 1
+}

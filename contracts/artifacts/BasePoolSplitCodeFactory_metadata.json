@@ -1,0 +1,135 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "pool",
+						"type": "address"
+					}
+				],
+				"name": "PoolCreated",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "getCreationCode",
+				"outputs": [
+					{
+						"internalType": "bytes",
+						"name": "",
+						"type": "bytes"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getCreationCodeContracts",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "contractA",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "contractB",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getVault",
+				"outputs": [
+					{
+						"internalType": "contract IVault",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "pool",
+						"type": "address"
+					}
+				],
+				"name": "isPoolFromFactory",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "Same as `BasePoolFactory`, for Pools whose creation code is so large that the factory cannot hold it.",
+			"kind": "dev",
+			"methods": {
+				"getCreationCode()": {
+					"details": "Returns the creation code of the contract this factory creates."
+				},
+				"getCreationCodeContracts()": {
+					"details": "Returns the two addresses where the creation code of the contract crated by this factory is stored."
+				},
+				"getVault()": {
+					"details": "Returns the Vault's address."
+				},
+				"isPoolFromFactory(address)": {
+					"details": "Returns true if `pool` was created by this factory."
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/StablePhantomPoolFactory.sol": "BasePoolSplitCodeFactory"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/StablePhantomPoolFactory.sol": {
+			"keccak256": "0x45c157fd10a3b3d3d4925a111cd0e367e7852123ef18815a88e5dfbab23d93b0",
+			"urls": [
+				"bzz-raw://fdc6c1c5f828365ca267e77c1de88f88f58705be2964ec3f4ae62d6d4ddd7b09",
+				"dweb:/ipfs/Qmcsfxtji1VCJBdgw3hRHerQeopvRfPrH6FTVLVSttCzsq"
+			]
+		}
+	},
+	"version": 1
+}

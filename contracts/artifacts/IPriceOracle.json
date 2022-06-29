@@ -1,0 +1,157 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"ropsten:3": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"rinkeby:4": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"kovan:42": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"görli:5": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"generatedSources": [],
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"deployedBytecode": {
+			"generatedSources": [],
+			"immutableReferences": {},
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"gasEstimates": null,
+		"methodIdentifiers": {
+			"getLargestSafeQueryWindow()": "ffd088eb",
+			"getLatest(uint8)": "b10be739",
+			"getPastAccumulators((uint8,uint256)[])": "6b843239",
+			"getTimeWeightedAverage((uint8,uint256,uint256)[])": "1dccd830"
+		}
+	},
+	"abi": [
+		{
+			"inputs": [],
+			"name": "getLargestSafeQueryWindow",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "enum IPriceOracle.Variable",
+					"name": "variable",
+					"type": "uint8"
+				}
+			],
+			"name": "getLatest",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"components": [
+						{
+							"internalType": "enum IPriceOracle.Variable",
+							"name": "variable",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint256",
+							"name": "ago",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct IPriceOracle.OracleAccumulatorQuery[]",
+					"name": "queries",
+					"type": "tuple[]"
+				}
+			],
+			"name": "getPastAccumulators",
+			"outputs": [
+				{
+					"internalType": "int256[]",
+					"name": "results",
+					"type": "int256[]"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"components": [
+						{
+							"internalType": "enum IPriceOracle.Variable",
+							"name": "variable",
+							"type": "uint8"
+						},
+						{
+							"internalType": "uint256",
+							"name": "secs",
+							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "ago",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct IPriceOracle.OracleAverageQuery[]",
+					"name": "queries",
+					"type": "tuple[]"
+				}
+			],
+			"name": "getTimeWeightedAverage",
+			"outputs": [
+				{
+					"internalType": "uint256[]",
+					"name": "results",
+					"type": "uint256[]"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		}
+	]
+}

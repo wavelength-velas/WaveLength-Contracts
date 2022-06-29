@@ -1,0 +1,191 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newFlashLoanFeePercentage",
+						"type": "uint256"
+					}
+				],
+				"name": "FlashLoanFeePercentageChanged",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newSwapFeePercentage",
+						"type": "uint256"
+					}
+				],
+				"name": "SwapFeePercentageChanged",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "getAuthorizer",
+				"outputs": [
+					{
+						"internalType": "contract IAuthorizer",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "contract IERC20[]",
+						"name": "tokens",
+						"type": "address[]"
+					}
+				],
+				"name": "getCollectedFeeAmounts",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "feeAmounts",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getFlashLoanFeePercentage",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getSwapFeePercentage",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "newFlashLoanFeePercentage",
+						"type": "uint256"
+					}
+				],
+				"name": "setFlashLoanFeePercentage",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "newSwapFeePercentage",
+						"type": "uint256"
+					}
+				],
+				"name": "setSwapFeePercentage",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "vault",
+				"outputs": [
+					{
+						"internalType": "contract IVault",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "contract IERC20[]",
+						"name": "tokens",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "amounts",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					}
+				],
+				"name": "withdrawCollectedFees",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/StablePhantomPoolFactory.sol": "IProtocolFeesCollector"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/StablePhantomPoolFactory.sol": {
+			"keccak256": "0x45c157fd10a3b3d3d4925a111cd0e367e7852123ef18815a88e5dfbab23d93b0",
+			"urls": [
+				"bzz-raw://fdc6c1c5f828365ca267e77c1de88f88f58705be2964ec3f4ae62d6d4ddd7b09",
+				"dweb:/ipfs/Qmcsfxtji1VCJBdgw3hRHerQeopvRfPrH6FTVLVSttCzsq"
+			]
+		}
+	},
+	"version": 1
+}

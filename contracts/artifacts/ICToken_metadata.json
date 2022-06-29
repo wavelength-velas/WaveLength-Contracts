@@ -1,0 +1,111 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "decimals",
+				"outputs": [
+					{
+						"internalType": "uint8",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "exchangeRateStored",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "isCToken",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "underlying",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"decimals()": {
+					"details": "returns the number of decimals for this interest-bearing Compound token"
+				},
+				"exchangeRateStored()": {
+					"details": "returns the current exchange rate for this Compound Token"
+				},
+				"isCToken()": {
+					"details": "returns true if token is CToken and false if not"
+				},
+				"underlying()": {
+					"details": "returns the address of the Compound Token's underlying asset (mainToken)"
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/CompoundLinearPoolFactory.sol": "ICToken"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/CompoundLinearPoolFactory.sol": {
+			"keccak256": "0x87a5dbde73bd735c18c5b11691968b77a162692a937226606580b0ffd2d3df49",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://31b938d349c2ea78f07d42724e1aade0c80af9b57699623e0ff5a37f8cace1e5",
+				"dweb:/ipfs/QmSchCBpTVUAR9i38Xo3svaqgFVPs65ZkqdFVS3iVSktVX"
+			]
+		}
+	},
+	"version": 1
+}

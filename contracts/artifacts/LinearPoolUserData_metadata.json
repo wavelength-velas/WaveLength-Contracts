@@ -1,0 +1,45 @@
+{
+	"compiler": {
+		"version": "0.7.6+commit.7338295f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/CompoundLinearPoolFactory.sol": "LinearPoolUserData"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/CompoundLinearPoolFactory.sol": {
+			"keccak256": "0x87a5dbde73bd735c18c5b11691968b77a162692a937226606580b0ffd2d3df49",
+			"license": "GPL-3.0-or-later",
+			"urls": [
+				"bzz-raw://31b938d349c2ea78f07d42724e1aade0c80af9b57699623e0ff5a37f8cace1e5",
+				"dweb:/ipfs/QmSchCBpTVUAR9i38Xo3svaqgFVPs65ZkqdFVS3iVSktVX"
+			]
+		}
+	},
+	"version": 1
+}

@@ -1,5 +1,6 @@
 import Web3 from 'web3'
 import { Contract, ContractSendMethod, Options } from 'web3-eth-contract'
+import { getDefaultProvider } from './ethers-lib'
 
 /**
  * Deploy the given contract
@@ -11,6 +12,7 @@ import { Contract, ContractSendMethod, Options } from 'web3-eth-contract'
  */
 export const deploy = async (contractName: string, args: Array<any>, from?: string, gas?: number): Promise<Options> => {
 
+    const web3Provider = getDefaultProvider()
     const web3 = new Web3(web3Provider)
     console.log(`deploying ${contractName}`)
     // Note that the script needs the ABI which is generated from the compilation artifact.

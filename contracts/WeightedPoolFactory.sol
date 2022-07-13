@@ -2774,12 +2774,14 @@ pragma solidity ^0.7.0;
  */
 abstract contract BasePoolFactory {
     IVault private immutable _vault;
+    address private _defaultPoolOwner;
     mapping(address => bool) private _isPoolFromFactory;
 
     event PoolCreated(address indexed pool);
 
-    constructor(IVault vault) {
+    constructor(IVault vault, address defaultPoolOwner) {
         _vault = vault;
+        _defaultPoolOwner = defaultPoolOwner;
     }
 
     /**
@@ -2787,6 +2789,26 @@ abstract contract BasePoolFactory {
      */
     function getVault() public view returns (IVault) {
         return _vault;
+    }
+    
+    /**
+     * @dev Returns the defaultPoolOwner address.
+     */
+
+    function getDefaultPoolOwner() public view returns (address) {
+        return _defaultPoolOwner;
+    }
+
+    /**
+     * @dev Change DefaultPoolOwner address. Function can only be executed by the current DefaultPoolOwner Address.
+     */
+
+    function setDefaultPoolOwner(address newOwner) public returns (address){
+        address defaultPoolOwner = getDefaultPoolOwner();
+        require(msg.sender == defaultPoolOwner, "Message Sender Is not Default Pool Owner");
+        _defaultPoolOwner = newOwner;
+        return(_defaultPoolOwner);
+        
     }
 
     /**
@@ -4955,7 +4977,7 @@ pragma solidity ^0.7.0;
 pragma experimental ABIEncoderV2;
 
 contract WeightedPoolFactory is BasePoolFactory, FactoryWidePauseWindow {
-    constructor(IVault vault) BasePoolFactory(vault) {
+    constructor(IVault vault, address defaultPoolOwner) BasePoolFactory(vault, defaultPoolOwner) {
         // solhint-disable-previous-line no-empty-blocks
     }
 
@@ -4967,8 +4989,7 @@ contract WeightedPoolFactory is BasePoolFactory, FactoryWidePauseWindow {
         string memory symbol,
         IERC20[] memory tokens,
         uint256[] memory weights,
-        uint256 swapFeePercentage,
-        address owner
+        uint256 swapFeePercentage
     ) external returns (address) {
         (uint256 pauseWindowDuration, uint256 bufferPeriodDuration) = getPauseConfiguration();
 
@@ -4982,7 +5003,7 @@ contract WeightedPoolFactory is BasePoolFactory, FactoryWidePauseWindow {
                 swapFeePercentage,
                 pauseWindowDuration,
                 bufferPeriodDuration,
-                owner
+                getDefaultPoolOwner()
             )
         );
         _register(pool);

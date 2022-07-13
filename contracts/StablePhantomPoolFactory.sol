@@ -6785,12 +6785,14 @@ pragma solidity ^0.7.0;
  */
 abstract contract BasePoolFactory {
     IVault private immutable _vault;
+    address private _defaultPoolOwner;
     mapping(address => bool) private _isPoolFromFactory;
 
     event PoolCreated(address indexed pool);
 
-    constructor(IVault vault) {
+    constructor(IVault vault, address defaultPoolOwner) {
         _vault = vault;
+        _defaultPoolOwner = defaultPoolOwner;
     }
 
     /**
@@ -6798,6 +6800,25 @@ abstract contract BasePoolFactory {
      */
     function getVault() public view returns (IVault) {
         return _vault;
+    }
+    
+    /**
+     * @dev Returns the defaultPoolOwner address.
+     */
+
+    function getDefaultPoolOwner() public view returns (address) {
+        return _defaultPoolOwner;
+    }
+
+    /**
+     * @dev Change DefaultPoolOwner address. Function can only be executed by the current DefaultPoolOwner Address.
+     */
+
+    function setDefaultPoolOwner(address newOwner) public returns (address){
+        address defaultPoolOwner = getDefaultPoolOwner();
+        require(msg.sender == defaultPoolOwner, "Message Sender Is not Default Pool Owner");
+        _defaultPoolOwner = newOwner;
+        return(_defaultPoolOwner);
     }
 
     /**
@@ -6844,6 +6865,7 @@ abstract contract BaseSplitCodeFactory {
      * @dev The creation code of a contract Foo can be obtained inside Solidity with `type(Foo).creationCode`.
      */
     constructor(bytes memory creationCode) {
+
         uint256 creationCodeSize = creationCode.length;
 
         // We are going to deploy two contracts: one with approximately the first half of `creationCode`'s contents
@@ -7024,12 +7046,14 @@ pragma solidity ^0.7.0;
  */
 abstract contract BasePoolSplitCodeFactory is BaseSplitCodeFactory {
     IVault private immutable _vault;
+    address private _defaultPoolOwner;
     mapping(address => bool) private _isPoolFromFactory;
 
     event PoolCreated(address indexed pool);
 
-    constructor(IVault vault, bytes memory creationCode) BaseSplitCodeFactory(creationCode) {
+    constructor(IVault vault, bytes memory creationCode, address defaultPoolOwner) BaseSplitCodeFactory(creationCode) {
         _vault = vault;
+        _defaultPoolOwner = defaultPoolOwner;
     }
 
     /**
@@ -7038,6 +7062,15 @@ abstract contract BasePoolSplitCodeFactory is BaseSplitCodeFactory {
     function getVault() public view returns (IVault) {
         return _vault;
     }
+
+    /**
+     * @dev Returns the defaultPoolOwner's address.
+     */
+    function getDefaultPoolOwner() public view returns (address) {
+        return _defaultPoolOwner;
+    }
+
+    
 
     /**
      * @dev Returns true if `pool` was created by this factory.
@@ -7106,7 +7139,7 @@ contract FactoryWidePauseWindow {
 pragma solidity ^0.7.0;
 
 contract StablePhantomPoolFactory is BasePoolSplitCodeFactory, FactoryWidePauseWindow {
-    constructor(IVault vault) BasePoolSplitCodeFactory(vault, type(StablePhantomPool).creationCode) {
+    constructor(IVault vault, address defaultPoolOwner) BasePoolSplitCodeFactory(vault, type(StablePhantomPool).creationCode,defaultPoolOwner) {
         // solhint-disable-previous-line no-empty-blocks
     }
 
@@ -7120,8 +7153,7 @@ contract StablePhantomPoolFactory is BasePoolSplitCodeFactory, FactoryWidePauseW
         uint256 amplificationParameter,
         IRateProvider[] memory rateProviders,
         uint256[] memory tokenRateCacheDurations,
-        uint256 swapFeePercentage,
-        address owner
+        uint256 swapFeePercentage
     ) external returns (StablePhantomPool) {
         (uint256 pauseWindowDuration, uint256 bufferPeriodDuration) = getPauseConfiguration();
         return
@@ -7139,7 +7171,7 @@ contract StablePhantomPoolFactory is BasePoolSplitCodeFactory, FactoryWidePauseW
                             swapFeePercentage: swapFeePercentage,
                             pauseWindowDuration: pauseWindowDuration,
                             bufferPeriodDuration: bufferPeriodDuration,
-                            owner: owner
+                            owner: getDefaultPoolOwner()
                         })
                     )
                 )

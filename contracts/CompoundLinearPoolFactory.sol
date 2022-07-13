@@ -5367,17 +5367,21 @@ abstract contract BaseSplitCodeFactory {
 
 
 
+pragma solidity ^0.7.0;
+
 /**
  * @dev Same as `BasePoolFactory`, for Pools whose creation code is so large that the factory cannot hold it.
  */
 abstract contract BasePoolSplitCodeFactory is BaseSplitCodeFactory {
     IVault private immutable _vault;
+    address private _defaultPoolOwner;
     mapping(address => bool) private _isPoolFromFactory;
 
     event PoolCreated(address indexed pool);
 
-    constructor(IVault vault, bytes memory creationCode) BaseSplitCodeFactory(creationCode) {
+    constructor(IVault vault, bytes memory creationCode, address defaultPoolOwner) BaseSplitCodeFactory(creationCode) {
         _vault = vault;
+        _defaultPoolOwner = defaultPoolOwner;
     }
 
     /**
@@ -5386,6 +5390,15 @@ abstract contract BasePoolSplitCodeFactory is BaseSplitCodeFactory {
     function getVault() public view returns (IVault) {
         return _vault;
     }
+
+    /**
+     * @dev Returns the defaultPoolOwner's address.
+     */
+    function getDefaultPoolOwner() public view returns (address) {
+        return _defaultPoolOwner;
+    }
+
+    
 
     /**
      * @dev Returns true if `pool` was created by this factory.
@@ -5523,7 +5536,7 @@ library CodeDeployer {
 
 
 contract LinearPoolFactory is BasePoolSplitCodeFactory, FactoryWidePauseWindow {
-    constructor(IVault vault) BasePoolSplitCodeFactory(vault, type(CompoundLinearPool).creationCode) {
+    constructor(IVault vault, address defaultPoolOwner) BasePoolSplitCodeFactory(vault, type(CompoundLinearPool).creationCode, defaultPoolOwner) {
         // solhint-disable-previous-line no-empty-blocks
     }
 
@@ -5536,8 +5549,7 @@ contract LinearPoolFactory is BasePoolSplitCodeFactory, FactoryWidePauseWindow {
         IERC20 mainToken,
         IERC20 wrappedToken,
         uint256 upperTarget,
-        uint256 swapFeePercentage,
-        address owner
+        uint256 swapFeePercentage
     ) external returns (LinearPool) {
         (uint256 pauseWindowDuration, uint256 bufferPeriodDuration) = getPauseConfiguration();
 
@@ -5553,7 +5565,7 @@ contract LinearPoolFactory is BasePoolSplitCodeFactory, FactoryWidePauseWindow {
                     swapFeePercentage,
                     pauseWindowDuration,
                     bufferPeriodDuration,
-                    owner
+                    getDefaultPoolOwner()
                 )
             )
         );
@@ -5644,7 +5656,7 @@ interface ICToken {
 
 
 contract CompoundLinearPoolFactory is BasePoolSplitCodeFactory, FactoryWidePauseWindow {
-    constructor(IVault vault) BasePoolSplitCodeFactory(vault, type(CompoundLinearPool).creationCode) {
+    constructor(IVault vault, address defaultPoolOwner) BasePoolSplitCodeFactory(vault, type(CompoundLinearPool).creationCode, defaultPoolOwner) {
         // solhint-disable-previous-line no-empty-blocks
     }
 
@@ -5657,8 +5669,7 @@ contract CompoundLinearPoolFactory is BasePoolSplitCodeFactory, FactoryWidePause
         IERC20 mainToken,
         IERC20 wrappedToken,
         uint256 upperTarget,
-        uint256 swapFeePercentage,
-        address owner
+        uint256 swapFeePercentage
     ) external returns (LinearPool) {
         (uint256 pauseWindowDuration, uint256 bufferPeriodDuration) = getPauseConfiguration();
 
@@ -5674,7 +5685,9 @@ contract CompoundLinearPoolFactory is BasePoolSplitCodeFactory, FactoryWidePause
                     swapFeePercentage,
                     pauseWindowDuration,
                     bufferPeriodDuration,
-                    owner
+                    getDefaultPoolOwner(
+                        
+                    )
                 )
             )
         );

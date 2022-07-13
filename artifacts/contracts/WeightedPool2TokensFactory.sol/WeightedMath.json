@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "WeightedMath",
+  "sourceName": "contracts/WeightedPool2TokensFactory.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220bb7b19b7bf35122fc1d5f59333152960e6da6aa918f900f42740485fa3c3e8fc64736f6c63430007060033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220bb7b19b7bf35122fc1d5f59333152960e6da6aa918f900f42740485fa3c3e8fc64736f6c63430007060033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

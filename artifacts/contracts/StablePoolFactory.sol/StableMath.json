@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "StableMath",
+  "sourceName": "contracts/StablePoolFactory.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220e994ef83bb7325ee66bdbfadb822678eed01868bf4ff164bb90a0f38b8cbabd864736f6c63430007060033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220e994ef83bb7325ee66bdbfadb822678eed01868bf4ff164bb90a0f38b8cbabd864736f6c63430007060033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

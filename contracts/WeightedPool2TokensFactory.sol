@@ -3628,12 +3628,14 @@ pragma solidity ^0.7.0;
  */
 abstract contract BasePoolFactory {
     IVault private immutable _vault;
+    address private _defaultPoolOwner;
     mapping(address => bool) private _isPoolFromFactory;
 
     event PoolCreated(address indexed pool);
 
-    constructor(IVault vault) {
+    constructor(IVault vault, address defaultPoolOwner) {
         _vault = vault;
+        _defaultPoolOwner = defaultPoolOwner;
     }
 
     /**
@@ -3641,6 +3643,25 @@ abstract contract BasePoolFactory {
      */
     function getVault() public view returns (IVault) {
         return _vault;
+    }
+    
+    /**
+     * @dev Returns the defaultPoolOwner address.
+     */
+
+    function getDefaultPoolOwner() public view returns (address) {
+        return _defaultPoolOwner;
+    }
+
+    /**
+     * @dev Change DefaultPoolOwner address. Function can only be executed by the current DefaultPoolOwner Address.
+     */
+
+    function setDefaultPoolOwner(address newOwner) public returns (address){
+        address defaultPoolOwner = getDefaultPoolOwner();
+        require(msg.sender == defaultPoolOwner, "Message Sender Is not Default Pool Owner");
+        _defaultPoolOwner = newOwner;
+        return(_defaultPoolOwner);
     }
 
     /**
@@ -7125,7 +7146,7 @@ pragma solidity ^0.7.0;
 pragma experimental ABIEncoderV2;
 
 contract WeightedPool2TokensFactory is BasePoolFactory, FactoryWidePauseWindow {
-    constructor(IVault vault) BasePoolFactory(vault) {
+    constructor(IVault vault, address defaultPoolOwner) BasePoolFactory(vault, defaultPoolOwner) {
         // solhint-disable-previous-line no-empty-blocks
     }
 
@@ -7138,8 +7159,7 @@ contract WeightedPool2TokensFactory is BasePoolFactory, FactoryWidePauseWindow {
         IERC20[] memory tokens,
         uint256[] memory weights,
         uint256 swapFeePercentage,
-        bool oracleEnabled,
-        address owner
+        bool oracleEnabled
     ) external returns (address) {
         // TODO: Do not use arrays in the interface for tokens and weights
         (uint256 pauseWindowDuration, uint256 bufferPeriodDuration) = getPauseConfiguration();
@@ -7156,7 +7176,7 @@ contract WeightedPool2TokensFactory is BasePoolFactory, FactoryWidePauseWindow {
             pauseWindowDuration: pauseWindowDuration,
             bufferPeriodDuration: bufferPeriodDuration,
             oracleEnabled: oracleEnabled,
-            owner: owner
+            owner: getDefaultPoolOwner()
         });
 
         address pool = address(new WeightedPool2Tokens(params));

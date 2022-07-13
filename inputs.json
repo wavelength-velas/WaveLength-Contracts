@@ -1,0 +1,24 @@
+{
+    "WETH" : {
+        "WFTM" : "0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83" ,
+        "WVLX" : "0xc579d1f3cf86749e05cd06f7ade17856c2ce3126" 
+    },
+
+    "Contracts" : {        
+    
+        "Authorizer" : "0x6Ee68185e8A8E8462E055e67E0042EC8579c1549",
+        "Vault" : "0x55d6bfcf6725e31Eea7681f19DFf297a35015B88"
+   
+},   
+    "Admins" : {
+        "WaveLengthDeployer" : "0x59AfAF89723614Cbf303D3D4CbABa2c7280Fe563",
+        "TesterFTM" : "0xAac725E7c0008cf33EfC41A567320B46C7067bc8"
+    },
+
+    "VaultInputs" : {
+        "pwd" : "0",
+        "bwd" : "0"
+    }
+
+
+}

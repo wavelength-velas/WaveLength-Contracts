@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "ganache" : "ganache --wallet.seed myCustomSeed"
+    "ganache": "ganache --wallet.seed myCustomSeed"
   },
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     "ethers": "^5.4.1",
     "ganache": "^7.3.2",
     "hardhat-deploy-fake-erc20": "^0.0.3-alpha",
-    "yarn": "^1.22.19",
-    "web3": "^1.7.3"
+    "web3": "^1.7.3",
+    "yarn": "^1.22.19"
   }
 }

@@ -1,10 +1,10 @@
 import { ethers } from 'ethers'
 import Web3 from 'web3'
 export const config = {
-    chainId: 250,
-    networkName: 'Fantom Opera Mainnet',
-    ftmscanUrl: 'https://ftmscan.com',
-    defaultProvider: 'https://rpc.ftm.tools/'
+    chainId: 106,
+    networkName: 'Velas Mainnet',
+    ftmscanUrl: 'https://evmexplorer.velas.com/',
+    defaultProvider: 'https://evmexplorer.velas.com/rpc'
   };
   
   export type EthereumConfig = {

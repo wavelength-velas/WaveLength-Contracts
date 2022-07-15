@@ -106,4 +106,4 @@ async function deploySingleFactory(factoryType:string) {
 }
 
 
-deploySingleFactory("StablePoolFactory");
+deploySingleFactory("AaveLinearPoolFactory");

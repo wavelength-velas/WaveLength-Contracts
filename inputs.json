@@ -7,7 +7,13 @@
     "Contracts" : {        
     
         "Authorizer" : "0x6Ee68185e8A8E8462E055e67E0042EC8579c1549",
-        "Vault" : "0x55d6bfcf6725e31Eea7681f19DFf297a35015B88"
+        "Vault" : "0x55d6bfcf6725e31Eea7681f19DFf297a35015B88",
+        "StablePoolFactory" : "0x22D9Dfb080cDfa733f7e9B61c15E50eB52E1fd92",
+        "StablePhantomPoolFactory": "0xAE2654D70153595B712cF474B1377d568A55Ee35",
+        "WeightedPoolFactory": "0x284f9Fc430cB9fB68683B0A6d79526EBA60845fD",
+        "WeightedPool2TokensFactory": "0x673C625D841deF04696361b61D7abbBE64DB075e",
+        "AaveLinearPool": "",
+        "NoProtocolFeeLiquidityBootstrappingPool" : ""
    
 },   
     "Admins" : {

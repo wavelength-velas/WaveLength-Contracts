@@ -4,6 +4,7 @@ import * as inputs from "../inputs.json"
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import { open, close, appendFile } from 'node:fs';
+import { ContractFactory } from 'ethers';
 dotenv.config();
 
 
@@ -105,5 +106,31 @@ async function deploySingleFactory(factoryType:string) {
   return contract;
 }
 
+async function deployToken(ContractFactory: string) {
+  const token = await ethers.getContractFactory(ContractFactory);
+  let Input : string;
+  //2. It will create a json request, json-rpc request over to eth network, and the network will call a process to begin a transaction
+  const [deployer] = await ethers.getSigners();
+  console.log(`Deploying contracts with the account: ${deployer.address}`);
+  Input = deployer.address;
+  const contract = await token.deploy();
+  //3. When the process before done, we will deployed the contract
+  await contract.deployed();
+  //4. All of the respnose will be returned. And named to contract variable
+  console.log(contract);
+  return contract;
+}
+
+async function deployTokenomics(tokenFactory:string) {
+deployToken(tokenFactory);
+
+
+
+  
+}
+
+async (patrams:type) => {
+  
+}
 
 deploySingleFactory("AaveLinearPoolFactory");

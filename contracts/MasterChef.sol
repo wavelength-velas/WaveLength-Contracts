@@ -1222,14 +1222,14 @@ abstract contract Ownable is Context {
 
 pragma solidity 0.8.7;
 
-contract WVLTToken is ERC20("WVLTToken", "WVLT"), Ownable {
-    uint256 public constant MAX_SUPPLY = 250_000_000e18; // 250 million wvlt
+contract WAVEToken is ERC20("WAVEToken", "WAVE"), Ownable {
+    uint256 public constant MAX_SUPPLY = 250_000_000e18; // 250 million wave
 
     /// @notice Creates `_amount` token to `_to`. Must only be called by the owner (MasterChef).
     function mint(address _to, uint256 _amount) public onlyOwner {
         require(
             totalSupply() + _amount <= MAX_SUPPLY,
-            "WVLT::mint: cannot exceed max supply"
+            "WAVE::mint: cannot exceed max supply"
         );
         _mint(_to, _amount);
     }
@@ -1238,18 +1238,18 @@ contract WVLTToken is ERC20("WVLTToken", "WVLT"), Ownable {
 pragma solidity 0.8.7;
 
 interface IRewarder {
-    function onWVLTReward(
+    function onWAVEReward(
         uint256 pid,
         address user,
         address recipient,
-        uint256 wvltAmount,
+        uint256 waveAmount,
         uint256 newLpAmount
     ) external;
 
     function pendingTokens(
         uint256 pid,
         address user,
-        uint256 wvltAmount
+        uint256 waveAmount
     ) external view returns (IERC20[] memory, uint256[] memory);
 }
 
@@ -1263,10 +1263,10 @@ pragma solidity 0.8.7;
      - remove withdraw function (without harvest) => requires the rewardDebt to be an signed int instead of uint which requires a lot of casting and has no real usecase for us
      - no dev emissions, but treasury emissions instead
      - treasury percentage is subtracted from emissions instead of added on top
-     - update of emission rate with upper limit of 6 WVLT/block
+     - update of emission rate with upper limit of 6 WAVE/block
      - more require checks in general
 */
-contract WVLTMasterChef is Ownable {
+contract WAVEMasterChef is Ownable {
     using SafeERC20 for IERC20;
     using EnumerableSet for EnumerableSet.AddressSet;
 
@@ -1275,34 +1275,34 @@ contract WVLTMasterChef is Ownable {
         uint256 amount; // How many LP tokens the user has provided.
         uint256 rewardDebt; // Reward debt. See explanation below.
         //
-        // We do some fancy math here. Basically, any point in time, the amount of WVLT
+        // We do some fancy math here. Basically, any point in time, the amount of WAVE
         // entitled to a user but is pending to be distributed is:
         //
-        //   pending reward = (user.amount * pool.accWVLTPerShare) - user.rewardDebt
+        //   pending reward = (user.amount * pool.accWAVEPerShare) - user.rewardDebt
         //
         // Whenever a user deposits or withdraws LP tokens to a pool. Here's what happens:
-        //   1. The pool's `accWVLTPerShare` (and `lastRewardBlock`) gets updated.
+        //   1. The pool's `accWAVEPerShare` (and `lastRewardBlock`) gets updated.
         //   2. User receives the pending reward sent to his/her address.
         //   3. User's `amount` gets updated.
         //   4. User's `rewardDebt` gets updated.
     }
     // Info of each pool.
     struct PoolInfo {
-        // we have a fixed number of WVLT tokens released per block, each pool gets his fraction based on the allocPoint
-        uint256 allocPoint; // How many allocation points assigned to this pool. the fraction WVLT to distribute per block.
-        uint256 lastRewardBlock; // Last block number that WVLT distribution occurs.
-        uint256 accWVLTPerShare; // Accumulated WVLT per LP share. this is multiplied by ACC_WVLT_PRECISION for more exact results (rounding errors)
+        // we have a fixed number of WAVE tokens released per block, each pool gets his fraction based on the allocPoint
+        uint256 allocPoint; // How many allocation points assigned to this pool. the fraction WAVE to distribute per block.
+        uint256 lastRewardBlock; // Last block number that WAVE distribution occurs.
+        uint256 accWAVEPerShare; // Accumulated WAVE per LP share. this is multiplied by ACC_WAVE_PRECISION for more exact results (rounding errors)
     }
-    // The WVLT TOKEN!
-    WVLTToken public wvlt;
+    // The WAVE TOKEN!
+    WAVEToken public wave;
 
     // Treasury address.
     address public treasuryAddress;
 
-    // WVLT tokens created per block.
-    uint256 public wvltPerBlock;
+    // WAVE tokens created per block.
+    uint256 public wavePerBlock;
 
-    uint256 private constant ACC_WVLT_PRECISION = 1e12;
+    uint256 private constant ACC_WAVE_PRECISION = 1e12;
 
     // distribution percentages: a value of 1000 = 100%
     // 12.8% percentage of pool rewards that goes to the treasury.
@@ -1325,7 +1325,7 @@ contract WVLTMasterChef is Ownable {
     mapping(uint256 => mapping(address => UserInfo)) public userInfo; // mapping form poolId => user Address => User Info
     // Total allocation points. Must be the sum of all allocation points in all pools.
     uint256 public totalAllocPoint = 0;
-    // The block number when WVLT mining starts.
+    // The block number when WAVE mining starts.
     uint256 public startBlock;
 
     event Deposit(
@@ -1363,27 +1363,27 @@ contract WVLTMasterChef is Ownable {
         uint256 indexed pid,
         uint256 lastRewardBlock,
         uint256 lpSupply,
-        uint256 accWVLTPerShare
+        uint256 accWAVEPerShare
     );
     event SetTreasuryAddress(
         address indexed oldAddress,
         address indexed newAddress
     );
-    event UpdateEmissionRate(address indexed user, uint256 _wvltPerSec);
+    event UpdateEmissionRate(address indexed user, uint256 _wavePerSec);
 
     constructor(
-        WVLTToken _wvlt,
+        WAVEToken _wave,
         address _treasuryAddress,
-        uint256 _wvltPerBlock,
+        uint256 _wavePerBlock,
         uint256 _startBlock
     ) {
         require(
-            _wvltPerBlock <= 6e18,
-            "maximum emission rate of 6 wvlt per block exceeded"
+            _wavePerBlock <= 6e18,
+            "maximum emission rate of 6 wave per block exceeded"
         );
-        wvlt = _wvlt;
+        wave = _wave;
         treasuryAddress = _treasuryAddress;
-        wvltPerBlock = _wvltPerBlock;
+        wavePerBlock = _wavePerBlock;
         startBlock = _startBlock;
     }
 
@@ -1427,7 +1427,7 @@ contract WVLTMasterChef is Ownable {
             PoolInfo({
                 allocPoint: _allocPoint,
                 lastRewardBlock: lastRewardBlock,
-                accWVLTPerShare: 0
+                accWAVEPerShare: 0
             })
         );
         emit LogPoolAddition(
@@ -1438,7 +1438,7 @@ contract WVLTMasterChef is Ownable {
         );
     }
 
-    // Update the given pool's WVLT allocation point. Can only be called by the owner.
+    // Update the given pool's WAVE allocation point. Can only be called by the owner.
     /// @param _pid The index of the pool. See `poolInfo`.
     /// @param _allocPoint New AP of the pool.
     /// @param _rewarder Address of the rewarder delegate.
@@ -1474,41 +1474,41 @@ contract WVLTMasterChef is Ownable {
         );
     }
 
-    // View function to see pending WVLT on frontend.
-    function pendingWVLT(uint256 _pid, address _user)
+    // View function to see pending WAVE on frontend.
+    function pendingWAVE(uint256 _pid, address _user)
         external
         view
         returns (uint256 pending)
     {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
-        // how many WVLT per lp token
-        uint256 accWVLTPerShare = pool.accWVLTPerShare;
+        // how many WAVE per lp token
+        uint256 accWAVEPerShare = pool.accWAVEPerShare;
         // total staked lp tokens in this pool
         uint256 lpSupply = lpTokens[_pid].balanceOf(address(this));
 
         if (block.number > pool.lastRewardBlock && lpSupply != 0) {
             uint256 blocksSinceLastReward = block.number - pool.lastRewardBlock;
-            // based on the pool weight (allocation points) we calculate the wvlt rewarded for this specific pool
-            uint256 wvltRewards = (blocksSinceLastReward *
-                wvltPerBlock *
+            // based on the pool weight (allocation points) we calculate the wave rewarded for this specific pool
+            uint256 waveRewards = (blocksSinceLastReward *
+                wavePerBlock *
                 pool.allocPoint) / totalAllocPoint;
 
             // we take parts of the rewards for treasury, these can be subject to change, so we recalculate it
             // a value of 1000 = 100%
-            uint256 wvltRewardsForPool = (wvltRewards * POOL_PERCENTAGE) /
+            uint256 waveRewardsForPool = (waveRewards * POOL_PERCENTAGE) /
                 1000;
 
-            // we calculate the new amount of accumulated wvlt per LP token
-            accWVLTPerShare =
-                accWVLTPerShare +
-                ((wvltRewardsForPool * ACC_WVLT_PRECISION) / lpSupply);
+            // we calculate the new amount of accumulated wave per LP token
+            accWAVEPerShare =
+                accWAVEPerShare +
+                ((waveRewardsForPool * ACC_WAVE_PRECISION) / lpSupply);
         }
         // based on the number of LP tokens the user owns, we calculate the pending amount by subtracting the amount
         // which he is not eligible for (joined the pool later) or has already harvested
         pending =
-            (user.amount * accWVLTPerShare) /
-            ACC_WVLT_PRECISION -
+            (user.amount * accWAVEPerShare) /
+            ACC_WAVE_PRECISION -
             user.rewardDebt;
     }
 
@@ -1533,23 +1533,23 @@ contract WVLTMasterChef is Ownable {
                     pool.lastRewardBlock;
 
                 // rewards for this pool based on his allocation points
-                uint256 wvltRewards = (blocksSinceLastReward *
-                    wvltPerBlock *
+                uint256 waveRewards = (blocksSinceLastReward *
+                    wavePerBlock *
                     pool.allocPoint) / totalAllocPoint;
 
-                uint256 wvltRewardsForPool = (wvltRewards * POOL_PERCENTAGE) /
+                uint256 waveRewardsForPool = (waveRewards * POOL_PERCENTAGE) /
                     1000;
 
-                wvlt.mint(
+                wave.mint(
                     treasuryAddress,
-                    (wvltRewards * TREASURY_PERCENTAGE) / 1000
+                    (waveRewards * TREASURY_PERCENTAGE) / 1000
                 );
 
-                wvlt.mint(address(this), wvltRewardsForPool);
+                wave.mint(address(this), waveRewardsForPool);
 
-                pool.accWVLTPerShare =
-                    pool.accWVLTPerShare +
-                    ((wvltRewardsForPool * ACC_WVLT_PRECISION) / lpSupply);
+                pool.accWAVEPerShare =
+                    pool.accWAVEPerShare +
+                    ((waveRewardsForPool * ACC_WAVE_PRECISION) / lpSupply);
             }
             pool.lastRewardBlock = block.number;
             poolInfo[_pid] = pool;
@@ -1558,12 +1558,12 @@ contract WVLTMasterChef is Ownable {
                 _pid,
                 pool.lastRewardBlock,
                 lpSupply,
-                pool.accWVLTPerShare
+                pool.accWAVEPerShare
             );
         }
     }
 
-    // Deposit LP tokens to MasterChef for WVLT allocation.
+    // Deposit LP tokens to MasterChef for WAVE allocation.
     function deposit(
         uint256 _pid,
         uint256 _amount,
@@ -1575,15 +1575,15 @@ contract WVLTMasterChef is Ownable {
         user.amount = user.amount + _amount;
         // since we add more LP tokens, we have to keep track of the rewards he is not eligible for
         // if we would not do that, he would get rewards like he added them since the beginning of this pool
-        // note that only the accWVLTPerShare have the precision applied
+        // note that only the accWAVEPerShare have the precision applied
         user.rewardDebt =
             user.rewardDebt +
-            (_amount * pool.accWVLTPerShare) /
-            ACC_WVLT_PRECISION;
+            (_amount * pool.accWAVEPerShare) /
+            ACC_WAVE_PRECISION;
 
         IRewarder _rewarder = rewarder[_pid];
         if (address(_rewarder) != address(0)) {
-            _rewarder.onWVLTReward(_pid, _to, _to, 0, user.amount);
+            _rewarder.onWAVEReward(_pid, _to, _to, 0, user.amount);
         }
 
         lpTokens[_pid].safeTransferFrom(msg.sender, address(this), _amount);
@@ -1601,42 +1601,42 @@ contract WVLTMasterChef is Ownable {
 
     /// @notice Harvest proceeds for transaction sender to `_to`.
     /// @param _pid The index of the pool. See `poolInfo`.
-    /// @param _to Receiver of WVLT rewards.
+    /// @param _to Receiver of WAVE rewards.
     function harvest(uint256 _pid, address _to) public {
         PoolInfo memory pool = updatePool(_pid);
         UserInfo storage user = userInfo[_pid][msg.sender];
 
         // this would  be the amount if the user joined right from the start of the farm
-        uint256 accumulatedWVLT = (user.amount * pool.accWVLTPerShare) /
-            ACC_WVLT_PRECISION;
+        uint256 accumulatedWAVE = (user.amount * pool.accWAVEPerShare) /
+            ACC_WAVE_PRECISION;
         // subtracting the rewards the user is not eligible for
-        uint256 eligibleWVLT = accumulatedWVLT - user.rewardDebt;
+        uint256 eligibleWAVE = accumulatedWAVE - user.rewardDebt;
 
         // we set the new rewardDebt to the current accumulated amount of rewards for his amount of LP token
-        user.rewardDebt = accumulatedWVLT;
+        user.rewardDebt = accumulatedWAVE;
 
-        if (eligibleWVLT > 0) {
-            safeWVLTTransfer(_to, eligibleWVLT);
+        if (eligibleWAVE > 0) {
+            safeWAVETransfer(_to, eligibleWAVE);
         }
 
         IRewarder _rewarder = rewarder[_pid];
         if (address(_rewarder) != address(0)) {
-            _rewarder.onWVLTReward(
+            _rewarder.onWAVEReward(
                 _pid,
                 msg.sender,
                 _to,
-                eligibleWVLT,
+                eligibleWAVE,
                 user.amount
             );
         }
 
-        emit Harvest(msg.sender, _pid, eligibleWVLT);
+        emit Harvest(msg.sender, _pid, eligibleWAVE);
     }
 
     /// @notice Withdraw LP tokens from MCV and harvest proceeds for transaction sender to `_to`.
     /// @param _pid The index of the pool. See `poolInfo`.
     /// @param _amount LP token amount to withdraw.
-    /// @param _to Receiver of the LP tokens and WVLT rewards.
+    /// @param _to Receiver of the LP tokens and WAVE rewards.
     function withdrawAndHarvest(
         uint256 _pid,
         uint256 _amount,
@@ -1648,33 +1648,33 @@ contract WVLTMasterChef is Ownable {
         require(_amount <= user.amount, "cannot withdraw more than deposited");
 
         // this would  be the amount if the user joined right from the start of the farm
-        uint256 accumulatedWVLT = (user.amount * pool.accWVLTPerShare) /
-            ACC_WVLT_PRECISION;
+        uint256 accumulatedWAVE = (user.amount * pool.accWAVEPerShare) /
+            ACC_WAVE_PRECISION;
         // subtracting the rewards the user is not eligible for
-        uint256 eligibleWVLT = accumulatedWVLT - user.rewardDebt;
+        uint256 eligibleWAVE = accumulatedWAVE - user.rewardDebt;
 
         /*
             after harvest & withdraw, he should be eligible for exactly 0 tokens
-            => userInfo.amount * pool.accWVLTPerShare / ACC_WVLT_PRECISION == userInfo.rewardDebt
+            => userInfo.amount * pool.accWAVEPerShare / ACC_WAVE_PRECISION == userInfo.rewardDebt
             since we are removing some LP's from userInfo.amount, we also have to remove
             the equivalent amount of reward debt
         */
 
         user.rewardDebt =
-            accumulatedWVLT -
-            (_amount * pool.accWVLTPerShare) /
-            ACC_WVLT_PRECISION;
+            accumulatedWAVE -
+            (_amount * pool.accWAVEPerShare) /
+            ACC_WAVE_PRECISION;
         user.amount = user.amount - _amount;
 
-        safeWVLTTransfer(_to, eligibleWVLT);
+        safeWAVETransfer(_to, eligibleWAVE);
 
         IRewarder _rewarder = rewarder[_pid];
         if (address(_rewarder) != address(0)) {
-            _rewarder.onWVLTReward(
+            _rewarder.onWAVEReward(
                 _pid,
                 msg.sender,
                 _to,
-                eligibleWVLT,
+                eligibleWAVE,
                 user.amount
             );
         }
@@ -1682,7 +1682,7 @@ contract WVLTMasterChef is Ownable {
         lpTokens[_pid].safeTransfer(_to, _amount);
 
         emit Withdraw(msg.sender, _pid, _amount, _to);
-        emit Harvest(msg.sender, _pid, eligibleWVLT);
+        emit Harvest(msg.sender, _pid, eligibleWAVE);
     }
 
     // Withdraw without caring about rewards. EMERGENCY ONLY.
@@ -1694,7 +1694,7 @@ contract WVLTMasterChef is Ownable {
 
         IRewarder _rewarder = rewarder[_pid];
         if (address(_rewarder) != address(0)) {
-            _rewarder.onWVLTReward(_pid, msg.sender, _to, 0, 0);
+            _rewarder.onWAVEReward(_pid, msg.sender, _to, 0, 0);
         }
 
         // Note: transfer can fail or succeed if `amount` is zero.
@@ -1702,13 +1702,13 @@ contract WVLTMasterChef is Ownable {
         emit EmergencyWithdraw(msg.sender, _pid, amount, _to);
     }
 
-    // Safe WVLT transfer function, just in case if rounding error causes pool to not have enough WVLT.
-    function safeWVLTTransfer(address _to, uint256 _amount) internal {
-        uint256 wvltBalance = wvlt.balanceOf(address(this));
-        if (_amount > wvltBalance) {
-            wvlt.transfer(_to, wvltBalance);
+    // Safe WAVE transfer function, just in case if rounding error causes pool to not have enough WAVE.
+    function safeWAVETransfer(address _to, uint256 _amount) internal {
+        uint256 waveBalance = wave.balanceOf(address(this));
+        if (_amount > waveBalance) {
+            wave.transfer(_to, waveBalance);
         } else {
-            wvlt.transfer(_to, _amount);
+            wave.transfer(_to, _amount);
         }
     }
 
@@ -1718,12 +1718,12 @@ contract WVLTMasterChef is Ownable {
         emit SetTreasuryAddress(treasuryAddress, _treasuryAddress);
     }
 
-    function updateEmissionRate(uint256 _wvltPerBlock) public onlyOwner {
+    function updateEmissionRate(uint256 _wavePerBlock) public onlyOwner {
         require(
-            _wvltPerBlock <= 6e18,
-            "maximum emission rate of 6 wvlt per block exceeded"
+            _wavePerBlock <= 6e18,
+            "maximum emission rate of 6 wave per block exceeded"
         );
-        wvltPerBlock = _wvltPerBlock;
-        emit UpdateEmissionRate(msg.sender, _wvltPerBlock);
+        wavePerBlock = _wavePerBlock;
+        emit UpdateEmissionRate(msg.sender, _wavePerBlock);
     }
 }

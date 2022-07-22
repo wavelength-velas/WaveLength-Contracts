@@ -143,61 +143,6 @@
         "Ballot"
       ]
     },
-    "C:\\Users\\berna\\OneDrive\\Documents\\SurfLodge Documents\\WaveLength\\WaveLength-Contracts-1\\contracts\\MasterChef.sol": {
-      "lastModificationDate": 1657119786958,
-      "contentHash": "6967ffb770940cd0475148409c40b837",
-      "sourceName": "contracts/MasterChef.sol",
-      "solcConfig": {
-        "version": "0.8.7",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "0.8.7",
-        "0.8.7",
-        "0.8.7"
-      ],
-      "artifacts": [
-        "Address",
-        "Context",
-        "ERC20",
-        "EnumerableSet",
-        "IERC20",
-        "IERC20Metadata",
-        "IRewarder",
-        "Ownable",
-        "SafeERC20",
-        "WVLTMasterChef",
-        "WVLTToken"
-      ]
-    },
     "C:\\Users\\berna\\OneDrive\\Documents\\SurfLodge Documents\\WaveLength\\WaveLength-Contracts-1\\contracts\\MasterChefOperator.sol": {
       "lastModificationDate": 1657119786958,
       "contentHash": "1848d61198dfb1435bc073a041f8fb65",
@@ -277,98 +222,6 @@
       ],
       "artifacts": [
         "Timelock"
-      ]
-    },
-    "C:\\Users\\berna\\OneDrive\\Documents\\SurfLodge Documents\\WaveLength\\WaveLength-Contracts-1\\contracts\\veWVLT.sol": {
-      "lastModificationDate": 1657118414075,
-      "contentHash": "512c0cd68b42dbd1e5681aaadc9df47b",
-      "sourceName": "contracts/veWVLT.sol",
-      "solcConfig": {
-        "version": "0.8.7",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "0.8.7"
-      ],
-      "artifacts": [
-        "Address",
-        "Context",
-        "ERC20",
-        "IERC20",
-        "IERC20Metadata",
-        "SafeERC20",
-        "WVLTBar"
-      ]
-    },
-    "C:\\Users\\berna\\OneDrive\\Documents\\SurfLodge Documents\\WaveLength\\WaveLength-Contracts-1\\contracts\\WVLTToken.sol": {
-      "lastModificationDate": 1657119786959,
-      "contentHash": "f1dfb8b8262b90ec05ea39687848f4af",
-      "sourceName": "contracts/WVLTToken.sol",
-      "solcConfig": {
-        "version": "0.8.7",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "0.8.7"
-      ],
-      "artifacts": [
-        "Context",
-        "ERC20",
-        "IERC20",
-        "IERC20Metadata",
-        "Ownable",
-        "WVLTToken"
       ]
     },
     "C:\\Users\\berna\\OneDrive\\Documents\\SurfLodge Documents\\WaveLength\\WaveLength-Contracts-1\\contracts\\Authorizer.sol": {
@@ -1206,6 +1059,363 @@
         "SafeMath",
         "TemporarilyPausable",
         "WordCodec"
+      ]
+    },
+    "C:\\Users\\berna\\OneDrive\\Documents\\SurfLodge Documents\\WaveLength\\WaveLength-Contracts-1\\contracts\\veWAVE.sol": {
+      "lastModificationDate": 1658306509005,
+      "contentHash": "1920683cf1d5548b00ddd69270042a43",
+      "sourceName": "contracts/veWAVE.sol",
+      "solcConfig": {
+        "version": "0.8.7",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "0.8.7"
+      ],
+      "artifacts": [
+        "Address",
+        "Context",
+        "ERC20",
+        "IERC20",
+        "IERC20Metadata",
+        "SafeERC20",
+        "WAVEBar"
+      ]
+    },
+    "C:\\Users\\berna\\OneDrive\\Documents\\SurfLodge Documents\\WaveLength\\WaveLength-Contracts-1\\contracts\\WAVEToken.sol": {
+      "lastModificationDate": 1658306409800,
+      "contentHash": "91165477262ba36abed753f36e04aa3b",
+      "sourceName": "contracts/WAVEToken.sol",
+      "solcConfig": {
+        "version": "0.8.7",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "0.8.7"
+      ],
+      "artifacts": [
+        "Context",
+        "ERC20",
+        "IERC20",
+        "IERC20Metadata",
+        "Ownable",
+        "WAVEToken"
+      ]
+    },
+    "C:\\Users\\berna\\OneDrive\\Documents\\SurfLodge Documents\\WaveLength\\WaveLength-Contracts-1\\contracts\\NoProtocolFeeLiquidityBootstrappingPoolFactory.sol": {
+      "lastModificationDate": 1658323585828,
+      "contentHash": "90c8b5e826d7db6b032e211e28f476f5",
+      "sourceName": "contracts/NoProtocolFeeLiquidityBootstrappingPoolFactory.sol",
+      "solcConfig": {
+        "version": "0.7.6",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 50
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0",
+        "^0.7.0"
+      ],
+      "artifacts": [
+        "Authentication",
+        "BalancerPoolToken",
+        "BaseGeneralPool",
+        "BaseMinimalSwapInfoPool",
+        "BasePool",
+        "BasePoolAuthorization",
+        "BasePoolFactory",
+        "BasePoolSplitCodeFactory",
+        "BaseSplitCodeFactory",
+        "BaseWeightedPool",
+        "Buffer",
+        "CodeDeployer",
+        "EIP712",
+        "ERC20",
+        "ERC20Permit",
+        "Errors",
+        "FactoryWidePauseWindow",
+        "FixedPoint",
+        "IAsset",
+        "IAssetManager",
+        "IAuthentication",
+        "IAuthorizer",
+        "IBasePool",
+        "IERC20",
+        "IERC20Permit",
+        "IFlashLoanRecipient",
+        "IGeneralPool",
+        "IMinimalSwapInfoPool",
+        "IPoolPriceOracle",
+        "IPoolSwapStructs",
+        "IPriceOracle",
+        "IProtocolFeesCollector",
+        "ISignaturesValidator",
+        "ITemporarilyPausable",
+        "IVault",
+        "IWETH",
+        "InputHelpers",
+        "LiquidityBootstrappingPool",
+        "LiquidityBootstrappingPoolFactory",
+        "LogCompression",
+        "LogExpMath",
+        "Math",
+        "MockLogCompression",
+        "MockPoolPriceOracle",
+        "MockSamples",
+        "MockWeightedMath",
+        "MockWeightedOracleMath",
+        "MockWeightedPool2Tokens",
+        "NoProtocolFeeLiquidityBootstrappingPool",
+        "NoProtocolFeeLiquidityBootstrappingPoolFactory",
+        "PoolPriceOracle",
+        "ReentrancyGuard",
+        "SafeMath",
+        "Samples",
+        "TemporarilyPausable",
+        "WeightCompression",
+        "WeightedMath",
+        "WeightedOracleMath",
+        "WeightedPool",
+        "WeightedPool2Tokens",
+        "WeightedPool2TokensMiscData",
+        "WeightedPoolFactory",
+        "WeightedPoolNoAMFactory",
+        "WeightedPoolUserDataHelpers",
+        "WordCodec"
+      ]
+    },
+    "C:\\Users\\berna\\OneDrive\\Documents\\SurfLodge Documents\\WaveLength\\WaveLength-Contracts-1\\contracts\\WAVEMasterChef.sol": {
+      "lastModificationDate": 1658334796592,
+      "contentHash": "9a22521854ec31c6a5f958f0c0fe1178",
+      "sourceName": "contracts/WAVEMasterChef.sol",
+      "solcConfig": {
+        "version": "0.8.7",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "0.8.7",
+        "0.8.7",
+        "0.8.7"
+      ],
+      "artifacts": [
+        "Address",
+        "Context",
+        "ERC20",
+        "EnumerableSet",
+        "IERC20",
+        "IERC20Metadata",
+        "IRewarder",
+        "Ownable",
+        "SafeERC20",
+        "WAVEMasterChef",
+        "WAVEToken"
+      ]
+    },
+    "C:\\Users\\berna\\OneDrive\\Documents\\SurfLodge Documents\\WaveLength\\WaveLength-Contracts-1\\contracts\\WAVEBar.sol": {
+      "lastModificationDate": 1658500171916,
+      "contentHash": "b5ae42879ac38348cb114f278308eec9",
+      "sourceName": "contracts/WAVEBar.sol",
+      "solcConfig": {
+        "version": "0.8.7",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "0.8.7"
+      ],
+      "artifacts": [
+        "Address",
+        "Context",
+        "ERC20",
+        "IERC20",
+        "IERC20Metadata",
+        "SafeERC20",
+        "WaveBar"
       ]
     }
   }

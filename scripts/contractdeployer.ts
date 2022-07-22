@@ -14,7 +14,11 @@ function printToInput (data: any){
 }
 
 
-
+async function initializeSigner() {
+  const [deployer] = await ethers.getSigners();
+  console.log(`Deploying contracts with the account: ${deployer.address}`);
+  return deployer;
+}
 
 async function deploy() {
   //1. Get the contract factory
@@ -106,31 +110,3 @@ async function deploySingleFactory(factoryType:string) {
   return contract;
 }
 
-async function deployToken(ContractFactory: string) {
-  const token = await ethers.getContractFactory(ContractFactory);
-  let Input : string;
-  //2. It will create a json request, json-rpc request over to eth network, and the network will call a process to begin a transaction
-  const [deployer] = await ethers.getSigners();
-  console.log(`Deploying contracts with the account: ${deployer.address}`);
-  Input = deployer.address;
-  const contract = await token.deploy();
-  //3. When the process before done, we will deployed the contract
-  await contract.deployed();
-  //4. All of the respnose will be returned. And named to contract variable
-  console.log(contract);
-  return contract;
-}
-
-async function deployTokenomics(tokenFactory:string) {
-deployToken(tokenFactory);
-
-
-
-  
-}
-
-async (patrams:type) => {
-  
-}
-
-deploySingleFactory("AaveLinearPoolFactory");

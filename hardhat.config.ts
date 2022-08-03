@@ -1,10 +1,13 @@
 import {HardhatUserConfig} from 'hardhat/types';
+import '@typechain/hardhat';
+import "@nomiclabs/hardhat-ethers";
 import '@nomiclabs/hardhat-waffle';
 import 'hardhat-deploy-fake-erc20';
 import '@nomiclabs/hardhat-etherscan';
-import "@nomiclabs/hardhat-ethers";
 import * as dotenv from 'dotenv';
+import "hardhat-deploy-ethers";
 import * as fs from 'fs';
+
 dotenv.config();
 
 const config: HardhatUserConfig = {
@@ -44,21 +47,6 @@ const config: HardhatUserConfig = {
             // gasMultiplier: 2,
         },
     },
-    etherscan: {
-        apiKey: {
-          velas: ""
-        },
-        customChains: [
-          {
-            network: "velas",
-            chainId: 106,
-            urls: {
-              apiURL: "http://0.0.0.0/api/eth-rpc",
-              browserURL: "https://evmexplorer.velas.com/"
-            }
-          }
-        ]
-      }
 }
 
 export default config;

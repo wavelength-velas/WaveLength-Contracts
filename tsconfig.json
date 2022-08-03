@@ -5,6 +5,14 @@
       "module": "commonjs",
       "strict": true,
       "moduleResolution": "node",
+      "esModuleInterop": true,
+      "outDir": "dist",
       "resolveJsonModule": true
-    }
+    },
+    "include": [
+      "./scripts",
+      "./test",
+      "./typechain-types"
+    ],
+    "files": ["./hardhat.config.ts"]
   }

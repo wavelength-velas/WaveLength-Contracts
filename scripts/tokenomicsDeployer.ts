@@ -14,11 +14,12 @@ async function initializeSigner() {
     return deployer;
   }
   
+  let deployer = initializeSigner();
 
 
-/*async function deployToken()  {
+export async function deployToken()  {
     const token = await ethers.getContractFactory("contracts/WAVEToken.sol:WAVEToken");
-  ~
+  
     //2. It will create a json request, json-rpc request over to eth network, and the network will call a process to begin a transaction
   
     const contract = await token.deploy();
@@ -27,11 +28,12 @@ async function initializeSigner() {
     await contract.deployed();
   
     //4. All of the respnose will be returned. And named to contract variable
-    console.log(contract);
-    return contract;
-  }*/
   
-  async function deployMasterChef(tokenAddress:string, treasuryAddress: string ,tokenPerBlock: string, startBlock: string) {
+    console.log("Token Deployed At: " + await contract.address);
+    return contract;
+  }
+  
+  export async function deployMasterChef(tokenAddress:string, treasuryAddress: string ,tokenPerBlock: string, startBlock: string) {
     const token = await ethers.getContractFactory("WAVEMasterChef");
     //2. It will create a json request, json-rpc request over to eth network, and the network will call a process to begin a transaction
     
@@ -44,7 +46,7 @@ async function initializeSigner() {
   }
   
   
-  async function deployTimeLock(adminAddress: string, delayTime: string) {
+  export async function deployTimeLock(adminAddress: string, delayTime: string) {
     const contractFactory = await ethers.getContractFactory("contracts/Timelock.sol:Timelock");
     //2. It will create a json request, json-rpc request over to eth network, and the network will call a process to begin a transaction
     
@@ -56,7 +58,7 @@ async function initializeSigner() {
     return contract;
   }
   
-  async function deployMasterChefOperator(timelock:string, masterChef: string, admin: string, stagingAdmin: string) {
+  export async function deployMasterChefOperator(timelock:string, masterChef: string, admin: string, stagingAdmin: string) {
     
     const contractFactory = await ethers.getContractFactory("MasterChefOperator");
     //2. It will create a json request, json-rpc request over to eth network, and the network will call a process to begin a transaction
@@ -70,24 +72,26 @@ async function initializeSigner() {
   
   
   
-  async function deployTokenomics(tokenPerSecond: string) {
-    let deployer = initializeSigner();
+  export async function deployTokenomics(tokenPerSecond: string) {
+    const tokenContract = deployToken();
+    let tokenContractAddress = (await tokenContract).address;
+
+    let addressInput = (await tokenContract).address;
     let deployerAddress = (await deployer).address;
-   // const tokenContract = deployToken();
-   // let addressInput = (await tokenContract).address;
-  
     let latestBlock = await ethers.provider.getBlock("latest");
   
     console.log("LatestBlock: " + latestBlock.timestamp);
 
-   // let masterChef = deployMasterChef(addressInput, deployerAddress , tokenPerSecond, (latestBlock.timestamp + 100).toString());
+    let masterChef = deployMasterChef(addressInput, deployerAddress , tokenPerSecond, (latestBlock.timestamp + 100).toString());
+    let masterChefAddress = (await masterChef).address;
     
     let timelock = deployTimeLock(deployerAddress, "0");
-    console.log("Timelock Deployed at the Following Address: " + (await timelock).address)
+    let timelockAddress = (await timelock).address;
+    console.log("Token Contract Deployed at The Following Address" + tokenContractAddress + " MasterChefDeployed At:" + masterChefAddress + " Timelock Deployed at the Following Address: " + timelockAddress)
 
-    // let masterChefOperator = deployMasterChefOperator((await timelock).address, (await masterChef).address, deployerAddress, deployerAddress );
+     let masterChefOperator = deployMasterChefOperator((await timelock).address, (await masterChef).address, deployerAddress, deployerAddress );
 
-    // console.log("WAVE Token Address: " + addressInput + '/n' + "MasterChef Address: " + (await masterChef).address + '/n' +  "Timelock Address: " + (await timelock).address + '/n' + (await masterChefOperator).address);
+     console.log("WAVE Token Address: " + addressInput + '/n' + "MasterChef Address: " + (await masterChef).address + '/n' +  "Timelock Address: " + (await timelock).address + '/n' + (await masterChefOperator).address);
     return;
   }
 
@@ -101,5 +105,5 @@ async function initializeSigner() {
   }
   
   
-  deployWaveBar();
+  deployTokenomics("0");
   

@@ -1,15 +1,3 @@
-/**
- *Submitted for verification at FtmScan.com on 2021-11-18
-*/
-
-// SPDX-License-Identifier: MIT
-
-// Sources flattened with hardhat v2.6.8 https://hardhat.org
-
-// File @openzeppelin/contracts/token/ERC20/IERC20.sol@v4.3.2
-
-// SPDX-License-Identifier: MIT
-
 pragma solidity ^0.8.0;
 
 /**

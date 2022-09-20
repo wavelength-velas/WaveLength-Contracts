@@ -1306,10 +1306,10 @@ contract WAVEMasterChef is Ownable {
 
     // distribution percentages: a value of 1000 = 100%
     // 12.8% percentage of pool rewards that goes to the treasury.
-    uint256 public constant TREASURY_PERCENTAGE = 128;
+    uint256 public constant TREASURY_PERCENTAGE = 124;
 
     // 87.2% percentage of pool rewards that goes to LP holders.
-    uint256 public constant POOL_PERCENTAGE = 872;
+    uint256 public constant POOL_PERCENTAGE = 876;
 
     // Info of each pool.
     PoolInfo[] public poolInfo;

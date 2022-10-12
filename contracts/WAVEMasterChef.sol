@@ -1413,8 +1413,8 @@ contract WAVEMasterChef is Ownable {
         );
 
         // respect startBlock!
-        uint256 lastRewardBlock = block.number > startBlock
-            ? block.number
+        uint256 lastRewardBlock = block.timestamp > startBlock
+            ? block.timestamp
             : startBlock;
         totalAllocPoint = totalAllocPoint + _allocPoint;
 
@@ -1487,8 +1487,8 @@ contract WAVEMasterChef is Ownable {
         // total staked lp tokens in this pool
         uint256 lpSupply = lpTokens[_pid].balanceOf(address(this));
 
-        if (block.number > pool.lastRewardBlock && lpSupply != 0) {
-            uint256 blocksSinceLastReward = block.number - pool.lastRewardBlock;
+        if (block.timestamp > pool.lastRewardBlock && lpSupply != 0) {
+            uint256 blocksSinceLastReward = block.timestamp - pool.lastRewardBlock;
             // based on the pool weight (allocation points) we calculate the wave rewarded for this specific pool
             uint256 waveRewards = (blocksSinceLastReward *
                 wavePerBlock *
@@ -1525,11 +1525,11 @@ contract WAVEMasterChef is Ownable {
     function updatePool(uint256 _pid) public returns (PoolInfo memory pool) {
         pool = poolInfo[_pid];
 
-        if (block.number > pool.lastRewardBlock) {
+        if (block.timestamp > pool.lastRewardBlock) {
             // total lp tokens staked for this pool
             uint256 lpSupply = lpTokens[_pid].balanceOf(address(this));
             if (lpSupply > 0) {
-                uint256 blocksSinceLastReward = block.number -
+                uint256 blocksSinceLastReward = block.timestamp -
                     pool.lastRewardBlock;
 
                 // rewards for this pool based on his allocation points
@@ -1551,7 +1551,7 @@ contract WAVEMasterChef is Ownable {
                     pool.accWAVEPerShare +
                     ((waveRewardsForPool * ACC_WAVE_PRECISION) / lpSupply);
             }
-            pool.lastRewardBlock = block.number;
+            pool.lastRewardBlock = block.timestamp;
             poolInfo[_pid] = pool;
 
             emit LogUpdatePool(

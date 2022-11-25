@@ -11,13 +11,14 @@
         },
         "Velas" : {
             "WAVE" : "0x0d64fa9EefD5a579ac9479C3CDF009d697038E39",
-            "USDC" : "0xe2c120f188ebd5389f71cf4d9c16d05b62a58993",
-            "BUSD" : "0xc111c29a988ae0c0087d97b33c6e6766808a3bd3",
-            "USDT" : "0x01445c31581c354b7338ac35693ab2001b50b9ae",
-            "WBTC" : "0x639a647fbe20b6c8ac19e48e2de44ea792c62c5c",
-            "WETH" : "0x85219708c49aa701871ad330a94ea0f41dff24ca",
+            "WVLX" : "0xc579D1f3CF86749E05CD06f7ADe17856c2CE3126",
+            "USDC" : "0x80a16016cc4a2e6a2caca8a4a498b1699ff0f844",
+            "BUSD" : "0xc9baa8cfdde8e328787e29b4b078abf2dadc2055",
+            "USDT" : "0xb44a9b6905af7c801311e8f4e76932ee959c663c",
+            "WBTC" : "0x639A647fbe20b6c8ac19E48E2de44ea792c62c5C",
+            "WETH" : "0x6ab6d61428fde76768d7b45d8bfeec19c6ef91a8",
             "WAVAX" : "0x525bd1f949ffa2a0c5820f3b6fe61bb897466ff7",
-            "MATIC" : "0x6ab0b8c1a35f9f4ce107ccbd05049cb1dbd99ec5"
+            "MATIC" : "0xa649325aa7c5093d12d6f98eb4378deae68ce23f"
 
         }
         

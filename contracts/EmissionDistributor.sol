@@ -1,3 +1,263 @@
+library Base64 {
+    bytes internal constant TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+    /// @notice Encodes some bytes to the base64 representation
+    function encode(bytes memory data) internal pure returns (string memory) {
+        uint len = data.length;
+        if (len == 0) return "";
+
+        // multiply by 4/3 rounded up
+        uint encodedLen = 4 * ((len + 2) / 3);
+
+        // Add some extra buffer at the end
+        bytes memory result = new bytes(encodedLen + 32);
+
+        bytes memory table = TABLE;
+
+        assembly {
+            let tablePtr := add(table, 1)
+            let resultPtr := add(result, 32)
+
+            for {
+                let i := 0
+            } lt(i, len) {
+
+            } {
+                i := add(i, 3)
+                let input := and(mload(add(data, i)), 0xffffff)
+
+                let out := mload(add(tablePtr, and(shr(18, input), 0x3F)))
+                out := shl(8, out)
+                out := add(out, and(mload(add(tablePtr, and(shr(12, input), 0x3F))), 0xFF))
+                out := shl(8, out)
+                out := add(out, and(mload(add(tablePtr, and(shr(6, input), 0x3F))), 0xFF))
+                out := shl(8, out)
+                out := add(out, and(mload(add(tablePtr, and(input, 0x3F))), 0xFF))
+                out := shl(224, out)
+
+                mstore(resultPtr, out)
+
+                resultPtr := add(resultPtr, 4)
+            }
+
+            switch mod(len, 3)
+            case 1 {
+                mstore(sub(resultPtr, 2), shl(240, 0x3d3d))
+            }
+            case 2 {
+                mstore(sub(resultPtr, 1), shl(248, 0x3d))
+            }
+
+            mstore(result, encodedLen)
+        }
+
+        return string(result);
+    }
+}
+
+/**
+* @dev Interface of the ERC165 standard, as defined in the
+* https://eips.ethereum.org/EIPS/eip-165[EIP].
+*
+* Implementers can declare support of contract interfaces, which can then be
+* queried by others ({ERC165Checker}).
+*
+* For an implementation, see {ERC165}.
+*/
+interface IERC165 {
+    /**
+    * @dev Returns true if this contract implements the interface defined by
+    * `interfaceId`. See the corresponding
+    * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
+    * to learn more about how these ids are created.
+    *
+    * This function call must use less than 30 000 gas.
+    */
+    function supportsInterface(bytes4 interfaceId) external view returns (bool);
+}
+
+/**
+* @dev Required interface of an ERC721 compliant contract.
+*/
+interface IERC721 is IERC165 {
+    /**
+    * @dev Emitted when `tokenId` token is transferred from `from` to `to`.
+    */
+    event Transfer(address indexed from, address indexed to, uint indexed tokenId);
+
+    /**
+    * @dev Emitted when `owner` enables `approved` to manage the `tokenId` token.
+    */
+    event Approval(address indexed owner, address indexed approved, uint indexed tokenId);
+
+    /**
+    * @dev Emitted when `owner` enables or disables (`approved`) `operator` to manage all of its assets.
+    */
+    event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
+
+    /**
+    * @dev Returns the number of tokens in ``owner``'s account.
+    */
+    function balanceOf(address owner) external view returns (uint balance);
+
+    /**
+    * @dev Returns the owner of the `tokenId` token.
+    *
+    * Requirements:
+    *
+    * - `tokenId` must exist.
+    */
+    function ownerOf(uint tokenId) external view returns (address owner);
+
+    /**
+    * @dev Safely transfers `tokenId` token from `from` to `to`, checking first that contract recipients
+    * are aware of the ERC721 protocol to prevent tokens from being forever locked.
+    *
+    * Requirements:
+    *
+    * - `from` cannot be the zero address.
+    * - `to` cannot be the zero address.
+    * - `tokenId` token must exist and be owned by `from`.
+    * - If the caller is not `from`, it must be have been allowed to move this token by either {approve} or {setApprovalForAll}.
+    * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.
+    *
+    * Emits a {Transfer} event.
+    */
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint tokenId
+    ) external;
+
+    /**
+    * @dev Transfers `tokenId` token from `from` to `to`.
+    *
+    * WARNING: Usage of this method is discouraged, use {safeTransferFrom} whenever possible.
+    *
+    * Requirements:
+    *
+    * - `from` cannot be the zero address.
+    * - `to` cannot be the zero address.
+    * - `tokenId` token must be owned by `from`.
+    * - If the caller is not `from`, it must be approved to move this token by either {approve} or {setApprovalForAll}.
+    *
+    * Emits a {Transfer} event.
+    */
+    function transferFrom(
+        address from,
+        address to,
+        uint tokenId
+    ) external;
+
+    /**
+    * @dev Gives permission to `to` to transfer `tokenId` token to another account.
+    * The approval is cleared when the token is transferred.
+    *
+    * Only a single account can be approved at a time, so approving the zero address clears previous approvals.
+    *
+    * Requirements:
+    *
+    * - The caller must own the token or be an approved operator.
+    * - `tokenId` must exist.
+    *
+    * Emits an {Approval} event.
+    */
+    function approve(address to, uint tokenId) external;
+
+    /**
+    * @dev Returns the account approved for `tokenId` token.
+    *
+    * Requirements:
+    *
+    * - `tokenId` must exist.
+    */
+    function getApproved(uint tokenId) external view returns (address operator);
+
+    /**
+    * @dev Approve or remove `operator` as an operator for the caller.
+    * Operators can call {transferFrom} or {safeTransferFrom} for any token owned by the caller.
+    *
+    * Requirements:
+    *
+    * - The `operator` cannot be the caller.
+    *
+    * Emits an {ApprovalForAll} event.
+    */
+    function setApprovalForAll(address operator, bool _approved) external;
+
+    /**
+    * @dev Returns if the `operator` is allowed to manage all of the assets of `owner`.
+    *
+    * See {setApprovalForAll}
+    */
+    function isApprovedForAll(address owner, address operator) external view returns (bool);
+
+    /**
+    * @dev Safely transfers `tokenId` token from `from` to `to`.
+    *
+    * Requirements:
+    *
+    * - `from` cannot be the zero address.
+    * - `to` cannot be the zero address.
+    * - `tokenId` token must exist and be owned by `from`.
+    * - If the caller is not `from`, it must be approved to move this token by either {approve} or {setApprovalForAll}.
+    * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.
+    *
+    * Emits a {Transfer} event.
+    */
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint tokenId,
+        bytes calldata data
+    ) external;
+}
+
+/**
+* @title ERC721 token receiver interface
+* @dev Interface for any contract that wants to support safeTransfers
+* from ERC721 asset contracts.
+*/
+interface IERC721Receiver {
+    /**
+    * @dev Whenever an {IERC721} `tokenId` token is transferred to this contract via {IERC721-safeTransferFrom}
+    * by `operator` from `from`, this function is called.
+    *
+    * It must return its Solidity selector to confirm the token transfer.
+    * If any other value is returned or the interface is not implemented by the recipient, the transfer will be reverted.
+    *
+    * The selector can be obtained in Solidity with `IERC721.onERC721Received.selector`.
+    */
+    function onERC721Received(
+        address operator,
+        address from,
+        uint tokenId,
+        bytes calldata data
+    ) external returns (bytes4);
+}
+
+/**
+* @title ERC-721 Non-Fungible Token Standard, optional metadata extension
+* @dev See https://eips.ethereum.org/EIPS/eip-721
+*/
+interface IERC721Metadata is IERC721 {
+    /**
+    * @dev Returns the token collection name.
+    */
+    function name() external view returns (string memory);
+
+    /**
+    * @dev Returns the token collection symbol.
+    */
+    function symbol() external view returns (string memory);
+
+    /**
+    * @dev Returns the Uniform Resource Identifier (URI) for `tokenId` token.
+    */
+    function tokenURI(uint tokenId) external view returns (string memory);
+}
+
+
 /**
  * @dev Provides information about the current execution context, including the
  * sender of the transaction and its data. While these are generally available
@@ -1318,27 +1578,6 @@ library Address {
 }
 
 /**
- * @dev Interface of the ERC165 standard, as defined in the
- * https://eips.ethereum.org/EIPS/eip-165[EIP].
- *
- * Implementers can declare support of contract interfaces, which can then be
- * queried by others ({ERC165Checker}).
- *
- * For an implementation, see {ERC165}.
- */
-interface IERC165 {
-    /**
-     * @dev Returns true if this contract implements the interface defined by
-     * `interfaceId`. See the corresponding
-     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]
-     * to learn more about how these ids are created.
-     *
-     * This function call must use less than 30 000 gas.
-     */
-    function supportsInterface(bytes4 interfaceId) external view returns (bool);
-}
-
-/**
  * @dev Implementation of the {IERC165} interface.
  *
  * Contracts that want to implement ERC165 should inherit from this contract and override {supportsInterface} to check
@@ -1361,191 +1600,21 @@ abstract contract ERC165 is IERC165 {
     }
 }
 
-/**
-* @dev Required interface of an ERC721 compliant contract.
-*/
-interface IERC721 is IERC165 {
-    /**
-    * @dev Emitted when `tokenId` token is transferred from `from` to `to`.
-    */
-    event Transfer(address indexed from, address indexed to, uint indexed tokenId);
+struct Point {
+    int128 bias;
+    int128 slope; // # -dweight / dt
+    uint ts;
+    uint blk; // block
+}
+/* We cannot really do block numbers per se b/c slope is per time, not per block
+* and per block could be fairly bad b/c Ethereum changes blocktimes.
+* What we can do is to extrapolate ***At functions */
 
-    /**
-    * @dev Emitted when `owner` enables `approved` to manage the `tokenId` token.
-    */
-    event Approval(address indexed owner, address indexed approved, uint indexed tokenId);
-
-    /**
-    * @dev Emitted when `owner` enables or disables (`approved`) `operator` to manage all of its assets.
-    */
-    event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
-
-    /**
-    * @dev Returns the number of tokens in ``owner``'s account.
-    */
-    function balanceOf(address owner) external view returns (uint balance);
-
-    /**
-    * @dev Returns the owner of the `tokenId` token.
-    *
-    * Requirements:
-    *
-    * - `tokenId` must exist.
-    */
-    function ownerOf(uint tokenId) external view returns (address owner);
-
-    /**
-    * @dev Safely transfers `tokenId` token from `from` to `to`, checking first that contract recipients
-    * are aware of the ERC721 protocol to prevent tokens from being forever locked.
-    *
-    * Requirements:
-    *
-    * - `from` cannot be the zero address.
-    * - `to` cannot be the zero address.
-    * - `tokenId` token must exist and be owned by `from`.
-    * - If the caller is not `from`, it must be have been allowed to move this token by either {approve} or {setApprovalForAll}.
-    * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.
-    *
-    * Emits a {Transfer} event.
-    */
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint tokenId
-    ) external;
-
-    /**
-    * @dev Transfers `tokenId` token from `from` to `to`.
-    *
-    * WARNING: Usage of this method is discouraged, use {safeTransferFrom} whenever possible.
-    *
-    * Requirements:
-    *
-    * - `from` cannot be the zero address.
-    * - `to` cannot be the zero address.
-    * - `tokenId` token must be owned by `from`.
-    * - If the caller is not `from`, it must be approved to move this token by either {approve} or {setApprovalForAll}.
-    *
-    * Emits a {Transfer} event.
-    */
-    function transferFrom(
-        address from,
-        address to,
-        uint tokenId
-    ) external;
-
-    /**
-    * @dev Gives permission to `to` to transfer `tokenId` token to another account.
-    * The approval is cleared when the token is transferred.
-    *
-    * Only a single account can be approved at a time, so approving the zero address clears previous approvals.
-    *
-    * Requirements:
-    *
-    * - The caller must own the token or be an approved operator.
-    * - `tokenId` must exist.
-    *
-    * Emits an {Approval} event.
-    */
-    function approve(address to, uint tokenId) external;
-
-    /**
-    * @dev Returns the account approved for `tokenId` token.
-    *
-    * Requirements:
-    *
-    * - `tokenId` must exist.
-    */
-    function getApproved(uint tokenId) external view returns (address operator);
-
-    /**
-    * @dev Approve or remove `operator` as an operator for the caller.
-    * Operators can call {transferFrom} or {safeTransferFrom} for any token owned by the caller.
-    *
-    * Requirements:
-    *
-    * - The `operator` cannot be the caller.
-    *
-    * Emits an {ApprovalForAll} event.
-    */
-    function setApprovalForAll(address operator, bool _approved) external;
-
-    /**
-    * @dev Returns if the `operator` is allowed to manage all of the assets of `owner`.
-    *
-    * See {setApprovalForAll}
-    */
-    function isApprovedForAll(address owner, address operator) external view returns (bool);
-
-    /**
-    * @dev Safely transfers `tokenId` token from `from` to `to`.
-    *
-    * Requirements:
-    *
-    * - `from` cannot be the zero address.
-    * - `to` cannot be the zero address.
-    * - `tokenId` token must exist and be owned by `from`.
-    * - If the caller is not `from`, it must be approved to move this token by either {approve} or {setApprovalForAll}.
-    * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon a safe transfer.
-    *
-    * Emits a {Transfer} event.
-    */
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint tokenId,
-        bytes calldata data
-    ) external;
+struct LockedBalance {
+    int128 amount;
+    uint end;
 }
 
-/**
-* @title ERC-721 Non-Fungible Token Standard, optional metadata extension
-* @dev See https://eips.ethereum.org/EIPS/eip-721
-*/
-interface IERC721Metadata is IERC721 {
-    /**
-    * @dev Returns the token collection name.
-    */
-    function name() external view returns (string memory);
-
-    /**
-    * @dev Returns the token collection symbol.
-    */
-    function symbol() external view returns (string memory);
-
-    /**
-    * @dev Returns the Uniform Resource Identifier (URI) for `tokenId` token.
-    */
-    function tokenURI(uint tokenId) external view returns (string memory);
-}
-
-/**
-* @title ERC721 token receiver interface
-* @dev Interface for any contract that wants to support safeTransfers
-* from ERC721 asset contracts.
-*/
-interface IERC721Receiver {
-    /**
-    * @dev Whenever an {IERC721} `tokenId` token is transferred to this contract via {IERC721-safeTransferFrom}
-    * by `operator` from `from`, this function is called.
-    *
-    * It must return its Solidity selector to confirm the token transfer.
-    * If any other value is returned or the interface is not implemented by the recipient, the transfer will be reverted.
-    *
-    * The selector can be obtained in Solidity with `IERC721.onERC721Received.selector`.
-    */
-    function onERC721Received(
-        address operator,
-        address from,
-        uint tokenId,
-        bytes calldata data
-    ) external returns (bytes4);
-}
-
-
-interface ve {
-    function shareRevenue(uint256 _amount) external;
-}
 
 /**
  * @dev String operations.
@@ -3272,13 +3341,30 @@ abstract contract AccessControl is Context, IAccessControl, ERC165 {
     }
 }
 
+interface ve {
+    function token() external view returns (address);
+    function locking(uint) external view returns (uint);
+    function totalSupply() external view returns (uint);
+    function create_lock_for(uint, uint, address) external returns (uint);
+    function transferFrom(address, address, uint) external;
+}
+
 pragma solidity 0.8.7;
 
-contract FBeetsEmissionDistributor is
+contract WaveEmissionDistributor is
     ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWAVE"),
     AccessControl
 {
     using SafeERC20 for IERC20;
+
+    struct TokenInfo {
+        // we have a fixed number of WAVE tokens released per block, each pool gets his fraction based on the allocPoint
+        address user; 
+        uint256 numberNFT; // How many allocation points assigned to this pool. the fraction WAVE to distribute per block.
+    }
+
+    mapping(uint256 => mapping(address => TokenInfo)) public tokenInfo; // mapping form poolId => user Address => User Info
+
 
     bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR");
     bytes32 public constant DISTRIBUTE_ROLE = keccak256("DISTRIBUTE");
@@ -3288,7 +3374,7 @@ contract FBeetsEmissionDistributor is
     uint256 public fBeetsLockerShare;
     uint256 public constant DENOMINATOR = 1000;
 
-    IERC20 public fidelioDuetteBpt;
+    IERC721 public fidelioDuetteBpt;
     IERC20 public wave;
     ve public waveBar;
     FBeetsLocker public locker;
@@ -3297,7 +3383,7 @@ contract FBeetsEmissionDistributor is
     bytes32 public fidelioDuettoPoolId;
 
     constructor(
-        IERC20 _fidelioDuettoBpt,
+        IERC721 _fidelioDuettoBpt,
         IERC20 _wave,
         ve _waveBar,
         FBeetsLocker _locker,
@@ -3333,13 +3419,27 @@ contract FBeetsEmissionDistributor is
         locker = fwaveLocker;
     }
 
-    function depositToChef() external onlyRole(OPERATOR_ROLE) {
-        _mint(address(this), 1);
-        _approve(address(this), address(chef), 1);
-        chef.deposit(farmPid, 1, address(this));
+    function depositToChef(uint256 _tokenId) external {
+        IERC721(fidelioDuetteBpt).safeTransferFrom(address(msg.sender), address(this), _tokenId);
+        uint256 amount = ve(address(fidelioDuetteBpt)).locking(_tokenId);
+        tokenInfo.push(
+            TokenInfo({
+                user: address(msg.sender),
+                numberNFT:  _tokenId
+            })
+        );
+       
+       
+        _mint(address(this), amount);
+        _approve(address(this), address(chef), amount);
+        chef.deposit(farmPid, amount, address(this));
     }
 
-    function withdrawAndDistribute() external onlyRole(OPERATOR_ROLE) {
+    function withdrawAndDistribute() external {
+        IERC721(fidelioDuetteBpt).safeTransferFrom(address(msg.sender), address(this), _tokenId);
+        uint256 amount = ve(address(fidelioDuetteBpt)).locking(_tokenId);
+
+
         chef.withdrawAndHarvest(farmPid, 1, address(this));
         _burn(address(this), 1);
         _distribute();

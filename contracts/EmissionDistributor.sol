@@ -2511,7 +2511,7 @@ contract WaveEmissionDistributor is
     TokenInfo[] public tokenInfo; // mapping form poolId => user Address => User Info
     mapping(uint256 => mapping(address => mapping(uint256 => UserInfo))) public userInfo; // mapping form poolId => user Address => User Info
 
-    uint256 public totalAmountLockedWave;
+    uint256 public totalAmountLockedWave = 0;
     uint256 public wavePerBlock;
 
     uint256 private constant ACC_WAVE_PRECISION = 1e12;
@@ -2521,15 +2521,11 @@ contract WaveEmissionDistributor is
 
     WAVEMasterChef public chef;
     uint256 public farmPid;
-    uint256 public fBeetsLockerShare;
     uint256 public constant DENOMINATOR = 1000;
 
     IERC721 public fidelioDuetteBpt;
     IERC20 public wave;
-    ve public waveBar;
-    FBeetsLocker public locker;
 
-    IBalancerVault public vault;
     bytes32 public fidelioDuettoPoolId;
 
     event LogUpdatePool(
@@ -2556,28 +2552,13 @@ contract WaveEmissionDistributor is
     constructor(
         IERC721 _fidelioDuettoBpt,
         IERC20 _wave,
-        ve _waveBar,
-        FBeetsLocker _locker,
         WAVEMasterChef _chef,
-        uint256 _farmPid,
-        uint256 _fBeetsLockerShare,
-        IBalancerVault _vault,
-        bytes32 _balancerPoolId,
-        address admin
+        uint256 _farmPid
     ) {
         fidelioDuetteBpt = _fidelioDuettoBpt;
         wave = _wave;
-        waveBar = _waveBar;
-        locker = _locker;
         chef = _chef;
         farmPid = _farmPid;
-        fBeetsLockerShare = _fBeetsLockerShare;
-        vault = _vault;
-        fidelioDuettoPoolId = _balancerPoolId;
-        _setupRole(DEFAULT_ADMIN_ROLE, admin);
-        _setupRole(OPERATOR_ROLE, admin);
-        _setupRole(DISTRIBUTE_ROLE, admin);
-        totalAmountLockedWave = 0;
     }
 
     function add(
@@ -2685,11 +2666,11 @@ contract WaveEmissionDistributor is
     }
 
     function depositToChef(uint256 _tokenId) external payable {
-
+        address ownerOfTokenId = IERC721(fidelioDuetteBpt).ownerOf(_tokenId);
+       // require(ownerOfTokenId = address(msg.sender), "You are not the owner of this veWAVE!");
         PoolInfo memory pool = updatePool();
         UserInfo storage user = userInfo[0][address(msg.sender)][_tokenId];
-
-        IERC721(fidelioDuetteBpt).safeTransferFrom(address(msg.sender), address(this), _tokenId);
+        ve(address(fidelioDuetteBpt)).transferFrom(address(msg.sender), address(this), _tokenId);
         uint256 amount = ve(address(fidelioDuetteBpt)).locking(_tokenId);
 
         user.amount = user.amount + amount;
@@ -2717,15 +2698,15 @@ contract WaveEmissionDistributor is
     }
 
     function withdrawAndDistribute(uint256 _tokenId) external {
-        IERC721(fidelioDuetteBpt).safeTransferFrom(address(this), address(msg.sender), _tokenId);
         uint256 amount = ve(address(fidelioDuetteBpt)).locking(_tokenId);
-
-
         chef.withdrawAndHarvest(farmPid, amount, address(this));
+        IERC721(fidelioDuetteBpt).safeTransferFrom(address(this), address(msg.sender), _tokenId);
+        totalAmountLockedWave -= amount;
+        harvestAndDistribute(_tokenId);
         _burn(address(this), amount);
     }
 
-    function harvestAndDistribute(uint256 _tokenId) external onlyRole(DISTRIBUTE_ROLE) {
+    function harvestAndDistribute(uint256 _tokenId) public {
         PoolInfo memory pool = updatePool();
         UserInfo storage user = userInfo[0][msg.sender][_tokenId];
         chef.harvest(farmPid, address(this));

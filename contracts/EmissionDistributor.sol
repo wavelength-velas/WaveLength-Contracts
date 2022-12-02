@@ -2516,7 +2516,7 @@ contract WaveEmissionDistributor is
     // Info of each pool.
     struct PoolInfoAnotherToken {
         address tokenReward;
-        address anotherTokenPerBlock;
+        uint256 anotherTokenPerBlock;
         bool isClosed;
         // we have a fixed number of WAVE tokens released per block, each pool gets his fraction based on the allocPoint
         uint256 allocPoint; // How many allocation points assigned to this pool. the fraction WAVE to distribute per block.
@@ -2525,6 +2525,8 @@ contract WaveEmissionDistributor is
     }
 
     PoolInfoAnotherToken[] public poolInfoAnotherToken;
+    uint256 public totalPidsAnotherToken = 0;
+    mapping(uint256 => mapping(address => mapping(uint256 => UserInfoAnotherToken))) public userInfoAnotherToken; // mapping form poolId => user Address => User Info
 
     PoolInfo[] public poolInfo;
     TokenInfo[] public tokenInfo; // mapping form poolId => user Address => User Info
@@ -2545,8 +2547,6 @@ contract WaveEmissionDistributor is
     IERC721 public veWave;
     IERC20 public wave;
 
-    bytes32 public fidelioDuettoPoolId;
-
     event LogUpdatePool(
         uint256 indexed pid,
         uint256 lastRewardBlock,
@@ -2556,19 +2556,24 @@ contract WaveEmissionDistributor is
     event Harvest(address indexed user, uint256 indexed pid, uint256 amount);
     event LogPoolAddition(
         uint256 indexed pid,
-        uint256 allocPoint,
-        IERC20 indexed lpToken,
-        IRewarder indexed rewarder
+        uint256 allocPoint
     );
 
     event LogPoolAnotherTokenAddition(
         uint256 indexed pid,
-        uint256 allocPoint,
-        IERC20 indexed lpToken,
-        IRewarder indexed rewarder
+        address indexed tokenReward,
+        bool indexed isClosed,
+        uint256 allocPoint
     );
 
     event Deposit(
+        address indexed user,
+        uint256 indexed pid,
+        uint256 amount,
+        address indexed to
+    );
+
+    event DepositAnotherToken(
         address indexed user,
         uint256 indexed pid,
         uint256 amount,
@@ -2585,22 +2590,6 @@ contract WaveEmissionDistributor is
         wave = _wave;
         chef = _chef;
         farmPid = _farmPid;
-    }
-
-    function add(
-        uint256 _allocPoint
-    ) public onlyOwner {
-        poolInfo.push(
-            PoolInfo({
-                allocPoint: _allocPoint,
-                lastRewardBlock: block.timestamp,
-                accWAVEPerShare: 0
-            })
-        );
-        emit LogPoolAddition(
-           0,
-            _allocPoint
-        );
     }
 
     // View function to see pending WAVEs on frontend.
@@ -2644,15 +2633,29 @@ contract WaveEmissionDistributor is
         farmPid = id;
     }
 
-    function depositToChef(uint256 _tokenId) external payable {
+    function depositToChef(uint256 _pid, uint256 _tokenId) external payable {
         address ownerOfTokenId = IERC721(veWave).ownerOf(_tokenId);
-       // require(ownerOfTokenId = address(msg.sender), "You are not the owner of this veWAVE!");
+        require(ownerOfTokenId == address(msg.sender),"You are not the owner of this veWAVE");
+
+        PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
+        UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][address(msg.sender)][_tokenId];
+        
         PoolInfo memory pool = updatePool();
         UserInfo storage user = userInfo[0][address(msg.sender)][_tokenId];
+        
         ve(address(veWave)).transferFrom(address(msg.sender), address(this), _tokenId);
         uint256 amount = ve(address(veWave)).locking(_tokenId);
 
-        user.amount = user.amount + amount;
+
+        if (poolAnotherToken.tokenReward != address(0)) {
+            userAnotherToken.amount = userAnotherToken.amount + amount;
+            userAnotherToken.rewardDebt =
+                userAnotherToken.rewardDebt +
+                (amount * poolAnotherToken.accAnotherTokenPerShare) /
+                ACC_ANOTHERTOKEN_PRECISION;
+        }      
+       
+        user.amount = amount;
         // since we add more LP tokens, we have to keep track of the rewards he is not eligible for
         // if we would not do that, he would get rewards like he added them since the beginning of this pool
         // note that only the accWAVEPerShare have the precision applied
@@ -2674,15 +2677,39 @@ contract WaveEmissionDistributor is
         chef.deposit(farmPid, amount, address(this));
                 
         emit Deposit(msg.sender, 0, amount, address(msg.sender));
+        emit DepositAnotherToken(msg.sender, _pid, amount, address(msg.sender));
     }
 
-    function withdrawAndDistribute(uint256 _tokenId) external {
+    function withdrawAndDistribute(uint256 _pid, uint256 _tokenId) external {
+        PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
+        UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][address(msg.sender)][_tokenId];
+        
+        PoolInfo memory pool = updatePool();
+        UserInfo storage user = userInfo[0][address(msg.sender)][_tokenId];
+
+        if (poolAnotherToken.tokenReward != address(0)) {
+            // this would  be the amount if the user joined right from the start of the farm
+            uint256 accumulatedWAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) /
+                ACC_ANOTHERTOKEN_PRECISION;
+            // subtracting the rewards the user is not eligible for
+            uint256 eligibleAnotherToken = accumulatedWAnotherToken - userAnotherToken.rewardDebt;
+
+            user.rewardDebt =
+                accumulatedWAnotherToken -
+                (amount * poolAnotherToken.accAnotherTokenPerShare) /
+                ACC_WAVE_PRECISION;
+            userAnotherToken.amount = userAnotherToken.amount - amount;
+        }
+
         uint256 amount = ve(address(veWave)).locking(_tokenId);
         chef.withdrawAndHarvest(farmPid, amount, address(this));
         IERC721(veWave).safeTransferFrom(address(this), address(msg.sender), _tokenId);
         totalAmountLockedWave -= amount;
         harvestAndDistribute(_tokenId);
         _burn(address(this), amount);
+
+        emit Withdraw(msg.sender, _pid, _amount, _to);
+        emit Harvest(msg.sender, _pid, eligibleWAVE);
     }
 
     function harvestAndDistribute(uint256 _tokenId) public {
@@ -2706,9 +2733,30 @@ contract WaveEmissionDistributor is
         emit Harvest(msg.sender, 0, eligibleWAVE);
     }
 
+
+
+
+    // Add a new pool to the pool. Can only be called by the owner.
+    function add(
+        uint256 _allocPoint
+    ) public onlyOwner {
+        poolInfo.push(
+            PoolInfo({
+                allocPoint: _allocPoint,
+                lastRewardBlock: block.timestamp,
+                accWAVEPerShare: 0
+            })
+        );
+        emit LogPoolAddition(
+           0,
+            _allocPoint
+        );
+    }
+
     // Add a new AnotherToken to the pool. Can only be called by the owner.
     function addAnotherToken(
         address _tokenReward,
+        uint256 _anotherTokenPerBlock,
         bool _isClosed,
        uint256 _allocPoint
     ) public onlyOwner {
@@ -2718,17 +2766,18 @@ contract WaveEmissionDistributor is
         poolInfoAnotherToken.push(
             PoolInfoAnotherToken({
                 tokenReward: _tokenReward,
+                anotherTokenPerBlock: _anotherTokenPerBlock,
                 isClosed: _isClosed,
                 allocPoint: _allocPoint,
                 lastRewardBlock: lastRewardBlock,
                 accAnotherTokenPerShare: 0
             })
         );
-        emit LogPoolAddition(
-            lpTokens.length - 1,
-            _allocPoint,
-            _lpToken,
-            _rewarder
+        emit LogPoolAnotherTokenAddition(
+            totalPidsAnotherToken - 1,
+            _tokenReward,
+            _isClosed,
+            _allocPoint
         );
     }
 
@@ -2810,12 +2859,13 @@ contract WaveEmissionDistributor is
     }
 
     // Safe anotherToken transfer function, just in case if rounding error causes pool to not have enough anotherToken.
-    function safeAnotherTokenTransfer(address _to, uint256 _amount) internal {
-        uint256 anotherTokenBalance = anotherToken.balanceOf(address(this));
+    function safeAnotherTokenTransfer(uint256 _pid, address _to, uint256 _amount) internal {
+        PoolInfoAnotherToken memory pool = poolInfoAnotherToken[_pid];
+        uint256 anotherTokenBalance = IERC20(pool.tokenReward).balanceOf(address(this));
         if (_amount > anotherTokenBalance) {
-            anotherToken.transfer(_to, anotherTokenBalance);
+            IERC20(pool.tokenReward).transfer(_to, anotherTokenBalance);
         } else {
-            anotherToken.transfer(_to, _amount);
+            IERC20(pool.tokenReward).transfer(_to, _amount);
         }
     }
 

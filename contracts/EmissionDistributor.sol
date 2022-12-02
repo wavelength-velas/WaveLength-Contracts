@@ -2687,6 +2687,19 @@ contract WaveEmissionDistributor is
         PoolInfo memory pool = updatePool();
         UserInfo storage user = userInfo[0][address(msg.sender)][_tokenId];
 
+        uint256 amount = 0;
+
+       //PODE SE MUDAR
+        if (user.amount && user.amount != 0) {
+            amount = ve(address(veWave)).locking(_tokenId);
+            chef.withdrawAndHarvest(farmPid, amount, address(this));
+            IERC721(veWave).safeTransferFrom(address(this), address(msg.sender), _tokenId);
+            totalAmountLockedWave -= amount;
+            harvestAndDistribute(_tokenId);
+            _burn(address(this), amount);
+        }
+
+
         if (poolAnotherToken.tokenReward != address(0)) {
             // this would  be the amount if the user joined right from the start of the farm
             uint256 accumulatedWAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) /
@@ -2700,13 +2713,6 @@ contract WaveEmissionDistributor is
                 ACC_WAVE_PRECISION;
             userAnotherToken.amount = userAnotherToken.amount - amount;
         }
-
-        uint256 amount = ve(address(veWave)).locking(_tokenId);
-        chef.withdrawAndHarvest(farmPid, amount, address(this));
-        IERC721(veWave).safeTransferFrom(address(this), address(msg.sender), _tokenId);
-        totalAmountLockedWave -= amount;
-        harvestAndDistribute(_tokenId);
-        _burn(address(this), amount);
 
         emit Withdraw(msg.sender, _pid, _amount, _to);
         emit Harvest(msg.sender, _pid, eligibleWAVE);
@@ -2861,6 +2867,7 @@ contract WaveEmissionDistributor is
     // Safe anotherToken transfer function, just in case if rounding error causes pool to not have enough anotherToken.
     function safeAnotherTokenTransfer(uint256 _pid, address _to, uint256 _amount) internal {
         PoolInfoAnotherToken memory pool = poolInfoAnotherToken[_pid];
+
         uint256 anotherTokenBalance = IERC20(pool.tokenReward).balanceOf(address(this));
         if (_amount > anotherTokenBalance) {
             IERC20(pool.tokenReward).transfer(_to, anotherTokenBalance);

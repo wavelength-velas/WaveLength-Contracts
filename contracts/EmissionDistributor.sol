@@ -2499,13 +2499,32 @@ contract WaveEmissionDistributor is
         uint256 amount; // How many LP tokens the user has provided.
         uint256 rewardDebt; // Reward debt. See explanation below.
     }
-    // Info of each pool.
+
+    struct UserInfoAnotherToken {
+        uint256 amount; // How many LP tokens the user has provided.
+        uint256 rewardDebt; // Reward debt. See explanation below.
+    }
+
+     // Info of each pool.
     struct PoolInfo {
         // we have a fixed number of WAVE tokens released per block, each pool gets his fraction based on the allocPoint
         uint256 allocPoint; // How many allocation points assigned to this pool. the fraction WAVE to distribute per block.
         uint256 lastRewardBlock; // Last block number that WAVE distribution occurs.
         uint256 accWAVEPerShare; // Accumulated WAVE per LP share. this is multiplied by ACC_WAVE_PRECISION for more exact results (rounding errors)
     }
+
+    // Info of each pool.
+    struct PoolInfoAnotherToken {
+        address tokenReward;
+        address anotherTokenPerBlock;
+        bool isClosed;
+        // we have a fixed number of WAVE tokens released per block, each pool gets his fraction based on the allocPoint
+        uint256 allocPoint; // How many allocation points assigned to this pool. the fraction WAVE to distribute per block.
+        uint256 lastRewardBlock; // Last block number that WAVE distribution occurs.
+        uint256 accAnotherTokenPerShare; // Accumulated WAVE per LP share. this is multiplied by ACC_WAVE_PRECISION for more exact results (rounding errors)
+    }
+
+    PoolInfoAnotherToken[] public poolInfoAnotherToken;
 
     PoolInfo[] public poolInfo;
     TokenInfo[] public tokenInfo; // mapping form poolId => user Address => User Info
@@ -2514,16 +2533,16 @@ contract WaveEmissionDistributor is
     uint256 public totalAmountLockedWave = 0;
     uint256 public wavePerBlock;
 
+
+    uint256 private constant ACC_ANOTHERTOKEN_PRECISION = 1e12;
     uint256 private constant ACC_WAVE_PRECISION = 1e12;
     uint256 public constant POOL_PERCENTAGE = 876;
-    bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR");
-    bytes32 public constant DISTRIBUTE_ROLE = keccak256("DISTRIBUTE");
 
     WAVEMasterChef public chef;
     uint256 public farmPid;
     uint256 public constant DENOMINATOR = 1000;
 
-    IERC721 public fidelioDuetteBpt;
+    IERC721 public veWave;
     IERC20 public wave;
 
     bytes32 public fidelioDuettoPoolId;
@@ -2542,6 +2561,13 @@ contract WaveEmissionDistributor is
         IRewarder indexed rewarder
     );
 
+    event LogPoolAnotherTokenAddition(
+        uint256 indexed pid,
+        uint256 allocPoint,
+        IERC20 indexed lpToken,
+        IRewarder indexed rewarder
+    );
+
     event Deposit(
         address indexed user,
         uint256 indexed pid,
@@ -2550,21 +2576,19 @@ contract WaveEmissionDistributor is
     );
 
     constructor(
-        IERC721 _fidelioDuettoBpt,
+        IERC721 _veWave,
         IERC20 _wave,
         WAVEMasterChef _chef,
         uint256 _farmPid
     ) {
-        fidelioDuetteBpt = _fidelioDuettoBpt;
+        veWave = _veWave;
         wave = _wave;
         chef = _chef;
         farmPid = _farmPid;
     }
 
     function add(
-        uint256 _allocPoint,
-        IERC20 _lpToken,
-        IRewarder _rewarder
+        uint256 _allocPoint
     ) public onlyOwner {
         poolInfo.push(
             PoolInfo({
@@ -2575,53 +2599,8 @@ contract WaveEmissionDistributor is
         );
         emit LogPoolAddition(
            0,
-            _allocPoint,
-            _lpToken,
-            _rewarder
+            _allocPoint
         );
-    }
-
-
-    // Safe WAVE transfer function, just in case if rounding error causes pool to not have enough WAVE.
-    function safeWAVETransfer(address _to, uint256 _amount) internal {
-        uint256 waveBalance = wave.balanceOf(address(this));
-        if (_amount > waveBalance) {
-            wave.transfer(_to, waveBalance);
-        } else {
-            wave.transfer(_to, _amount);
-        }
-    }
-
-
-    function updatePool() public returns (PoolInfo memory pool) {
-        PoolInfo storage pool = poolInfo[0];
-         if (block.timestamp > pool.lastRewardBlock) {
-            if (totalAmountLockedWave > 0) {
-                uint256 blocksSinceLastReward = block.timestamp -
-                    pool.lastRewardBlock;
-
-                // rewards for this pool based on his allocation points
-                uint256 waveRewards = (blocksSinceLastReward *
-                    wavePerBlock *
-                    pool.allocPoint) / 1000;
-
-                uint256 waveRewardsForPool = (waveRewards * POOL_PERCENTAGE) /
-                    1000;
-
-                pool.accWAVEPerShare =
-                    pool.accWAVEPerShare +
-                    ((waveRewardsForPool * ACC_WAVE_PRECISION) / totalAmountLockedWave);
-            }
-            pool.lastRewardBlock = block.timestamp;
-            poolInfo[0] = pool;
-
-            emit LogUpdatePool(
-                0,
-                pool.lastRewardBlock,
-                totalAmountLockedWave,
-                pool.accWAVEPerShare
-            );
-        }
     }
 
     // View function to see pending WAVEs on frontend.
@@ -2661,17 +2640,17 @@ contract WaveEmissionDistributor is
             user.rewardDebt;
     }
 
-    function setFarmId(uint256 id) external onlyRole(OPERATOR_ROLE) {
+    function setFarmId(uint256 id) external onlyOwner {
         farmPid = id;
     }
 
     function depositToChef(uint256 _tokenId) external payable {
-        address ownerOfTokenId = IERC721(fidelioDuetteBpt).ownerOf(_tokenId);
+        address ownerOfTokenId = IERC721(veWave).ownerOf(_tokenId);
        // require(ownerOfTokenId = address(msg.sender), "You are not the owner of this veWAVE!");
         PoolInfo memory pool = updatePool();
         UserInfo storage user = userInfo[0][address(msg.sender)][_tokenId];
-        ve(address(fidelioDuetteBpt)).transferFrom(address(msg.sender), address(this), _tokenId);
-        uint256 amount = ve(address(fidelioDuetteBpt)).locking(_tokenId);
+        ve(address(veWave)).transferFrom(address(msg.sender), address(this), _tokenId);
+        uint256 amount = ve(address(veWave)).locking(_tokenId);
 
         user.amount = user.amount + amount;
         // since we add more LP tokens, we have to keep track of the rewards he is not eligible for
@@ -2698,9 +2677,9 @@ contract WaveEmissionDistributor is
     }
 
     function withdrawAndDistribute(uint256 _tokenId) external {
-        uint256 amount = ve(address(fidelioDuetteBpt)).locking(_tokenId);
+        uint256 amount = ve(address(veWave)).locking(_tokenId);
         chef.withdrawAndHarvest(farmPid, amount, address(this));
-        IERC721(fidelioDuetteBpt).safeTransferFrom(address(this), address(msg.sender), _tokenId);
+        IERC721(veWave).safeTransferFrom(address(this), address(msg.sender), _tokenId);
         totalAmountLockedWave -= amount;
         harvestAndDistribute(_tokenId);
         _burn(address(this), amount);
@@ -2725,6 +2704,119 @@ contract WaveEmissionDistributor is
         }
 
         emit Harvest(msg.sender, 0, eligibleWAVE);
+    }
+
+    // Add a new AnotherToken to the pool. Can only be called by the owner.
+    function addAnotherToken(
+        address _tokenReward,
+        bool _isClosed,
+       uint256 _allocPoint
+    ) public onlyOwner {
+        // respect startBlock!
+        uint256 lastRewardBlock = block.timestamp;
+
+        poolInfoAnotherToken.push(
+            PoolInfoAnotherToken({
+                tokenReward: _tokenReward,
+                isClosed: _isClosed,
+                allocPoint: _allocPoint,
+                lastRewardBlock: lastRewardBlock,
+                accAnotherTokenPerShare: 0
+            })
+        );
+        emit LogPoolAddition(
+            lpTokens.length - 1,
+            _allocPoint,
+            _lpToken,
+            _rewarder
+        );
+    }
+
+    // Update reward variables of the given WAVE pool to be up-to-date.
+    function updatePool() public returns (PoolInfo memory pool) {
+        PoolInfo storage pool = poolInfo[0];
+         if (block.timestamp > pool.lastRewardBlock) {
+            if (totalAmountLockedWave > 0) {
+                uint256 blocksSinceLastReward = block.timestamp -
+                    pool.lastRewardBlock;
+
+                // rewards for this pool based on his allocation points
+                uint256 waveRewards = (blocksSinceLastReward *
+                    wavePerBlock *
+                    pool.allocPoint) / 1000;
+
+                uint256 waveRewardsForPool = (waveRewards * POOL_PERCENTAGE) /
+                    1000;
+
+                pool.accWAVEPerShare =
+                    pool.accWAVEPerShare +
+                    ((waveRewardsForPool * ACC_WAVE_PRECISION) / totalAmountLockedWave);
+            }
+            pool.lastRewardBlock = block.timestamp;
+            poolInfo[0] = pool;
+
+            emit LogUpdatePool(
+                0,
+                pool.lastRewardBlock,
+                totalAmountLockedWave,
+                pool.accWAVEPerShare
+            );
+        }
+    }
+
+    // Update reward variables of the given anotherToken pool to be up-to-date.
+    function updatePoolAnotherToken(uint256 _pid) public returns (PoolInfoAnotherToken memory pool) {
+        pool = poolInfoAnotherToken[_pid];
+
+        if (block.timestamp > pool.lastRewardBlock) {
+            // total of AnotherTokens staked for this pool
+            uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
+            if (anotherTokenSupply > 0) {
+                uint256 blocksSinceLastReward = block.timestamp -
+                    pool.lastRewardBlock;
+
+                // rewards for this pool based on his allocation points
+                uint256 anotherTokenRewards = (blocksSinceLastReward *
+                    poolInfoAnotherToken[_pid].anotherTokenPerBlock *
+                    pool.allocPoint) / poolInfoAnotherToken[_pid].allocPoint;
+
+                uint256 anotherTokenRewardsForPool = (anotherTokenRewards * 1000) /
+                    1000;
+
+                pool.accAnotherTokenPerShare =
+                    pool.accAnotherTokenPerShare +
+                    ((anotherTokenRewardsForPool * ACC_ANOTHERTOKEN_PRECISION) / anotherTokenSupply);
+            }
+            pool.lastRewardBlock = block.timestamp;
+            poolInfoAnotherToken[_pid] = pool;
+
+            emit LogUpdatePool(
+                _pid,
+                pool.lastRewardBlock,
+                anotherTokenSupply,
+                pool.accAnotherTokenPerShare
+            );
+        }
+    }
+
+    // Safe WAVE transfer function, just in case if rounding error causes pool to not have enough WAVE.
+    function safeWAVETransfer(address _to, uint256 _amount) internal {
+        uint256 waveBalance = wave.balanceOf(address(this));
+        if (_amount > waveBalance) {
+            wave.transfer(_to, waveBalance);
+        } else {
+            wave.transfer(_to, _amount);
+        }
+    }
+
+    // Safe anotherToken transfer function, just in case if rounding error causes pool to not have enough anotherToken.
+    function safeAnotherTokenTransfer(address _to, uint256 _amount) internal {
+        uint256 anotherTokenBalance = anotherToken.balanceOf(address(this));
+        if (_amount > anotherTokenBalance) {
+            anotherToken.transfer(_to, anotherTokenBalance);
+        } else {
+            anotherToken.transfer(_to, _amount);
+        }
     }
 
 }

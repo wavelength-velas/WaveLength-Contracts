@@ -995,6 +995,14 @@ contract WAVEToken is ERC20("WAVEToken", "WAVE"), Ownable {
     }
 }
 
+contract veWAVEReceipt is ERC20("veWAVEReceipt", "veWAVEReceipt"), Ownable {
+
+    /// @notice Creates `_amount` token to `_to`. Must only be called by the owner (EmissionsDistributor).
+    function mint(address _to, uint256 _amount) public onlyOwner {
+        _mint(_to, _amount);
+    }
+}
+
 /**
  * @dev Library for managing
  * https://en.wikipedia.org/wiki/Set_(abstract_data_type)[sets] of primitive
@@ -2500,7 +2508,7 @@ contract WaveEmissionDistributor is
 
     PoolInfo[] public poolInfo;
     TokenInfo[] public tokenInfo; // mapping form poolId => user Address => User Info
-    mapping(address => mapping(uint256 => UserInfoAnotherToken)) public tokenInfoCheck; // mapping form poolId => user Address => User Info
+    mapping(address => mapping(uint256 => TokenInfo)) public tokenInfoCheck; // mapping form poolId => user Address => User Info
     mapping(uint256 => mapping(address => mapping(uint256 => UserInfo))) public userInfo; // mapping form poolId => user Address => User Info
 
     uint256 public totalAmountLockedWave = 0;
@@ -2517,7 +2525,7 @@ contract WaveEmissionDistributor is
 
     IERC721 public veWave;
     IERC20 public wave;
-    IERC20 public veWAVEReceipt;
+    IERC20 public veWaveReceipt;
 
 
     /* WAVE Rewards Events*/
@@ -2543,13 +2551,13 @@ contract WaveEmissionDistributor is
         IERC20 _wave,
         WAVEMasterChef _chef,
         uint256 _farmPid,
-        IERC20 _veWAVEReceipt
+        IERC20 _veWaveReceipt
     ) {
         veWave = _veWave;
         wave = _wave;
         chef = _chef;
         farmPid = _farmPid;
-        veWAVEReceipt = _veWAVEReceipt;
+        veWaveReceipt = _veWaveReceipt;
     }
 
     function setFarmId(uint256 id) external onlyOwner {
@@ -2600,7 +2608,7 @@ contract WaveEmissionDistributor is
         /*************************************************************/
 
         /******************** veWAVEReceipt Code ********************/
-        veWAVEReceipt._mint(address(msg.sender), 1000000000000000000);
+        veWAVEReceipt(address(veWaveReceipt)).mint(address(msg.sender), 1000000000000000000);
         /*************************************************************/
 
         // Events    
@@ -2610,8 +2618,8 @@ contract WaveEmissionDistributor is
 
     function withdrawAndDistribute(uint256 _pid, uint256 _tokenId) external {
         TokenInfo storage tokenInfoUser = tokenInfoCheck[address(msg.sender)][_tokenId];
-        require(tokenInfoUser, "You are not the owner of this veWAVE");  // Check if msg.sender is the owner of the veWAVE
-        require(veWAVEReceipt.balanceOf(address(msg.sender)) > 999999999999999999, "You don't have any veWAVEReceipt");  // Check if msg.sender have at least 1 veWAVEReceipt
+        require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");  // Check if msg.sender is the owner of the veWAVE
+        require(veWaveReceipt.balanceOf(address(msg.sender)) > 999999999999999999, "You don't have any veWAVEReceipt");  // Check if msg.sender have at least 1 veWAVEReceipt
                                                                 
         // AnotherToken Rewards attributes
         PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
@@ -2649,12 +2657,11 @@ contract WaveEmissionDistributor is
         /********************************************************************/
 
         /******************** veWAVEReceipt Code ********************/
-        veWAVEReceipt.transferFrom(address(msg.sender),address(this),1000000000000000000);
-        veWAVEReceipt._burn(address(this), 1000000000000000000);
+        veWaveReceipt.transferFrom(address(msg.sender),0x0000000000000000000000000000000000000000,1000000000000000000);
         /*************************************************************/
 
         /* Token Info delete data */
-        tokenInfoUser.tokenInfoUser = address(0); 
+        tokenInfoUser.user = address(0); 
         tokenInfoUser.numberNFT = 0;
         /***********************/
 
@@ -2678,7 +2685,7 @@ contract WaveEmissionDistributor is
             userAnotherToken.rewardDebt = accumulatedAnotherToken;
 
             if (eligibleAnotherToken > 0) {
-                safeAnotherTokenTransfer(address(msg.sender), eligibleAnotherToken);
+                safeAnotherTokenTransfer(_pid, address(msg.sender), eligibleAnotherToken);
             }
         }
 
@@ -2777,12 +2784,7 @@ contract WaveEmissionDistributor is
         poolInfoAnotherToken[_pid].isClosed = _isClosed;
 
 
-        emit LogSetPool(
-            _pid,
-            _tokenReward,
-            _isClosed,
-            _allocPoint
-        );
+//        emit LogSetPoolAnotherToken(_pid, _tokenReward, _isClosed, _allocPoint);
     }
 
     // Update reward variables of the given WAVE pool to be up-to-date.
@@ -2808,17 +2810,17 @@ contract WaveEmissionDistributor is
             pool.lastRewardBlock = block.timestamp;
             poolInfo[0] = pool;
 
-            emit LogUpdatePool(
+          /*  emit LogUpdatePool(
                 0,
                 pool.lastRewardBlock,
                 totalAmountLockedWave,
                 pool.accWAVEPerShare
-            );
+            ); */
         }
     }
 
     // View function to see pending WAVEs on frontend.
-    function pendingWave(uint256 _pid, address _user, uint256 _tokenId)  
+    function pendingWave(address _user, uint256 _tokenId)  
         external
         view
         returns (uint256 pending)
@@ -2861,23 +2863,19 @@ contract WaveEmissionDistributor is
         returns (uint256 pending)
     {
         PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
-        UserInfoAnotherToken storage userAnotherToken = userInfo[_pid][_user][_tokenId];
+        UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][_user][_tokenId];
         // how many AnotherToken per veWAVE
-        uint256 accAnotherTokenPerShare = poolAnotherToken.accWAVEPerShare;
+        uint256 accAnotherTokenPerShare = poolAnotherToken.accAnotherTokenPerShare;
         // total staked veWAVE in this pool
         uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
 
         if (block.timestamp > poolAnotherToken.lastRewardBlock && anotherTokenSupply != 0) {
             uint256 blocksSinceLastReward = block.timestamp - poolAnotherToken.lastRewardBlock;
             // based on the pool weight (allocation points) we calculate the anotherToken rewarded for this specific pool
-            uint256 anotherTokenRewards = (blocksSinceLastReward *
-                anotherTokenPerBlock *
-                poolAnotherToken.allocPoint) / 1000;
-
+            uint256 anotherTokenRewards = (blocksSinceLastReward + poolAnotherToken.anotherTokenPerBlock * poolAnotherToken.allocPoint) / 1000;
             // we take parts of the rewards for treasury, these can be subject to change, so we recalculate it
             // a value of 1000 = 100%
-            uint256 anotherTokenRewardsForPool = (anotherTokenRewards * 1000) /
-                1000;
+            uint256 anotherTokenRewardsForPool = (anotherTokenRewards * 1000) /1000;
 
             // we calculate the new amount of accumulated anotherToken per veWAVE
             accAnotherTokenPerShare =
@@ -2893,10 +2891,10 @@ contract WaveEmissionDistributor is
     }
 
     // Update reward variables of the given anotherToken pool to be up-to-date.
-    function updatePoolAnotherToken(uint256 _pid) public returns (PoolInfoAnotherToken memory pool) {
+    function updatePoolAnotherToken(uint256 _pid) public returns (PoolInfoAnotherToken memory poolAnotherToken) {
         poolAnotherToken = poolInfoAnotherToken[_pid];
 
-        if (block.timestamp > pool.lastRewardBlock) {
+        if (block.timestamp > poolAnotherToken.lastRewardBlock) {
             // total of AnotherTokens staked for this pool
             uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
             if (anotherTokenSupply > 0) {
@@ -2916,14 +2914,9 @@ contract WaveEmissionDistributor is
                     ((anotherTokenRewardsForPool * ACC_ANOTHERTOKEN_PRECISION) / anotherTokenSupply);
             }
             poolAnotherToken.lastRewardBlock = block.timestamp;
-            poolInfoAnotherToken[_pid] = pool;
+            poolInfoAnotherToken[_pid] = poolAnotherToken;
 
-            emit LogUpdatePool(
-                _pid,
-                poolAnotherToken.lastRewardBlock,
-                anotherTokenSupply,
-                poolAnotherToken.accAnotherTokenPerShare
-            );
+            /*emit LogUpdatePool(_pid, poolAnotherToken.lastRewardBlock, anotherTokenSupply, poolAnotherToken.accAnotherTokenPerShare);*/
         }
     }
 

@@ -2748,19 +2748,19 @@ contract WaveEmissionDistributor is
         bool _isClosed,
        uint256 _allocPoint
     ) public onlyOwner {
-        // respect startBlock!
-        uint256 lastRewardBlock = block.timestamp;
-
         poolInfoAnotherToken.push(
             PoolInfoAnotherToken({
                 tokenReward: _tokenReward,
                 anotherTokenPerBlock: _anotherTokenPerBlock,
                 isClosed: _isClosed,
                 allocPoint: _allocPoint,
-                lastRewardBlock: lastRewardBlock,
+                lastRewardBlock: block.timestamp,
                 accAnotherTokenPerShare: 0
             })
         );
+
+        totalPidsAnotherToken++;
+
         emit LogPoolAnotherTokenAddition(
             totalPidsAnotherToken - 1,
             _tokenReward,

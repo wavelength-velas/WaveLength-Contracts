@@ -2521,7 +2521,7 @@ contract WaveEmissionDistributor is
 
     uint256 private constant ACC_ANOTHERTOKEN_PRECISION = 1e12;
     uint256 private constant ACC_WAVE_PRECISION = 1e12;
-    uint256 public constant POOL_PERCENTAGE = 1000;
+    uint256 public constant POOL_PERCENTAGE = 876;
 
     WAVEMasterChef public chef;
     uint256 public farmPid;

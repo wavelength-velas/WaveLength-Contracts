@@ -775,8 +775,8 @@ contract ve is IERC721, IERC721Metadata {
     event Supply(uint prevSupply, uint supply);
 
     uint internal constant WEEK = 1 weeks;
-    uint internal constant MAXTIME = 4 * 365 * 86400;
-    int128 internal constant iMAXTIME = 4 * 365 * 86400;
+    uint internal constant MAXTIME = 183 * 86400;
+    int128 internal constant iMAXTIME = 183 * 86400;
     uint internal constant MULTIPLIER = 1 ether;
 
     address immutable public token;
@@ -1442,7 +1442,7 @@ contract ve is IERC721, IERC721Metadata {
 
         require(_value > 0); // dev: need non-zero value
         require(unlock_time > block.timestamp, 'Can only lock until time in the future');
-        require(unlock_time <= block.timestamp + MAXTIME, 'Voting lock can be 4 years max');
+        require(unlock_time <= block.timestamp + MAXTIME, 'Voting lock can be 6 months max');
 
         ++tokenId;
         uint _tokenId = tokenId;
@@ -1472,7 +1472,7 @@ contract ve is IERC721, IERC721Metadata {
         require(_locked.end > block.timestamp, 'Lock expired');
         require(_locked.amount > 0, 'Nothing is locked');
         require(unlock_time > _locked.end, 'Can only increase lock duration');
-        require(unlock_time <= block.timestamp + MAXTIME, 'Voting lock can be 4 years max');
+        require(unlock_time <= block.timestamp + MAXTIME, 'Voting lock can be 6 months max');
 
         _deposit_for(_tokenId, 0, unlock_time, _locked, DepositType.INCREASE_UNLOCK_TIME);
     }
@@ -1698,6 +1698,12 @@ contract ve is IERC721, IERC721Metadata {
         }
         // Now dt contains info on how far are we beyond point
         return _supply_at(point, point.ts + dt);
+    }
+
+    function locking(uint256 _tokenId) external view returns (int) {
+        LockedBalance memory _locked = locked[_tokenId];
+
+        return _locked.amount;
     }
 
     function _tokenURI(uint _tokenId, uint _balanceOf, uint _locked_end, uint _value) internal pure returns (string memory output) {

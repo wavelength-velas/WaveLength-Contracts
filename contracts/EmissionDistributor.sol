@@ -1001,6 +1001,10 @@ contract veWAVEReceipt is ERC20("veWAVEReceipt", "veWAVEReceipt"), Ownable {
     function mint(address _to, uint256 _amount) public onlyOwner {
         _mint(_to, _amount);
     }
+
+    function burn(address _to, uint256 _amount) public onlyOwner {
+        _burn(_to, _amount);
+    }
 }
 
 /**
@@ -2517,7 +2521,7 @@ contract WaveEmissionDistributor is
 
     uint256 private constant ACC_ANOTHERTOKEN_PRECISION = 1e12;
     uint256 private constant ACC_WAVE_PRECISION = 1e12;
-    uint256 public constant POOL_PERCENTAGE = 876;
+    uint256 public constant POOL_PERCENTAGE = 1000;
 
     WAVEMasterChef public chef;
     uint256 public farmPid;
@@ -2632,9 +2636,7 @@ contract WaveEmissionDistributor is
         /******************** WAVE Rewards Code ********************/
         uint256  amount = ve(address(veWave)).locking(_tokenId);  // amount of locked WAVE on that veWAVE
         chef.withdrawAndHarvest(farmPid, amount, address(this));  // withdraw edveWAVE of MasterChef and harvest WAVE
-        IERC721(veWave).safeTransferFrom(address(this), address(msg.sender), _tokenId); // transfer veWAVE to his owner
         totalAmountLockedWave -= amount; // amount of lockedWave on the contract - amount of locked Wave of that veWAVE
-        harvestAndDistribute(_pid, _tokenId); // harvest and Distribute WAVE and AnotherToken to msg.sender
         _burn(address(this), amount); // burn edveWAVE
         // this would  be the amount if the user joined right from the start of the farm
         uint256 accumulatedWAVE = (user.amount * pool.accWAVEPerShare) / ACC_WAVE_PRECISION;
@@ -2646,18 +2648,19 @@ contract WaveEmissionDistributor is
         /************************************************************/
 
         /******************** AnotherToken Rewards Code ********************/
-        if (poolAnotherToken.tokenReward != address(0)) {
+        if (poolAnotherToken.isClosed == false) {
             // this would  be the amount if the user joined right from the start of the farm
             uint256 accumulatedWAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
             // subtracting the rewards the user is not eligible for
             uint256 eligibleAnotherToken = accumulatedWAnotherToken - userAnotherToken.rewardDebt;
-            user.rewardDebt = accumulatedWAnotherToken - (amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_WAVE_PRECISION; // update AnotherToken Reward Debt
+            user.rewardDebt = accumulatedWAnotherToken - (amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION; // update AnotherToken Reward Debt
             userAnotherToken.amount = userAnotherToken.amount - amount; // put user amount of UserInfo a zero
+            safeAnotherTokenTransfer(_pid, address(msg.sender), eligibleAnotherToken); 
         }
         /********************************************************************/
 
         /******************** veWAVEReceipt Code ********************/
-        veWaveReceipt.transferFrom(address(msg.sender),0x0000000000000000000000000000000000000000,1000000000000000000);
+        veWAVEReceipt(address(veWaveReceipt)).burn(address(msg.sender), 1000000000000000000);
         /*************************************************************/
 
         /* Token Info delete data */
@@ -2665,32 +2668,17 @@ contract WaveEmissionDistributor is
         tokenInfoUser.numberNFT = 0;
         /***********************/
 
+        IERC721(veWave).safeTransferFrom(address(this), address(msg.sender), _tokenId); // transfer veWAVE to his owner
+
         // Events
         emit Withdraw(msg.sender, 0, amount, msg.sender);
         emit WithdrawAnotherToken(msg.sender, _pid, amount, msg.sender);
     }
 
-    function harvestAndDistribute(uint256 _pid, uint256 _tokenId) public {
-        PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
-        UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[0][msg.sender][_tokenId];
-
-
-        if (poolAnotherToken.tokenReward != address(0)) {
-            // this would  be the amount if the user joined right from the start of the farm
-            uint256 accumulatedAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
-            // subtracting the rewards the user is not eligible for
-            uint256 eligibleAnotherToken = accumulatedAnotherToken - userAnotherToken.rewardDebt;
-
-            // we set the new rewardDebt to the current accumulated amount of rewards for his amount of LP token
-            userAnotherToken.rewardDebt = accumulatedAnotherToken;
-
-            if (eligibleAnotherToken > 0) {
-                safeAnotherTokenTransfer(_pid, address(msg.sender), eligibleAnotherToken);
-            }
-        }
-
+    function harvestAndDistribute(uint256 _tokenId) public {
         PoolInfo memory pool = updatePool();
         UserInfo storage user = userInfo[0][msg.sender][_tokenId];
+        
         chef.harvest(farmPid, address(this));
 
         // this would  be the amount if the user joined right from the start of the farm
@@ -2707,9 +2695,31 @@ contract WaveEmissionDistributor is
         }
 
         emit Harvest(msg.sender, 0, eligibleWAVE);
-        emit HarvestAnotherToken(msg.sender, _pid, eligibleWAVE);
     }
 
+    function harvestAndDistributeAnotherToken(uint256 _pid, uint256 _tokenId) public {
+        PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
+        UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[0][msg.sender][_tokenId];
+    
+
+       if (poolAnotherToken.isClosed == false) {
+            // this would  be the amount if the user joined right from the start of the farm
+            uint256 accumulatedAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
+            // subtracting the rewards the user is not eligible for
+            uint256 eligibleAnotherToken = accumulatedAnotherToken - userAnotherToken.rewardDebt;
+
+            // we set the new rewardDebt to the current accumulated amount of rewards for his amount of LP token
+            userAnotherToken.rewardDebt = accumulatedAnotherToken;
+
+            if (eligibleAnotherToken > 0) {
+                safeAnotherTokenTransfer(_pid, address(msg.sender), eligibleAnotherToken);
+            }
+
+        emit HarvestAnotherToken(msg.sender, _pid, eligibleAnotherToken);
+        }
+        
+    }
+    
      // Withdraw without caring about rewards. EMERGENCY ONLY.
     function emergencyWithdraw(uint256 _pid, uint256 _tokenId, address _to) public {
         UserInfo storage user = userInfo[0][msg.sender][_tokenId];

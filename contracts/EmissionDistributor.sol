@@ -2914,7 +2914,7 @@ contract WaveEmissionDistributor is
                 // rewards for this pool based on his allocation points
                 uint256 anotherTokenRewards = (blocksSinceLastReward *
                     poolInfoAnotherToken[_pid].anotherTokenPerBlock *
-                    poolAnotherToken.allocPoint) / poolInfoAnotherToken[_pid].allocPoint;
+                    1000) / 1000;
 
                 uint256 anotherTokenRewardsForPool = (anotherTokenRewards * 1000) /
                     1000;
@@ -2959,4 +2959,23 @@ contract WaveEmissionDistributor is
         wavePerBlock = _wavePerBlock;
     }
 
+     function balanceOfAnotherToken(uint256 _pid)
+        external
+        view
+        returns (uint256 balance)
+    {
+        PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
+        // total staked veWAVE in this pool
+        balance = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
+    }
+
+    function balanceOfAnotherToken2(uint256 _pid)
+        external
+        view
+        returns (uint256 balance)
+    {
+        PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
+        // total staked veWAVE in this pool
+        balance = IERC20(poolAnotherToken.tokenReward).balanceOf(address(this));
+    }
 }

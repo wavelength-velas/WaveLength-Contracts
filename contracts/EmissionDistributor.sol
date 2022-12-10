@@ -2596,10 +2596,10 @@ contract WaveEmissionDistributor is
         uint256 amount = ve(address(veWave)).locking(_tokenId);
 
         /******************** AnotherToken Rewards Code ********************/
-      //  if (poolAnotherToken.isClosed != true) {
+        if (poolAnotherToken.isClosed != true) {
             userAnotherToken.amount = userAnotherToken.amount + amount;
             userAnotherToken.rewardDebt = userAnotherToken.rewardDebt + (amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
-      //  }      
+        }      
         /*******************************************************************/
         
         /******************** WAVE Rewards Code ********************/
@@ -2957,25 +2957,5 @@ contract WaveEmissionDistributor is
             "maximum emission rate of 6 anothertoken per block exceeded"
         );
         wavePerBlock = _wavePerBlock;
-    }
-
-     function balanceOfAnotherToken(uint256 _pid)
-        external
-        view
-        returns (uint256 balance)
-    {
-        PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
-        // total staked veWAVE in this pool
-        balance = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
-    }
-
-    function balanceOfAnotherToken2(uint256 _pid)
-        external
-        view
-        returns (uint256 balance)
-    {
-        PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
-        // total staked veWAVE in this pool
-        balance = IERC20(poolAnotherToken.tokenReward).balanceOf(address(this));
     }
 }

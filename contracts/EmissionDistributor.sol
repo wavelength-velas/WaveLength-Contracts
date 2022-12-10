@@ -2596,14 +2596,14 @@ contract WaveEmissionDistributor is
         uint256 amount = ve(address(veWave)).locking(_tokenId);
 
         /******************** AnotherToken Rewards Code ********************/
-        if (poolAnotherToken.tokenReward != address(0)) {
+      //  if (poolAnotherToken.isClosed != true) {
             userAnotherToken.amount = userAnotherToken.amount + amount;
             userAnotherToken.rewardDebt = userAnotherToken.rewardDebt + (amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
-        }      
+      //  }      
         /*******************************************************************/
         
         /******************** WAVE Rewards Code ********************/
-        totalAmountLockedWave += amount;
+        totalAmountLockedWave = totalAmountLockedWave + amount;
         _mint(address(this), amount); // mint 
         _approve(address(this), address(chef), amount);
         chef.deposit(farmPid, amount, address(this));
@@ -2636,7 +2636,7 @@ contract WaveEmissionDistributor is
         /******************** WAVE Rewards Code ********************/
         uint256  amount = ve(address(veWave)).locking(_tokenId);  // amount of locked WAVE on that veWAVE
         chef.withdrawAndHarvest(farmPid, amount, address(this));  // withdraw edveWAVE of MasterChef and harvest WAVE
-        totalAmountLockedWave -= amount; // amount of lockedWave on the contract - amount of locked Wave of that veWAVE
+        totalAmountLockedWave = totalAmountLockedWave + amount; // amount of lockedWave on the contract - amount of locked Wave of that veWAVE
         _burn(address(this), amount); // burn edveWAVE
         // this would  be the amount if the user joined right from the start of the farm
         uint256 accumulatedWAVE = (user.amount * pool.accWAVEPerShare) / ACC_WAVE_PRECISION;
@@ -2702,7 +2702,7 @@ contract WaveEmissionDistributor is
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[0][msg.sender][_tokenId];
     
 
-       if (poolAnotherToken.isClosed == false) {
+     //  if (poolAnotherToken.isClosed == false) {
             // this would  be the amount if the user joined right from the start of the farm
             uint256 accumulatedAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
             // subtracting the rewards the user is not eligible for
@@ -2716,7 +2716,7 @@ contract WaveEmissionDistributor is
             }
 
         emit HarvestAnotherToken(msg.sender, _pid, eligibleAnotherToken);
-        }
+   //     }
         
     }
     
@@ -2949,6 +2949,14 @@ contract WaveEmissionDistributor is
         } else {
             IERC20(pool.tokenReward).transfer(_to, _amount);
         }
+    }
+
+    function updateEmissionRate(uint256 _wavePerBlock) public onlyOwner {
+        require(
+            _wavePerBlock <= 6e18,
+            "maximum emission rate of 6 anothertoken per block exceeded"
+        );
+        wavePerBlock = _wavePerBlock;
     }
 
 }

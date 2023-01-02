@@ -171,7 +171,7 @@ const _abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;
 
 export class IAssetManager__factory {
   static readonly abi = _abi;

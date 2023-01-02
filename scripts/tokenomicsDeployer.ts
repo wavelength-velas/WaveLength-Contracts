@@ -34,7 +34,7 @@ export async function deployToken()  {
   }
   
   export async function deployMasterChef(tokenAddress:string, treasuryAddress: string ,tokenPerBlock: string, startBlock: string) {
-    const token = await ethers.getContractFactory("WAVEMasterChef");
+    const token = await ethers.getContractFactory("contracts/WAVEMasterChef.sol:WAVEMasterChef");
     //2. It will create a json request, json-rpc request over to eth network, and the network will call a process to begin a transaction
     
     const contract = await token.deploy(tokenAddress, treasuryAddress,tokenPerBlock, startBlock);
@@ -89,10 +89,10 @@ export async function deployToken()  {
     let timelockAddress = (await timelock).address;
     console.log("Token Contract Deployed at The Following Address" + tokenContractAddress + " MasterChefDeployed At:" + masterChefAddress + " Timelock Deployed at the Following Address: " + timelockAddress)
 
-     let masterChefOperator = deployMasterChefOperator((await timelock).address, (await masterChef).address, deployerAddress, deployerAddress );
+     //let masterChefOperator = deployMasterChefOperator((await timelock).address, (await masterChef).address, deployerAddress, deployerAddress );
 
-     console.log("WAVE Token Address: " + addressInput + '/n' + "MasterChef Address: " + (await masterChef).address + '/n' +  "Timelock Address: " + (await timelock).address + '/n' + (await masterChefOperator).address);
-    return;
+     //console.log("WAVE Token Address: " + addressInput + '/n' + "MasterChef Address: " + (await masterChef).address + '/n' +  "Timelock Address: " + (await timelock).address + '/n' + (await masterChefOperator).address);
+     return;
   }
 
   async function deployWaveBar() {

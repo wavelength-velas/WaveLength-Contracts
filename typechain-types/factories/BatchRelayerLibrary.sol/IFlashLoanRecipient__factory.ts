@@ -38,7 +38,7 @@ const _abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;
 
 export class IFlashLoanRecipient__factory {
   static readonly abi = _abi;

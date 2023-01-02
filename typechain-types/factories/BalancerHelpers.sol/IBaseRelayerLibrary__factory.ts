@@ -23,7 +23,7 @@ const _abi = [
     stateMutability: "view",
     type: "function",
   },
-];
+] as const;
 
 export class IBaseRelayerLibrary__factory {
   static readonly abi = _abi;

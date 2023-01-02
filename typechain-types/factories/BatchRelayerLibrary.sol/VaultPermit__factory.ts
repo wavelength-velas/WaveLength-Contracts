@@ -132,7 +132,7 @@ const _abi = [
     stateMutability: "payable",
     type: "function",
   },
-];
+] as const;
 
 export class VaultPermit__factory {
   static readonly abi = _abi;

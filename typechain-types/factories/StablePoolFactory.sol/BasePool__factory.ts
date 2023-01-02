@@ -748,7 +748,7 @@ const _abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-];
+] as const;
 
 export class BasePool__factory {
   static readonly abi = _abi;

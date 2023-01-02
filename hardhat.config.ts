@@ -15,19 +15,37 @@ const config: HardhatUserConfig = {
         compilers: [
             {
                 version: "0.8.7",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs:   200,
+                    },
+                },
             },
             {
                 version: "0.8.11",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs: 200,
+                    },
+                },
             },
             {
                 version: "0.8.0",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs: 200,
+                    },
+                },
             },
             {
                 version: '0.7.6',
                 settings: {
                     optimizer: {
                         enabled: true,
-                        runs: 50,
+                        runs: 200,
                     },
                 },
                 
@@ -46,9 +64,8 @@ const config: HardhatUserConfig = {
         velas: {
             url: 'https://evmexplorer.velas.com/rpc',
             chainId: 106,
-            accounts: [`${process.env.PRIVATE_KEY1}`],
-            // gasMultiplier: 2,
-        },
+            accounts: [`${process.env.PRIVATE_KEY}`],
+            },
     },
 }
 

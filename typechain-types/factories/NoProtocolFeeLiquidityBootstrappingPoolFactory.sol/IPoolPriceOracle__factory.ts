@@ -72,7 +72,7 @@ const _abi = [
     stateMutability: "view",
     type: "function",
   },
-];
+] as const;
 
 export class IPoolPriceOracle__factory {
   static readonly abi = _abi;

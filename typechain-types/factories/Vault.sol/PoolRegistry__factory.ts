@@ -1157,7 +1157,7 @@ const _abi = [
     stateMutability: "payable",
     type: "function",
   },
-];
+] as const;
 
 export class PoolRegistry__factory {
   static readonly abi = _abi;

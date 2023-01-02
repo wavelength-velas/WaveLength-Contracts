@@ -4,10 +4,7 @@
 export { AccessControl__factory } from "./AccessControl__factory";
 export { ERC165__factory } from "./ERC165__factory";
 export { ERC20__factory } from "./ERC20__factory";
-export { FBeetsEmissionDistributor__factory } from "./FBeetsEmissionDistributor__factory";
-export { FBeetsLocker__factory } from "./FBeetsLocker__factory";
 export { IAccessControl__factory } from "./IAccessControl__factory";
-export { IBalancerVault__factory } from "./IBalancerVault__factory";
 export { IERC165__factory } from "./IERC165__factory";
 export { IERC20__factory } from "./IERC20__factory";
 export { IERC20Metadata__factory } from "./IERC20Metadata__factory";
@@ -18,4 +15,6 @@ export { IRewarder__factory } from "./IRewarder__factory";
 export { Ownable__factory } from "./Ownable__factory";
 export { WAVEMasterChef__factory } from "./WAVEMasterChef__factory";
 export { WAVEToken__factory } from "./WAVEToken__factory";
+export { WaveEmissionDistributor__factory } from "./WaveEmissionDistributor__factory";
 export { Ve__factory } from "./Ve__factory";
+export { VeWAVEReceipt__factory } from "./VeWAVEReceipt__factory";

@@ -51,6 +51,7 @@ export interface VeInterface extends utils.Interface {
     "leave(uint256)": FunctionFragment;
     "locked(uint256)": FunctionFragment;
     "locked__end(uint256)": FunctionFragment;
+    "locking(uint256)": FunctionFragment;
     "merge(uint256,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
@@ -104,6 +105,7 @@ export interface VeInterface extends utils.Interface {
       | "leave"
       | "locked"
       | "locked__end"
+      | "locking"
       | "merge"
       | "name"
       | "ownerOf"
@@ -213,6 +215,10 @@ export interface VeInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "locked__end",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "locking",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -377,6 +383,7 @@ export interface VeInterface extends utils.Interface {
     functionFragment: "locked__end",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "locking", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "merge", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
@@ -713,6 +720,11 @@ export interface Ve extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    locking(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     merge(
       _from: PromiseOrValue<BigNumberish>,
       _to: PromiseOrValue<BigNumberish>,
@@ -961,6 +973,11 @@ export interface Ve extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  locking(
+    _tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   merge(
     _from: PromiseOrValue<BigNumberish>,
     _to: PromiseOrValue<BigNumberish>,
@@ -1203,6 +1220,11 @@ export interface Ve extends BaseContract {
     ): Promise<[BigNumber, BigNumber] & { amount: BigNumber; end: BigNumber }>;
 
     locked__end(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    locking(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -1552,6 +1574,11 @@ export interface Ve extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    locking(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     merge(
       _from: PromiseOrValue<BigNumberish>,
       _to: PromiseOrValue<BigNumberish>,
@@ -1783,6 +1810,11 @@ export interface Ve extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     locked__end(
+      _tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    locking(
       _tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

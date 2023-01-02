@@ -2,7 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as aaveLinearPoolFactorySol from "./AaveLinearPoolFactory.sol";
-export * as auditContracts from "./Audit_Contracts";
 export * as authorizerSol from "./Authorizer.sol";
 export * as balancerHelpersSol from "./BalancerHelpers.sol";
 export * as batchRelayerLibrarySol from "./BatchRelayerLibrary.sol";
@@ -19,7 +18,7 @@ export * as waveMasterChefSol from "./WAVEMasterChef.sol";
 export * as waveTokenSol from "./WAVEToken.sol";
 export * as weightedPool2TokensFactorySol from "./WeightedPool2TokensFactory.sol";
 export * as weightedPoolFactorySol from "./WeightedPoolFactory.sol";
-export * as veSol from "./ve.sol";
 export * as veWaveSol from "./veWAVE.sol";
+export * as veWaveReceiptSol from "./veWAVEReceipt.sol";
 export { Multicall2__factory } from "./Multicall2__factory";
 export { Timelock__factory } from "./Timelock__factory";

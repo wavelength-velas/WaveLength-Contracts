@@ -1,8 +1,8 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\AaveLinearPoolFactory.sol": {
-      "lastModificationDate": 1669205243944,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\AaveLinearPoolFactory.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "456c88d01318cf462001d00fba1ca071",
       "sourceName": "contracts/AaveLinearPoolFactory.sol",
       "solcConfig": {
@@ -10,7 +10,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 50
+            "runs": 200
           },
           "outputSelection": {
             "*": {
@@ -121,8 +121,8 @@
         "WordCodec"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\Authorizer.sol": {
-      "lastModificationDate": 1669205243957,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\Authorizer.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "f12ee106db2047631e6aff897044300d",
       "sourceName": "contracts/Authorizer.sol",
       "solcConfig": {
@@ -130,7 +130,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 50
+            "runs": 200
           },
           "outputSelection": {
             "*": {
@@ -170,8 +170,8 @@
         "InputHelpers"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\BalancerHelpers.sol": {
-      "lastModificationDate": 1669208242605,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\BalancerHelpers.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "c5389ac04e07502867c0b582259b740a",
       "sourceName": "contracts/BalancerHelpers.sol",
       "solcConfig": {
@@ -179,7 +179,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 50
+            "runs": 200
           },
           "outputSelection": {
             "*": {
@@ -319,8 +319,8 @@
         "WordCodec"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\BatchRelayerLibrary.sol": {
-      "lastModificationDate": 1669205243957,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\BatchRelayerLibrary.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "1b70acb330f45f281c9df9fd5e9f0b0f",
       "sourceName": "contracts/BatchRelayerLibrary.sol",
       "solcConfig": {
@@ -328,7 +328,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 50
+            "runs": 200
           },
           "outputSelection": {
             "*": {
@@ -414,8 +414,8 @@
         "WeightedPoolUserData"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\CompoundLinearPoolFactory.sol": {
-      "lastModificationDate": 1669205243957,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\CompoundLinearPoolFactory.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "e6a62a4cf4910bbd000a28e008124500",
       "sourceName": "contracts/CompoundLinearPoolFactory.sol",
       "solcConfig": {
@@ -423,7 +423,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 50
+            "runs": 200
           },
           "outputSelection": {
             "*": {
@@ -492,8 +492,8 @@
         "WordCodec"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\NoProtocolFeeLiquidityBootstrappingPoolFactory.sol": {
-      "lastModificationDate": 1669205243967,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\NoProtocolFeeLiquidityBootstrappingPoolFactory.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "90c8b5e826d7db6b032e211e28f476f5",
       "sourceName": "contracts/NoProtocolFeeLiquidityBootstrappingPoolFactory.sol",
       "solcConfig": {
@@ -501,7 +501,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 50
+            "runs": 200
           },
           "outputSelection": {
             "*": {
@@ -655,8 +655,8 @@
         "WordCodec"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\ProtocolFeesCollector.sol": {
-      "lastModificationDate": 1669205243967,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\ProtocolFeesCollector.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "d4f3d2ed8c9d78718585b5a4b88fb671",
       "sourceName": "contracts/ProtocolFeesCollector.sol",
       "solcConfig": {
@@ -664,7 +664,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 50
+            "runs": 200
           },
           "outputSelection": {
             "*": {
@@ -717,8 +717,8 @@
         "SafeERC20"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\StablePhantomPoolFactory.sol": {
-      "lastModificationDate": 1669205243967,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\StablePhantomPoolFactory.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "224edaef6602a685402db3ace5df1d8a",
       "sourceName": "contracts/StablePhantomPoolFactory.sol",
       "solcConfig": {
@@ -726,7 +726,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 50
+            "runs": 200
           },
           "outputSelection": {
             "*": {
@@ -843,8 +843,8 @@
         "WordCodec"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\StablePoolFactory.sol": {
-      "lastModificationDate": 1669205243967,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\StablePoolFactory.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "e6233ee3149471c057c924f1102a9f92",
       "sourceName": "contracts/StablePoolFactory.sol",
       "solcConfig": {
@@ -852,7 +852,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 50
+            "runs": 200
           },
           "outputSelection": {
             "*": {
@@ -956,8 +956,8 @@
         "WordCodec"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\Vault.sol": {
-      "lastModificationDate": 1669205243967,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\Vault.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "c5b574fbaf59d646333a825ebdb3f1a0",
       "sourceName": "contracts/Vault.sol",
       "solcConfig": {
@@ -965,7 +965,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 50
+            "runs": 200
           },
           "outputSelection": {
             "*": {
@@ -1079,8 +1079,8 @@
         "VaultAuthorization"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\WeightedPool2TokensFactory.sol": {
-      "lastModificationDate": 1669205243967,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\WeightedPool2TokensFactory.sol": {
+      "lastModificationDate": 1672080598640,
       "contentHash": "583f8757501979f3593e7149ec967922",
       "sourceName": "contracts/WeightedPool2TokensFactory.sol",
       "solcConfig": {
@@ -1088,7 +1088,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 50
+            "runs": 200
           },
           "outputSelection": {
             "*": {
@@ -1202,8 +1202,8 @@
         "WordCodec"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\WeightedPoolFactory.sol": {
-      "lastModificationDate": 1669205243967,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\WeightedPoolFactory.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "79c535474879dedc584ffbf941fe286c",
       "sourceName": "contracts/WeightedPoolFactory.sol",
       "solcConfig": {
@@ -1211,7 +1211,7 @@
         "settings": {
           "optimizer": {
             "enabled": true,
-            "runs": 50
+            "runs": 200
           },
           "outputSelection": {
             "*": {
@@ -1307,15 +1307,15 @@
         "WeightedPoolUserDataHelpers"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\EmissionDistributor.sol": {
-      "lastModificationDate": 1669205243957,
-      "contentHash": "ae9590a8bef3bdd66c94da3dc4c33a3e",
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\EmissionDistributor.sol": {
+      "lastModificationDate": 1672080598639,
+      "contentHash": "8b387e7ffd54efae3b8794a0f2af2401",
       "sourceName": "contracts/EmissionDistributor.sol",
       "solcConfig": {
         "version": "0.8.7",
         "settings": {
           "optimizer": {
-            "enabled": false,
+            "enabled": true,
             "runs": 200
           },
           "outputSelection": {
@@ -1336,19 +1336,18 @@
       },
       "imports": [],
       "versionPragmas": [
+        "0.8.7",
         "0.8.7"
       ],
       "artifacts": [
         "AccessControl",
         "Address",
+        "Base64",
         "Context",
         "ERC165",
         "ERC20",
         "EnumerableSet",
-        "FBeetsEmissionDistributor",
-        "FBeetsLocker",
         "IAccessControl",
-        "IBalancerVault",
         "IERC165",
         "IERC20",
         "IERC20Metadata",
@@ -1363,18 +1362,20 @@
         "Strings",
         "WAVEMasterChef",
         "WAVEToken",
-        "ve"
+        "WaveEmissionDistributor",
+        "ve",
+        "veWAVEReceipt"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\MasterChefOperator.sol": {
-      "lastModificationDate": 1669205243965,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\MasterChefOperator.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "1848d61198dfb1435bc073a041f8fb65",
       "sourceName": "contracts/MasterChefOperator.sol",
       "solcConfig": {
         "version": "0.8.7",
         "settings": {
           "optimizer": {
-            "enabled": false,
+            "enabled": true,
             "runs": 200
           },
           "outputSelection": {
@@ -1412,15 +1413,15 @@
         "Timelock"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\Timelock.sol": {
-      "lastModificationDate": 1669205243967,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\Timelock.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "e685030acea383cbefaa70575118fbbe",
       "sourceName": "contracts/Timelock.sol",
       "solcConfig": {
         "version": "0.8.7",
         "settings": {
           "optimizer": {
-            "enabled": false,
+            "enabled": true,
             "runs": 200
           },
           "outputSelection": {
@@ -1447,15 +1448,60 @@
         "Timelock"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\WAVEBar.sol": {
-      "lastModificationDate": 1669208933201,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\veWAVEReceipt.sol": {
+      "lastModificationDate": 1672080598639,
+      "contentHash": "773628343ef744ef3f68083c24b4cb74",
+      "sourceName": "contracts/veWAVEReceipt.sol",
+      "solcConfig": {
+        "version": "0.8.7",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "^0.8.0",
+        "0.8.7"
+      ],
+      "artifacts": [
+        "Context",
+        "ERC20",
+        "IERC20",
+        "IERC20Metadata",
+        "Ownable",
+        "veWAVEReceipt"
+      ]
+    },
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\WAVEBar.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "84b9a087a99ef5a4b20be9df511cee86",
       "sourceName": "contracts/WAVEBar.sol",
       "solcConfig": {
         "version": "0.8.7",
         "settings": {
           "optimizer": {
-            "enabled": false,
+            "enabled": true,
             "runs": 200
           },
           "outputSelection": {
@@ -1494,15 +1540,15 @@
         "WaveBar"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\WAVEMasterChef.sol": {
-      "lastModificationDate": 1669205243967,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\WAVEMasterChef.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "471034fa86e26c0a30d9b1ab3cd7da27",
       "sourceName": "contracts/WAVEMasterChef.sol",
       "solcConfig": {
         "version": "0.8.7",
         "settings": {
           "optimizer": {
-            "enabled": false,
+            "enabled": true,
             "runs": 200
           },
           "outputSelection": {
@@ -1549,15 +1595,15 @@
         "WAVEToken"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\WAVEToken.sol": {
-      "lastModificationDate": 1669205243967,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\WAVEToken.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "91165477262ba36abed753f36e04aa3b",
       "sourceName": "contracts/WAVEToken.sol",
       "solcConfig": {
         "version": "0.8.7",
         "settings": {
           "optimizer": {
-            "enabled": false,
+            "enabled": true,
             "runs": 200
           },
           "outputSelection": {
@@ -1594,15 +1640,15 @@
         "WAVEToken"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\Multicall2.sol": {
-      "lastModificationDate": 1669205243965,
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\Multicall2.sol": {
+      "lastModificationDate": 1672080598639,
       "contentHash": "e19728bd5d87cbad5f1b7270a49bcb49",
       "sourceName": "contracts/Multicall2.sol",
       "solcConfig": {
         "version": "0.8.11",
         "settings": {
           "optimizer": {
-            "enabled": false,
+            "enabled": true,
             "runs": 200
           },
           "outputSelection": {
@@ -1629,65 +1675,15 @@
         "Multicall2"
       ]
     },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\ve.sol": {
-      "lastModificationDate": 1669205247149,
-      "contentHash": "82d9d43c05033737f286906373e14907",
-      "sourceName": "contracts/ve.sol",
-      "solcConfig": {
-        "version": "0.8.11",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0",
-        "0.8.11",
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0",
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "Address",
-        "Base64",
-        "Context",
-        "IERC165",
-        "IERC20",
-        "IERC20Metadata",
-        "IERC721",
-        "IERC721Metadata",
-        "IERC721Receiver",
-        "SafeERC20",
-        "ve"
-      ]
-    },
-    "C:\\Users\\Cospe\\Documents\\Wavelength\\WaveLength-Contracts\\contracts\\veWAVE.sol": {
-      "lastModificationDate": 1669208930475,
-      "contentHash": "82d9d43c05033737f286906373e14907",
+    "C:\\Users\\berna\\OneDrive\\Documents\\WavelengthContracts\\WaveLength-Contracts-1\\contracts\\veWAVE.sol": {
+      "lastModificationDate": 1672080598639,
+      "contentHash": "48a52245645d2a880ce0dad6a281f877",
       "sourceName": "contracts/veWAVE.sol",
       "solcConfig": {
         "version": "0.8.11",
         "settings": {
           "optimizer": {
-            "enabled": false,
+            "enabled": true,
             "runs": 200
           },
           "outputSelection": {

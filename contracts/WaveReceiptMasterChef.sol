@@ -1208,16 +1208,15 @@ abstract contract Ownable is Context {
 
 pragma solidity 0.8.7;
 
-contract WAVEToken is ERC20("WAVEToken", "WAVE"), Ownable {
-    uint256 public constant MAX_SUPPLY = 250_000_000e18; // 250 million wave
+contract veWAVEReceipt is ERC20("veWAVEReceipt", "veWAVEReceipt"), Ownable {
 
-    /// @notice Creates `_amount` token to `_to`. Must only be called by the owner (MasterChef).
+    /// @notice Creates `_amount` token to `_to`. Must only be called by the owner (EmissionsDistributor).
     function mint(address _to, uint256 _amount) public onlyOwner {
-        require(
-            totalSupply() + _amount <= MAX_SUPPLY,
-            "WAVE::mint: cannot exceed max supply"
-        );
         _mint(_to, _amount);
+    }
+
+    function burn(address _to, uint256 _amount) public onlyOwner {
+        _burn(_to, _amount);
     }
 }
 
@@ -1260,47 +1259,26 @@ contract WAVEReceiptMasterChef is Ownable {
     struct UserInfo {
         uint256 amount; // How many LP tokens the user has provided.
         uint256 rewardDebt; // Reward debt. See explanation below.
-        //
-        // We do some fancy math here. Basically, any point in time, the amount of WAVE
-        // entitled to a user but is pending to be distributed is:
-        //
-        //   pending reward = (user.amount * pool.accWAVEPerShare) - user.rewardDebt
-        //
-        // Whenever a user deposits or withdraws LP tokens to a pool. Here's what happens:
-        //   1. The pool's `accWAVEPerShare` (and `lastRewardBlock`) gets updated.
-        //   2. User receives the pending reward sent to his/her address.
-        //   3. User's `amount` gets updated.
-        //   4. User's `rewardDebt` gets updated.
     }
     // Info of each pool.
     struct PoolInfo {
         // we have a fixed number of WAVE tokens released per block, each pool gets his fraction based on the allocPoint
         uint256 allocPoint; // How many allocation points assigned to this pool. the fraction WAVE to distribute per block.
         uint256 lastRewardBlock; // Last block number that WAVE distribution occurs.
-        uint256 accWAVEPerShare; // Accumulated WAVE per LP share. this is multiplied by ACC_WAVE_PRECISION for more exact results (rounding errors)
+        uint256 accRewardPerShare; // Accumulated WAVE per LP share. this is multiplied by ACC_REWARD_PRECISION for more exact results (rounding errors)
     }
-    // The WAVE TOKEN!
-    WAVEToken public wave;
+    // The REWARD TOKEN!
+    IERC20 public reward;
 
-    // Treasury address.
-    address public treasuryAddress;
-
-    // WAVE tokens created per block.
+    // Reward tokens created per block.
     uint256 public rewardPerBlock;
 
-    uint256 private constant ACC_WAVE_PRECISION = 1e12;
+    uint256 private constant ACC_REWARD_PRECISION = 1e12;
 
-    // distribution percentages: a value of 1000 = 100%
-    // 12.8% percentage of pool rewards that goes to the treasury.
-    uint256 public constant TREASURY_PERCENTAGE = 124;
-
-    // 87.2% percentage of pool rewards that goes to LP holders.
-    uint256 public constant POOL_PERCENTAGE = 876;
+    uint256 public constant POOL_PERCENTAGE = 1000;
 
     // Info of each pool.
     PoolInfo[] public poolInfo;
-    // Info of each user that stakes LP tokens per pool. poolId => address => userInfo
-    /// @notice Address of the LP token for each MCV pool.
     IERC20[] public lpTokens;
 
     EnumerableSet.AddressSet private lpTokenAddresses;
@@ -1344,26 +1322,16 @@ contract WAVEReceiptMasterChef is Ownable {
         uint256 indexed pid,
         uint256 lastRewardBlock,
         uint256 lpSupply,
-        uint256 accWAVEPerShare
-    );
-    event SetTreasuryAddress(
-        address indexed oldAddress,
-        address indexed newAddress
+        uint256 accRewardPerShare
     );
     event UpdateEmissionRate(address indexed user, uint256 _wavePerSec);
 
     constructor(
-        WAVEToken _wave,
-        address _treasuryAddress,
+        IERC20 _reward,
         uint256 _rewardPerBlock,
         uint256 _startBlock
     ) {
-        require(
-            _rewardPerBlock <= 6e18,
-            "maximum emission rate of 6 wave per block exceeded"
-        );
-        wave = _wave;
-        treasuryAddress = _treasuryAddress;
+        reward = _reward;
         rewardPerBlock = _rewardPerBlock;
         startBlock = _startBlock;
     }
@@ -1377,15 +1345,6 @@ contract WAVEReceiptMasterChef is Ownable {
         uint256 _allocPoint,
         IERC20 _lpToken
     ) public onlyOwner {
-        require(
-            Address.isContract(address(_lpToken)),
-            "add: LP token must be a valid contract"
-        );
-        // we make sure the same LP cannot be added twice which would cause trouble
-        require(
-            !lpTokenAddresses.contains(address(_lpToken)),
-            "add: LP already added"
-        );
 
         // respect startBlock!
         uint256 lastRewardBlock = block.timestamp > startBlock
@@ -1401,13 +1360,13 @@ contract WAVEReceiptMasterChef is Ownable {
             PoolInfo({
                 allocPoint: _allocPoint,
                 lastRewardBlock: lastRewardBlock,
-                accWAVEPerShare: 0
+                accRewardPerShare: 0
             })
         );
         emit LogPoolAddition(
             lpTokens.length - 1,
             _allocPoint,
-            _lpToken,
+            _lpToken
         );
     }
 
@@ -1438,50 +1397,41 @@ contract WAVEReceiptMasterChef is Ownable {
     }
 
     // View function to see pending WAVE on frontend.
-    function pendingWAVE(uint256 _pid, address _user)
+    function pendingREWARD(uint256 _pid, address _user)
         external
         view
         returns (uint256 pending)
     {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
-        // how many WAVE per lp token
-        uint256 accWAVEPerShare = pool.accWAVEPerShare;
+
+        uint256 accRewardPerShare = pool.accRewardPerShare;
         // total staked lp tokens in this pool
         uint256 lpSupply = lpTokens[_pid].balanceOf(address(this));
 
         if (block.timestamp > pool.lastRewardBlock && lpSupply != 0) {
             uint256 blocksSinceLastReward = block.timestamp - pool.lastRewardBlock;
             // based on the pool weight (allocation points) we calculate the wave rewarded for this specific pool
-            uint256 waveRewards = (blocksSinceLastReward *
+            uint256 rewardRewards = (blocksSinceLastReward *
                 rewardPerBlock *
                 pool.allocPoint) / totalAllocPoint;
 
             // we take parts of the rewards for treasury, these can be subject to change, so we recalculate it
             // a value of 1000 = 100%
-            uint256 waveRewardsForPool = (waveRewards * POOL_PERCENTAGE) /
+            uint256 rewardRewardsForPool = (rewardRewards * POOL_PERCENTAGE) /
                 1000;
 
             // we calculate the new amount of accumulated wave per LP token
-            accWAVEPerShare =
-                accWAVEPerShare +
-                ((waveRewardsForPool * ACC_WAVE_PRECISION) / lpSupply);
+            accRewardPerShare =
+                accRewardPerShare +
+                ((rewardRewardsForPool * ACC_REWARD_PRECISION) / lpSupply);
         }
         // based on the number of LP tokens the user owns, we calculate the pending amount by subtracting the amount
         // which he is not eligible for (joined the pool later) or has already harvested
         pending =
-            (user.amount * accWAVEPerShare) /
-            ACC_WAVE_PRECISION -
+            (user.amount * accRewardPerShare) /
+            ACC_REWARD_PRECISION -
             user.rewardDebt;
-    }
-
-    /// @notice Update reward variables for all pools. Be careful of gas spending!
-    /// @param pids Pool IDs of all to be updated. Make sure to update all active pools.
-    function massUpdatePools(uint256[] calldata pids) external {
-        uint256 len = pids.length;
-        for (uint256 i = 0; i < len; ++i) {
-            updatePool(pids[i]);
-        }
     }
 
     // Update reward variables of the given pool to be up-to-date.
@@ -1496,23 +1446,16 @@ contract WAVEReceiptMasterChef is Ownable {
                     pool.lastRewardBlock;
 
                 // rewards for this pool based on his allocation points
-                uint256 waveRewards = (blocksSinceLastReward *
+                uint256 rewardRewards = (blocksSinceLastReward *
                     rewardPerBlock *
                     pool.allocPoint) / totalAllocPoint;
 
-                uint256 waveRewardsForPool = (waveRewards * POOL_PERCENTAGE) /
+                uint256 rewardRewardsForPool = (rewardRewards * POOL_PERCENTAGE) /
                     1000;
 
-                wave.mint(
-                    treasuryAddress,
-                    (waveRewards * TREASURY_PERCENTAGE) / 1000
-                );
-
-                wave.mint(address(this), waveRewardsForPool);
-
-                pool.accWAVEPerShare =
-                    pool.accWAVEPerShare +
-                    ((waveRewardsForPool * ACC_WAVE_PRECISION) / lpSupply);
+                pool.accRewardPerShare =
+                    pool.accRewardPerShare +
+                    ((rewardRewardsForPool * ACC_REWARD_PRECISION) / lpSupply);
             }
             pool.lastRewardBlock = block.timestamp;
             poolInfo[_pid] = pool;
@@ -1521,7 +1464,7 @@ contract WAVEReceiptMasterChef is Ownable {
                 _pid,
                 pool.lastRewardBlock,
                 lpSupply,
-                pool.accWAVEPerShare
+                pool.accRewardPerShare
             );
         }
     }
@@ -1538,11 +1481,11 @@ contract WAVEReceiptMasterChef is Ownable {
         user.amount = user.amount + _amount;
         // since we add more LP tokens, we have to keep track of the rewards he is not eligible for
         // if we would not do that, he would get rewards like he added them since the beginning of this pool
-        // note that only the accWAVEPerShare have the precision applied
+        // note that only the accRewardPerShare have the precision applied
         user.rewardDebt =
             user.rewardDebt +
-            (_amount * pool.accWAVEPerShare) /
-            ACC_WAVE_PRECISION;
+            (_amount * pool.accRewardPerShare) /
+            ACC_REWARD_PRECISION;
 
         lpTokens[_pid].safeTransferFrom(msg.sender, address(this), _amount);
 
@@ -1565,19 +1508,19 @@ contract WAVEReceiptMasterChef is Ownable {
         UserInfo storage user = userInfo[_pid][msg.sender];
 
         // this would  be the amount if the user joined right from the start of the farm
-        uint256 accumulatedWAVE = (user.amount * pool.accWAVEPerShare) /
-            ACC_WAVE_PRECISION;
+        uint256 accumulatedReward = (user.amount * pool.accRewardPerShare) /
+            ACC_REWARD_PRECISION;
         // subtracting the rewards the user is not eligible for
-        uint256 eligibleWAVE = accumulatedWAVE - user.rewardDebt;
+        uint256 eligibleReward = accumulatedReward - user.rewardDebt;
 
         // we set the new rewardDebt to the current accumulated amount of rewards for his amount of LP token
-        user.rewardDebt = accumulatedWAVE;
+        user.rewardDebt = accumulatedReward;
 
-        if (eligibleWAVE > 0) {
-            safeWAVETransfer(_to, eligibleWAVE);
+        if (eligibleReward > 0) {
+            safeRewardTransfer(_to, eligibleReward);
         }
 
-        emit Harvest(msg.sender, _pid, eligibleWAVE);
+        emit Harvest(msg.sender, _pid, eligibleReward);
     }
 
     /// @notice Withdraw LP tokens from MCV and harvest proceeds for transaction sender to `_to`.
@@ -1595,23 +1538,23 @@ contract WAVEReceiptMasterChef is Ownable {
         require(_amount <= user.amount, "cannot withdraw more than deposited");
 
         // this would  be the amount if the user joined right from the start of the farm
-        uint256 accumulatedWAVE = (user.amount * pool.accWAVEPerShare) /
-            ACC_WAVE_PRECISION;
+        uint256 accumulatedReward = (user.amount * pool.accRewardPerShare) /
+            ACC_REWARD_PRECISION;
         // subtracting the rewards the user is not eligible for
-        uint256 eligibleWAVE = accumulatedWAVE - user.rewardDebt;
+        uint256 eligibleReward = accumulatedReward - user.rewardDebt;
 
         user.rewardDebt =
-            accumulatedWAVE -
-            (_amount * pool.accWAVEPerShare) /
-            ACC_WAVE_PRECISION;
+            accumulatedReward -
+            (_amount * pool.accRewardPerShare) /
+            ACC_REWARD_PRECISION;
         user.amount = user.amount - _amount;
 
-        safeWAVETransfer(_to, eligibleWAVE);
+        safeRewardTransfer(_to, eligibleReward);
 
         lpTokens[_pid].safeTransfer(_to, _amount);
 
         emit Withdraw(msg.sender, _pid, _amount, _to);
-        emit Harvest(msg.sender, _pid, eligibleWAVE);
+        emit Harvest(msg.sender, _pid, eligibleReward);
     }
 
     // Withdraw without caring about rewards. EMERGENCY ONLY.
@@ -1634,12 +1577,6 @@ contract WAVEReceiptMasterChef is Ownable {
         } else {
             reward.transfer(_to, _amount);
         }
-    }
-
-    // Update treasury address by the owner.
-    function treasury(address _treasuryAddress) public onlyOwner {
-        treasuryAddress = _treasuryAddress;
-        emit SetTreasuryAddress(treasuryAddress, _treasuryAddress);
     }
 
     function updateEmissionRate(uint256 _rewardPerBlock) public onlyOwner {

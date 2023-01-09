@@ -2456,6 +2456,7 @@ abstract contract AccessControl is Context, IAccessControl, ERC165 {
 interface ve {
     function token() external view returns (address);
     function locking(uint) external view returns (uint);
+    function locked_end(uint) external view returns (uint);
     function totalSupply() external view returns (uint);
     function create_lock_for(uint, uint, address) external returns (uint);
     function transferFrom(address, address, uint) external;
@@ -2473,6 +2474,7 @@ contract WaveEmissionDistributor is
     struct TokenInfo {
         address user;  // address from the owner of this veWave
         uint256 numberNFT; // TokenId veWave
+        uint256 numberDummyTokens;
     }
 
     /******************** AnotherToken Structs ********************/
@@ -2533,14 +2535,14 @@ contract WaveEmissionDistributor is
 
 
     /* WAVE Rewards Events*/
+    event LogSetPool(uint256 allocPoint);
     event Harvest(address indexed user, uint256 indexed pid, uint256 amount);
     event LogPoolAddition(uint256 indexed pid, uint256 allocPoint);
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount, address indexed to);
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount, address indexed to);
-   
 
     /* AnotherToken Rewards Events*/
-    event LogSetPoolAnotherToken(uint256 indexed pid, address indexed tokenReward, uint256 allocPoint, bool indexed isClosed);
+    event LogSetPoolAnotherToken(uint256 indexed pid, address indexed tokenReward, bool indexed isClosed,  uint256 allocPoint);
     event LogPoolAnotherTokenAddition(uint256 indexed pid, address indexed tokenReward, bool indexed isClosed, uint256 allocPoint);
     event DepositAnotherToken(address indexed user, uint256 indexed pid, uint256 amount, address indexed to);
     event WithdrawAnotherToken(address indexed user, uint256 indexed pid, uint256 amount, address indexed to);
@@ -2584,10 +2586,22 @@ contract WaveEmissionDistributor is
         TokenInfo storage tokenInfoUser = tokenInfoCheck[address(msg.sender)][_tokenId];
         tokenInfoUser.user = address(msg.sender);
         tokenInfoUser.numberNFT = _tokenId;
+
+        /******************** veWAVEReceipt Code ********************/
+        
+        uint256 timeDays = ve(address(veWave)).locked_end(_tokenId) - block.timestamp;
+        uint256 mediumMint = timeDays + 86400;
+        uint256 finalMint = mediumMint/31556926;
+        uint256 finalMintFormmated = finalMint* 10**18; 
+        
+        veWAVEReceipt(address(veWaveReceipt)).mint(address(msg.sender), finalMintFormmated);
+        /*************************************************************/
+
         tokenInfo.push(
             TokenInfo({
                 user: address(msg.sender),
-                numberNFT:  _tokenId               
+                numberNFT:  _tokenId,
+                numberDummyTokens: finalMintFormmated      
             })
         );
         
@@ -2611,10 +2625,6 @@ contract WaveEmissionDistributor is
         user.rewardDebt = user.rewardDebt + (amount * pool.accWAVEPerShare) / ACC_WAVE_PRECISION;
         /*************************************************************/
 
-        /******************** veWAVEReceipt Code ********************/
-        veWAVEReceipt(address(veWaveReceipt)).mint(address(msg.sender), 1000000000000000000);
-        /*************************************************************/
-
         // Events    
         emit Deposit(msg.sender, 0, amount, address(msg.sender));
         emit DepositAnotherToken(msg.sender, _pid, amount, address(msg.sender));
@@ -2623,7 +2633,7 @@ contract WaveEmissionDistributor is
     function withdrawAndDistribute(uint256 _pid, uint256 _tokenId) external {
         TokenInfo storage tokenInfoUser = tokenInfoCheck[address(msg.sender)][_tokenId];
         require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");  // Check if msg.sender is the owner of the veWAVE
-        require(veWaveReceipt.balanceOf(address(msg.sender)) > 999999999999999999, "You don't have any veWAVEReceipt");  // Check if msg.sender have at least 1 veWAVEReceipt
+        require(veWaveReceipt.balanceOf(address(msg.sender)) >= tokenInfoUser.numberDummyTokens, "You don't have any veWAVEReceipt");  // Check if msg.sender have at least 1 veWAVEReceipt
                                                                 
         // AnotherToken Rewards attributes
         PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
@@ -2660,10 +2670,11 @@ contract WaveEmissionDistributor is
         /********************************************************************/
 
         /******************** veWAVEReceipt Code ********************/
-        veWAVEReceipt(address(veWaveReceipt)).burn(address(msg.sender), 1000000000000000000);
+        veWAVEReceipt(address(veWaveReceipt)).burn(address(msg.sender), tokenInfoUser.numberDummyTokens);
         /*************************************************************/
 
         /* Token Info delete data */
+        tokenInfoUser.numberDummyTokens = 0;
         tokenInfoUser.user = address(0); 
         tokenInfoUser.numberNFT = 0;
         /***********************/
@@ -2779,8 +2790,17 @@ contract WaveEmissionDistributor is
         );
     }
 
-    // Update the given Another Token pool's. Can only be called by the owner.
     function set(
+        uint256 _allocPoint,
+        bool _isClosed
+    ) public onlyOwner {
+        // we re-adjust the total allocation points
+        poolInfo[0].allocPoint = _allocPoint;
+        emit LogSetPool( _allocPoint);
+    }
+
+    // Update the given Another Token pool's. Can only be called by the owner.
+    function setAnotherToken(
         uint256 _pid,
         address _tokenReward,
         uint256 _allocPoint,
@@ -2792,9 +2812,7 @@ contract WaveEmissionDistributor is
         poolInfoAnotherToken[_pid].tokenReward = _tokenReward;
         poolInfoAnotherToken[_pid].anotherTokenPerBlock = _anotherTokenPerBlock;
         poolInfoAnotherToken[_pid].isClosed = _isClosed;
-
-
-//        emit LogSetPoolAnotherToken(_pid, _tokenReward, _isClosed, _allocPoint);
+        emit LogSetPoolAnotherToken(_pid, _tokenReward, _isClosed, _allocPoint);
     }
 
     // Update reward variables of the given WAVE pool to be up-to-date.

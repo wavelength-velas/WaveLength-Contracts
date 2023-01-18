@@ -2520,6 +2520,8 @@ contract WaveEmissionDistributor is
     uint256 public totalAmountLockedWave = 0; // total WAVE locked in pools
     uint256 public wavePerBlock;     // WAVE distributed per block
 
+    mapping (address => uint[]) public tokenIdsByUser;
+
 
     uint256 private constant ACC_ANOTHERTOKEN_PRECISION = 1e12; // precision used for calculations involving another token
     uint256 private constant ACC_WAVE_PRECISION = 1e12;   // Precision for accumulating WAVE
@@ -2605,6 +2607,8 @@ contract WaveEmissionDistributor is
                 numberDummyTokens: finalMintFormmated      
             })
         );
+
+        tokenIdsByUser[address(msg.sender)].push(_tokenId);
         
         // Transfer the veWAVE token from the user to the contract
         ve(address(veWave)).transferFrom(address(msg.sender), address(this), _tokenId);
@@ -2686,6 +2690,12 @@ contract WaveEmissionDistributor is
 
         IERC721(veWave).safeTransferFrom(address(this), address(msg.sender), _tokenId); // transfer veWAVE to his owner
 
+       for (uint i = 0; i < tokenIdsByUser[address(msg.sender)].length; i++) {
+        if (tokenIdsByUser[address(msg.sender)][i] == _tokenId) {
+            delete tokenIdsByUser[address(msg.sender)][i];
+        }
+        }
+
         // Events
         emit Withdraw(msg.sender, 0, amount, msg.sender);
         emit WithdrawAnotherToken(msg.sender, _pid, amount, msg.sender);
@@ -2759,6 +2769,13 @@ contract WaveEmissionDistributor is
         userAnotherToken.rewardDebt = 0;
         // Transfer the user's LP token back to them using the IERC721 contract
         IERC721(veWave).safeTransferFrom(address(this), address(msg.sender), _tokenId);
+
+        for (uint i = 0; i < tokenIdsByUser[address(msg.sender)].length; i++) {
+        if (tokenIdsByUser[address(msg.sender)][i] == _tokenId) {
+            delete tokenIdsByUser[address(msg.sender)][i];
+        }
+        }
+
         // Emit an event to log the emergency withdraw
         emit EmergencyWithdraw(msg.sender, _pid, amount, _to);
     }
@@ -2848,7 +2865,8 @@ contract WaveEmissionDistributor is
                 uint256 blocksSinceLastReward = block.timestamp -
                     pool.lastRewardBlock;
 
-                // Calculate the total WAVE rewards for the pool based on the number of blocks, WAVE per block, and pool allocation points                uint256 waveRewards = (blocksSinceLastReward *
+                // Calculate the total WAVE rewards for the pool based on the number of blocks, WAVE per block, and pool allocation points                
+                uint256 waveRewards = (blocksSinceLastReward *
                     wavePerBlock *
                     pool.allocPoint) / 1000;
                 // Calculate the WAVE rewards for the pool after taking a percentage for the treasury

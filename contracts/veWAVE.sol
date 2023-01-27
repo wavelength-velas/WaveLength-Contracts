@@ -775,10 +775,9 @@ contract ve is IERC721, IERC721Metadata {
     event Supply(uint prevSupply, uint supply);
 
     uint internal constant WEEK = 1 weeks;
-    uint internal constant MAXTIME = 183 * 86400;
-    int128 internal constant iMAXTIME = 183 * 86400;
+    uint internal constant MAXTIME = 1 * 365 * 86400;
+    int128 internal constant iMAXTIME = 1 * 365 * 86400;
     uint internal constant MULTIPLIER = 1 ether;
-
     address immutable public token;
     uint public supply;
     mapping(uint => LockedBalance) public locked;

@@ -2522,6 +2522,8 @@ contract WaveEmissionDistributor is
 
     mapping (address => uint[]) public tokenIdsByUser;
 
+    mapping (address => uint256) public totalNftsByUser;
+
 
     uint256 private constant ACC_ANOTHERTOKEN_PRECISION = 1e12; // precision used for calculations involving another token
     uint256 private constant ACC_WAVE_PRECISION = 1e12;   // Precision for accumulating WAVE
@@ -2589,7 +2591,8 @@ contract WaveEmissionDistributor is
         TokenInfo storage tokenInfoUser = tokenInfoCheck[address(msg.sender)][_tokenId];
         tokenInfoUser.user = address(msg.sender);
         tokenInfoUser.numberNFT = _tokenId;
-
+        
+        totalNftsByUser[address(msg.sender)] = totalNftsByUser[address(msg.sender)] + 1;
         tokenIdsByUser[address(msg.sender)].push(_tokenId);
         
         // Transfer the veWAVE token from the user to the contract
@@ -2687,6 +2690,7 @@ contract WaveEmissionDistributor is
         tokenInfoUser.numberNFT = 0;
         /***********************/
 
+
         IERC721(veWave).safeTransferFrom(address(this), address(msg.sender), _tokenId); // transfer veWAVE to his owner
 
        for (uint i = 0; i < tokenIdsByUser[address(msg.sender)].length; i++) {
@@ -2694,6 +2698,8 @@ contract WaveEmissionDistributor is
             delete tokenIdsByUser[address(msg.sender)][i];
         }
         }
+
+        totalNftsByUser[address(msg.sender)] = totalNftsByUser[address(msg.sender)] - 1;
 
         // Events
         emit Withdraw(msg.sender, 0, amount, msg.sender);
@@ -2774,6 +2780,8 @@ contract WaveEmissionDistributor is
             delete tokenIdsByUser[address(msg.sender)][i];
         }
         }
+
+        totalNftsByUser[address(msg.sender)] = totalNftsByUser[address(msg.sender)] - 1;
 
         // Emit an event to log the emergency withdraw
         emit EmergencyWithdraw(msg.sender, _pid, amount, _to);

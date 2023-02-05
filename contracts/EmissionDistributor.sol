@@ -2456,7 +2456,7 @@ abstract contract AccessControl is Context, IAccessControl, ERC165 {
 interface ve {
     function token() external view returns (address);
     function locking(uint) external view returns (uint);
-    function locked_end(uint) external view returns (uint);
+    function locked__end(uint) external view returns (uint);
     function totalSupply() external view returns (uint);
     function create_lock_for(uint, uint, address) external returns (uint);
     function transferFrom(address, address, uint) external;
@@ -2590,24 +2590,6 @@ contract WaveEmissionDistributor is
         tokenInfoUser.user = address(msg.sender);
         tokenInfoUser.numberNFT = _tokenId;
 
-        /******************** veWAVEReceipt Code ********************/
-        // Mint the veWAVEReceipt token for the user based on the locked time of the veWAVE token
-        uint256 timeDays = ve(address(veWave)).locked_end(_tokenId) - block.timestamp;
-        uint256 mediumMint = timeDays + 86400;
-        uint256 finalMint = mediumMint/31556926;
-        uint256 finalMintFormmated = finalMint* 10**18; 
-        
-        veWAVEReceipt(address(veWaveReceipt)).mint(address(msg.sender), finalMintFormmated);
-        /*************************************************************/
-        // Push the tokenInfo to the tokenInfo array
-        tokenInfo.push(
-            TokenInfo({
-                user: address(msg.sender),
-                numberNFT:  _tokenId,
-                numberDummyTokens: finalMintFormmated      
-            })
-        );
-
         tokenIdsByUser[address(msg.sender)].push(_tokenId);
         
         // Transfer the veWAVE token from the user to the contract
@@ -2630,6 +2612,23 @@ contract WaveEmissionDistributor is
         user.amount = amount;
         user.rewardDebt = user.rewardDebt + (amount * pool.accWAVEPerShare) / ACC_WAVE_PRECISION;
         /*************************************************************/
+
+         /******************** veWAVEReceipt Code ********************/
+        // Mint the veWAVEReceipt token for the user based on the locked time of the veWAVE token
+        uint256 timeDays = ve(address(veWave)).locked__end(_tokenId) - block.timestamp;
+        uint256 mediumMint = timeDays + 86400;
+        uint256 finalMint = (mediumMint * 10 ** 18)/31556926;
+        
+        veWAVEReceipt(address(veWaveReceipt)).mint(address(msg.sender), finalMint);
+        /*************************************************************/
+        // Push the tokenInfo to the tokenInfo array
+        tokenInfo.push(
+            TokenInfo({
+                user: address(msg.sender),
+                numberNFT:  _tokenId,
+                numberDummyTokens: finalMint  
+            })
+        );
 
         // Events    
         // Emit events for deposit

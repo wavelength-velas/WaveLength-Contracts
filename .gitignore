@@ -1,2 +1,7 @@
 node_modules
 .env
+
+# hardhat folders
+artifacts
+cache
+typechain-types

@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "test:emissiondistributor": "npx hardhat test test/EmissionDistributor.test.ts"
+  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.1",
     "@nomiclabs/hardhat-etherscan": "^3.1.2",

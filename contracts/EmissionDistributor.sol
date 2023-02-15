@@ -2474,7 +2474,7 @@ contract WaveEmissionDistributor is
     struct TokenInfo {
         address user;  // address from the owner of this veWave
         uint256 numberNFT; // TokenId veWave
-        uint256 numberDummyTokens; // Number of dummy tokens owned by the user on this numberNFT
+        uint256 numberVeWaveReceiptTokens; // Number of dummy tokens owned by the user on this numberNFT
     }
 
     /******************** AnotherToken Structs ********************/
@@ -2629,7 +2629,7 @@ contract WaveEmissionDistributor is
             TokenInfo({
                 user: msg.sender,
                 numberNFT:  _tokenId,
-                numberDummyTokens: finalMint
+                numberVeWaveReceiptTokens: finalMint
             })
         );
 
@@ -2644,7 +2644,7 @@ contract WaveEmissionDistributor is
         // Check if msg.sender is the owner of the veWAVE
         require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");  // Check if msg.sender is the owner of the veWAVE
         // Check if msg.sender have at least 1 veWAVEReceipt
-        require(veWaveReceipt.balanceOf(msg.sender) >= tokenInfoUser.numberDummyTokens, "You don't have any veWAVEReceipt");  // Check if msg.sender have at least 1 veWAVEReceipt
+        require(veWaveReceipt.balanceOf(msg.sender) >= tokenInfoUser.numberVeWaveReceiptTokens, "You don't have any veWAVEReceipt");  // Check if msg.sender have at least 1 veWAVEReceipt
 
         // AnotherToken Rewards attributes
         PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
@@ -2681,11 +2681,11 @@ contract WaveEmissionDistributor is
         /********************************************************************/
 
         /******************** veWAVEReceipt Code ********************/
-        veWAVEReceipt(address(veWaveReceipt)).burn(msg.sender, tokenInfoUser.numberDummyTokens);
+        veWAVEReceipt(address(veWaveReceipt)).burn(msg.sender, tokenInfoUser.numberVeWaveReceiptTokens);
         /*************************************************************/
 
         /* Token Info delete data */
-        tokenInfoUser.numberDummyTokens = 0;
+        tokenInfoUser.numberVeWaveReceiptTokens = 0;
         tokenInfoUser.user = address(0);
         tokenInfoUser.numberNFT = 0;
         /***********************/

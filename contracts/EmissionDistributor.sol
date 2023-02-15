@@ -2693,9 +2693,10 @@ contract WaveEmissionDistributor is
 
         IERC721(veWave).safeTransferFrom(address(this), msg.sender, _tokenId); // transfer veWAVE to his owner
 
-        for (uint i = 0; i < tokenIdsByUser[msg.sender].length;) {
-            if (tokenIdsByUser[msg.sender][i] == _tokenId) {
-                delete tokenIdsByUser[msg.sender][i];
+        uint256[] storage tokenIdsByCaller = tokenIdsByUser[msg.sender];
+        for (uint i = 0; i < tokenIdsByCaller.length;) {
+            if (tokenIdsByCaller[i] == _tokenId) {
+                delete tokenIdsByCaller[i];
             }
             unchecked {
                 ++i;
@@ -2778,9 +2779,10 @@ contract WaveEmissionDistributor is
         // Transfer the user's LP token back to them using the IERC721 contract
         IERC721(veWave).safeTransferFrom(address(this), msg.sender, _tokenId);
 
-        for (uint i = 0; i < tokenIdsByUser[msg.sender].length;) {
-            if (tokenIdsByUser[msg.sender][i] == _tokenId) {
-                delete tokenIdsByUser[msg.sender][i];
+        uint256[] memory tokenIdsByCaller = tokenIdsByUser[msg.sender];
+        for (uint i = 0; i < tokenIdsByCaller.length;) {
+            if (tokenIdsByCaller[i] == _tokenId) {
+                delete tokenIdsByCaller[i];
             }
             unchecked {
                 ++i;
@@ -2859,10 +2861,11 @@ contract WaveEmissionDistributor is
         bool _isClosed
     ) public onlyOwner {
         // Update the allocation point, token reward, block reward and closed status of the specified AnotherToken pool
-        poolInfoAnotherToken[_pid].allocPoint = _allocPoint;
-        poolInfoAnotherToken[_pid].tokenReward = _tokenReward;
-        poolInfoAnotherToken[_pid].anotherTokenPerBlock = _anotherTokenPerBlock;
-        poolInfoAnotherToken[_pid].isClosed = _isClosed;
+        PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
+        poolAnotherToken.allocPoint = _allocPoint;
+        poolAnotherToken.tokenReward = _tokenReward;
+        poolAnotherToken.anotherTokenPerBlock = _anotherTokenPerBlock;
+        poolAnotherToken.isClosed = _isClosed;
         // Emit an event to log the pool update
         emit LogSetPoolAnotherToken(_pid, _tokenReward, _isClosed, _allocPoint);
     }

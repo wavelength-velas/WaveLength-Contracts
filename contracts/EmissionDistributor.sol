@@ -2515,7 +2515,7 @@ contract WaveEmissionDistributor is
     PoolInfo[] public poolInfo;  // an array to store information of all pools of WAVE
     TokenInfo[] public tokenInfo; // mapping form poolId => user Address => User Info
     mapping(address => mapping(uint256 => TokenInfo)) public tokenInfoCheck; // mapping form poolId => user Address => User Info
-    mapping(uint256 => mapping(address => mapping(uint256 => UserInfo))) public userInfo; // mapping form poolId => user Address => User Info
+    mapping(address => mapping(uint256 => UserInfo)) public userInfo; // mapping form user Address => User Info
 
     uint256 public totalAmountLockedWave = 0; // total WAVE locked in pools
     uint256 public wavePerBlock;     // WAVE distributed per block
@@ -2585,7 +2585,7 @@ contract WaveEmissionDistributor is
 
         // Wave Rewards attributes
         PoolInfo memory pool = updatePool();
-        UserInfo storage user = userInfo[0][msg.sender][_tokenId];
+        UserInfo storage user = userInfo[msg.sender][_tokenId];
 
         // Take and write info about tokenInfo (user address & _numberNFT/tokenId
         TokenInfo storage tokenInfoUser = tokenInfoCheck[msg.sender][_tokenId];
@@ -2652,7 +2652,7 @@ contract WaveEmissionDistributor is
 
         // Wave Rewards attributes
         PoolInfo memory pool = updatePool();
-        UserInfo storage user = userInfo[0][msg.sender][_tokenId];
+        UserInfo storage user = userInfo[msg.sender][_tokenId];
 
         /******************** WAVE Rewards Code ********************/
         uint256  amount = ve(address(veWave)).locking(_tokenId);  // amount of locked WAVE on that veWAVE
@@ -2710,7 +2710,7 @@ contract WaveEmissionDistributor is
         // Get the current pool information
         PoolInfo memory pool = updatePool();
         // Get the current user's information based on the tokenId
-        UserInfo storage user = userInfo[0][msg.sender][_tokenId];
+        UserInfo storage user = userInfo[msg.sender][_tokenId];
 
         // Call the harvest function on the chef contract with the farmPid and this contract's address
         chef.harvest(farmPid, address(this));
@@ -2763,7 +2763,7 @@ contract WaveEmissionDistributor is
      // Withdraw without caring about rewards. EMERGENCY ONLY.
     function emergencyWithdraw(uint256 _pid, uint256 _tokenId, address _to) public {
         // Get the current user's information for the specified tokenId
-        UserInfo storage user = userInfo[0][msg.sender][_tokenId];
+        UserInfo storage user = userInfo[msg.sender][_tokenId];
         // Get the current user's information for the specified pid and tokenId
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
         // Get the current user's LP token amount
@@ -2904,7 +2904,7 @@ contract WaveEmissionDistributor is
         returns (uint256 pending)
     {
        PoolInfo storage pool = poolInfo[0];
-        UserInfo storage user = userInfo[0][_user][_tokenId];
+        UserInfo storage user = userInfo[_user][_tokenId];
         // Get the accumulated WAVE per LP token
         uint256 accWAVEPerShare = pool.accWAVEPerShare;
         // Only update the rewards if it's time to do so and there are LP tokens staked in the pool

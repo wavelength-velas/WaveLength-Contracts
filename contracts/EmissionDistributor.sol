@@ -2577,26 +2577,26 @@ contract WaveEmissionDistributor is
     function depositToChef(uint256 _pid, uint256 _tokenId) external payable {
         // Check if msg.sender is the owner of the veWAVE
         address ownerOfTokenId = IERC721(veWave).ownerOf(_tokenId);
-        require(ownerOfTokenId == address(msg.sender),"You are not the owner of this veWAVE");
+        require(ownerOfTokenId == msg.sender,"You are not the owner of this veWAVE");
 
         // AnotherToken Rewards attributes
         PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
-        UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][address(msg.sender)][_tokenId];
+        UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
 
         // Wave Rewards attributes
         PoolInfo memory pool = updatePool();
-        UserInfo storage user = userInfo[0][address(msg.sender)][_tokenId];
+        UserInfo storage user = userInfo[0][msg.sender][_tokenId];
 
         // Take and write info about tokenInfo (user address & _numberNFT/tokenId
-        TokenInfo storage tokenInfoUser = tokenInfoCheck[address(msg.sender)][_tokenId];
-        tokenInfoUser.user = address(msg.sender);
+        TokenInfo storage tokenInfoUser = tokenInfoCheck[msg.sender][_tokenId];
+        tokenInfoUser.user = msg.sender;
         tokenInfoUser.numberNFT = _tokenId;
 
-        totalNftsByUser[address(msg.sender)] = totalNftsByUser[address(msg.sender)] + 1;
-        tokenIdsByUser[address(msg.sender)].push(_tokenId);
+        totalNftsByUser[msg.sender] = totalNftsByUser[msg.sender] + 1;
+        tokenIdsByUser[msg.sender].push(_tokenId);
 
         // Transfer the veWAVE token from the user to the contract
-        ve(address(veWave)).transferFrom(address(msg.sender), address(this), _tokenId);
+        ve(address(veWave)).transferFrom(msg.sender, address(this), _tokenId);
         uint256 amount = ve(address(veWave)).locking(_tokenId);
 
         /******************** AnotherToken Rewards Code ********************/
@@ -2622,12 +2622,12 @@ contract WaveEmissionDistributor is
         uint256 mediumMint = timeDays + 86400;
         uint256 finalMint = (mediumMint * 10 ** 18)/31556926;
 
-        veWAVEReceipt(address(veWaveReceipt)).mint(address(msg.sender), finalMint);
+        veWAVEReceipt(address(veWaveReceipt)).mint(msg.sender, finalMint);
         /*************************************************************/
         // Push the tokenInfo to the tokenInfo array
         tokenInfo.push(
             TokenInfo({
-                user: address(msg.sender),
+                user: msg.sender,
                 numberNFT:  _tokenId,
                 numberDummyTokens: finalMint
             })
@@ -2635,24 +2635,24 @@ contract WaveEmissionDistributor is
 
         // Events
         // Emit events for deposit
-        emit Deposit(msg.sender, 0, amount, address(msg.sender));
-        emit DepositAnotherToken(msg.sender, _pid, amount, address(msg.sender));
+        emit Deposit(msg.sender, 0, amount, msg.sender);
+        emit DepositAnotherToken(msg.sender, _pid, amount, msg.sender);
     }
 
     function withdrawAndDistribute(uint256 _pid, uint256 _tokenId) external {
-        TokenInfo storage tokenInfoUser = tokenInfoCheck[address(msg.sender)][_tokenId];
+        TokenInfo storage tokenInfoUser = tokenInfoCheck[msg.sender][_tokenId];
         // Check if msg.sender is the owner of the veWAVE
         require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");  // Check if msg.sender is the owner of the veWAVE
         // Check if msg.sender have at least 1 veWAVEReceipt
-        require(veWaveReceipt.balanceOf(address(msg.sender)) >= tokenInfoUser.numberDummyTokens, "You don't have any veWAVEReceipt");  // Check if msg.sender have at least 1 veWAVEReceipt
+        require(veWaveReceipt.balanceOf(msg.sender) >= tokenInfoUser.numberDummyTokens, "You don't have any veWAVEReceipt");  // Check if msg.sender have at least 1 veWAVEReceipt
 
         // AnotherToken Rewards attributes
         PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
-        UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][address(msg.sender)][_tokenId];
+        UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
 
         // Wave Rewards attributes
         PoolInfo memory pool = updatePool();
-        UserInfo storage user = userInfo[0][address(msg.sender)][_tokenId];
+        UserInfo storage user = userInfo[0][msg.sender][_tokenId];
 
         /******************** WAVE Rewards Code ********************/
         uint256  amount = ve(address(veWave)).locking(_tokenId);  // amount of locked WAVE on that veWAVE
@@ -2665,7 +2665,7 @@ contract WaveEmissionDistributor is
         uint256 eligibleWAVE = accumulatedWAVE - user.rewardDebt;
         user.rewardDebt = accumulatedWAVE - (amount * pool.accWAVEPerShare) / ACC_WAVE_PRECISION; // update WAVE Reward Debt
         user.amount = user.amount - amount; // put user amount of UserInfo a zero
-        safeWAVETransfer(address(msg.sender), eligibleWAVE);
+        safeWAVETransfer(msg.sender, eligibleWAVE);
         /************************************************************/
 
         /******************** AnotherToken Rewards Code ********************/
@@ -2676,12 +2676,12 @@ contract WaveEmissionDistributor is
             uint256 eligibleAnotherToken = accumulatedWAnotherToken - userAnotherToken.rewardDebt;
             user.rewardDebt = accumulatedWAnotherToken - (amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION; // update AnotherToken Reward Debt
             userAnotherToken.amount = userAnotherToken.amount - amount; // put user amount of UserInfo a zero
-            safeAnotherTokenTransfer(_pid, address(msg.sender), eligibleAnotherToken);
+            safeAnotherTokenTransfer(_pid, msg.sender, eligibleAnotherToken);
         }
         /********************************************************************/
 
         /******************** veWAVEReceipt Code ********************/
-        veWAVEReceipt(address(veWaveReceipt)).burn(address(msg.sender), tokenInfoUser.numberDummyTokens);
+        veWAVEReceipt(address(veWaveReceipt)).burn(msg.sender, tokenInfoUser.numberDummyTokens);
         /*************************************************************/
 
         /* Token Info delete data */
@@ -2691,15 +2691,15 @@ contract WaveEmissionDistributor is
         /***********************/
 
 
-        IERC721(veWave).safeTransferFrom(address(this), address(msg.sender), _tokenId); // transfer veWAVE to his owner
+        IERC721(veWave).safeTransferFrom(address(this), msg.sender, _tokenId); // transfer veWAVE to his owner
 
-       for (uint i = 0; i < tokenIdsByUser[address(msg.sender)].length; i++) {
-        if (tokenIdsByUser[address(msg.sender)][i] == _tokenId) {
-            delete tokenIdsByUser[address(msg.sender)][i];
+       for (uint i = 0; i < tokenIdsByUser[msg.sender].length; i++) {
+        if (tokenIdsByUser[msg.sender][i] == _tokenId) {
+            delete tokenIdsByUser[msg.sender][i];
         }
         }
 
-        totalNftsByUser[address(msg.sender)] = totalNftsByUser[address(msg.sender)] - 1;
+        totalNftsByUser[msg.sender] = totalNftsByUser[msg.sender] - 1;
 
         // Events
         emit Withdraw(msg.sender, 0, amount, msg.sender);
@@ -2726,7 +2726,7 @@ contract WaveEmissionDistributor is
 
         // If there are any eligible WAVE rewards, transfer them to the user
         if (eligibleWAVE > 0) {
-            safeWAVETransfer(address(msg.sender), eligibleWAVE);
+            safeWAVETransfer(msg.sender, eligibleWAVE);
         }
 
         // Emit an event to log the harvest
@@ -2751,7 +2751,7 @@ contract WaveEmissionDistributor is
 
             // If there are any eligible AnotherToken rewards, transfer them to the user
             if (eligibleAnotherToken > 0) {
-                safeAnotherTokenTransfer(_pid, address(msg.sender), eligibleAnotherToken);
+                safeAnotherTokenTransfer(_pid, msg.sender, eligibleAnotherToken);
             }
 
         // Emit an event to log the harvest
@@ -2765,7 +2765,7 @@ contract WaveEmissionDistributor is
         // Get the current user's information for the specified tokenId
         UserInfo storage user = userInfo[0][msg.sender][_tokenId];
         // Get the current user's information for the specified pid and tokenId
-        UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][address(msg.sender)][_tokenId];
+        UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
         // Get the current user's LP token amount
         uint256 amount = user.amount;
         user.amount = 0;
@@ -2773,15 +2773,15 @@ contract WaveEmissionDistributor is
         userAnotherToken.amount = 0;
         userAnotherToken.rewardDebt = 0;
         // Transfer the user's LP token back to them using the IERC721 contract
-        IERC721(veWave).safeTransferFrom(address(this), address(msg.sender), _tokenId);
+        IERC721(veWave).safeTransferFrom(address(this), msg.sender, _tokenId);
 
-        for (uint i = 0; i < tokenIdsByUser[address(msg.sender)].length; i++) {
-        if (tokenIdsByUser[address(msg.sender)][i] == _tokenId) {
-            delete tokenIdsByUser[address(msg.sender)][i];
+        for (uint i = 0; i < tokenIdsByUser[msg.sender].length; i++) {
+        if (tokenIdsByUser[msg.sender][i] == _tokenId) {
+            delete tokenIdsByUser[msg.sender][i];
         }
         }
 
-        totalNftsByUser[address(msg.sender)] = totalNftsByUser[address(msg.sender)] - 1;
+        totalNftsByUser[msg.sender] = totalNftsByUser[msg.sender] - 1;
 
         // Emit an event to log the emergency withdraw
         emit EmergencyWithdraw(msg.sender, _pid, amount, _to);

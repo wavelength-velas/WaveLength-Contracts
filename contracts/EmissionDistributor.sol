@@ -2882,9 +2882,7 @@ contract WaveEmissionDistributor is
                     pool.lastRewardBlock;
 
                 // Calculate the total WAVE rewards for the pool based on the number of blocks, WAVE per block, and pool allocation points
-                uint256 waveRewards = (blocksSinceLastReward *
-                    wavePerBlock *
-                    pool.allocPoint) / DENOMINATOR;
+                uint256 waveRewards = (blocksSinceLastReward * wavePerBlock) / DENOMINATOR;
                 // Calculate the WAVE rewards for the pool after taking a percentage for the treasury
                 uint256 waveRewardsForPool = (waveRewards * POOL_PERCENTAGE) /
                     DENOMINATOR;
@@ -2921,9 +2919,7 @@ contract WaveEmissionDistributor is
         if (block.timestamp > pool.lastRewardBlock && totalAmountLockedWave != 0) {
             uint256 blocksSinceLastReward = block.timestamp - pool.lastRewardBlock;
             // Calculate the WAVE rewards for the pool based on the number of blocks, WAVE per block, and pool allocation points
-            uint256 waveRewards = (blocksSinceLastReward *
-                wavePerBlock *
-                pool.allocPoint) / DENOMINATOR;
+            uint256 waveRewards = (blocksSinceLastReward * wavePerBlock) / DENOMINATOR;
 
             // Calculate the WAVE rewards for the pool after taking a percentage for the treasury
             uint256 waveRewardsForPool = (waveRewards * POOL_PERCENTAGE) /

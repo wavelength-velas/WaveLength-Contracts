@@ -2551,7 +2551,7 @@ contract WaveEmissionDistributor is
     event WithdrawAnotherToken(address indexed user, uint256 indexed pid, uint256 amount, address indexed to);
     event HarvestAnotherToken(address indexed user, uint256 indexed pid, uint256 amount);
     event LogUpdatePoolAnotherToken(uint256 indexed pid, uint256 lastRewardBlock, uint256 totalAmountLockedWave, uint256 accWAVEPerShare);
-    
+
     /* General Events */
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount, address indexed to);
 
@@ -2582,7 +2582,7 @@ contract WaveEmissionDistributor is
         // AnotherToken Rewards attributes
         PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][address(msg.sender)][_tokenId];
-        
+
         // Wave Rewards attributes
         PoolInfo memory pool = updatePool();
         UserInfo storage user = userInfo[0][address(msg.sender)][_tokenId];
@@ -2591,25 +2591,25 @@ contract WaveEmissionDistributor is
         TokenInfo storage tokenInfoUser = tokenInfoCheck[address(msg.sender)][_tokenId];
         tokenInfoUser.user = address(msg.sender);
         tokenInfoUser.numberNFT = _tokenId;
-        
+
         totalNftsByUser[address(msg.sender)] = totalNftsByUser[address(msg.sender)] + 1;
         tokenIdsByUser[address(msg.sender)].push(_tokenId);
-        
+
         // Transfer the veWAVE token from the user to the contract
         ve(address(veWave)).transferFrom(address(msg.sender), address(this), _tokenId);
         uint256 amount = ve(address(veWave)).locking(_tokenId);
 
         /******************** AnotherToken Rewards Code ********************/
-        // AnotherToken Rewards Code 
+        // AnotherToken Rewards Code
         if (poolAnotherToken.isClosed != true) {
             userAnotherToken.amount = userAnotherToken.amount + amount;
             userAnotherToken.rewardDebt = userAnotherToken.rewardDebt + (amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
-        }      
+        }
         /*******************************************************************/
-        
+
         /******************** WAVE Rewards Code ********************/
         totalAmountLockedWave = totalAmountLockedWave + amount;
-        _mint(address(this), amount); // mint 
+        _mint(address(this), amount); // mint
         _approve(address(this), address(chef), amount);
         chef.deposit(farmPid, amount, address(this));
         user.amount = amount;
@@ -2621,7 +2621,7 @@ contract WaveEmissionDistributor is
         uint256 timeDays = ve(address(veWave)).locked__end(_tokenId) - block.timestamp;
         uint256 mediumMint = timeDays + 86400;
         uint256 finalMint = (mediumMint * 10 ** 18)/31556926;
-        
+
         veWAVEReceipt(address(veWaveReceipt)).mint(address(msg.sender), finalMint);
         /*************************************************************/
         // Push the tokenInfo to the tokenInfo array
@@ -2629,11 +2629,11 @@ contract WaveEmissionDistributor is
             TokenInfo({
                 user: address(msg.sender),
                 numberNFT:  _tokenId,
-                numberDummyTokens: finalMint  
+                numberDummyTokens: finalMint
             })
         );
 
-        // Events    
+        // Events
         // Emit events for deposit
         emit Deposit(msg.sender, 0, amount, address(msg.sender));
         emit DepositAnotherToken(msg.sender, _pid, amount, address(msg.sender));
@@ -2645,11 +2645,11 @@ contract WaveEmissionDistributor is
         require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");  // Check if msg.sender is the owner of the veWAVE
         // Check if msg.sender have at least 1 veWAVEReceipt
         require(veWaveReceipt.balanceOf(address(msg.sender)) >= tokenInfoUser.numberDummyTokens, "You don't have any veWAVEReceipt");  // Check if msg.sender have at least 1 veWAVEReceipt
-                                                                
+
         // AnotherToken Rewards attributes
         PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][address(msg.sender)][_tokenId];
-        
+
         // Wave Rewards attributes
         PoolInfo memory pool = updatePool();
         UserInfo storage user = userInfo[0][address(msg.sender)][_tokenId];
@@ -2662,10 +2662,10 @@ contract WaveEmissionDistributor is
         // this would  be the amount if the user joined right from the start of the farm
         uint256 accumulatedWAVE = (user.amount * pool.accWAVEPerShare) / ACC_WAVE_PRECISION;
         // subtracting the rewards the user is not eligible for
-        uint256 eligibleWAVE = accumulatedWAVE - user.rewardDebt; 
+        uint256 eligibleWAVE = accumulatedWAVE - user.rewardDebt;
         user.rewardDebt = accumulatedWAVE - (amount * pool.accWAVEPerShare) / ACC_WAVE_PRECISION; // update WAVE Reward Debt
         user.amount = user.amount - amount; // put user amount of UserInfo a zero
-        safeWAVETransfer(address(msg.sender), eligibleWAVE); 
+        safeWAVETransfer(address(msg.sender), eligibleWAVE);
         /************************************************************/
 
         /******************** AnotherToken Rewards Code ********************/
@@ -2676,7 +2676,7 @@ contract WaveEmissionDistributor is
             uint256 eligibleAnotherToken = accumulatedWAnotherToken - userAnotherToken.rewardDebt;
             user.rewardDebt = accumulatedWAnotherToken - (amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION; // update AnotherToken Reward Debt
             userAnotherToken.amount = userAnotherToken.amount - amount; // put user amount of UserInfo a zero
-            safeAnotherTokenTransfer(_pid, address(msg.sender), eligibleAnotherToken); 
+            safeAnotherTokenTransfer(_pid, address(msg.sender), eligibleAnotherToken);
         }
         /********************************************************************/
 
@@ -2686,7 +2686,7 @@ contract WaveEmissionDistributor is
 
         /* Token Info delete data */
         tokenInfoUser.numberDummyTokens = 0;
-        tokenInfoUser.user = address(0); 
+        tokenInfoUser.user = address(0);
         tokenInfoUser.numberNFT = 0;
         /***********************/
 
@@ -2711,7 +2711,7 @@ contract WaveEmissionDistributor is
         PoolInfo memory pool = updatePool();
         // Get the current user's information based on the tokenId
         UserInfo storage user = userInfo[0][msg.sender][_tokenId];
-        
+
         // Call the harvest function on the chef contract with the farmPid and this contract's address
         chef.harvest(farmPid, address(this));
 
@@ -2738,7 +2738,7 @@ contract WaveEmissionDistributor is
         PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
         // Get the current user's information for the specified pid and tokenId
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[0][msg.sender][_tokenId];
-    
+
 
      //  if (poolAnotherToken.isClosed == false) {
             // Calculate the total accumulated AnotherToken rewards for the user based on their LP token amount
@@ -2753,13 +2753,13 @@ contract WaveEmissionDistributor is
             if (eligibleAnotherToken > 0) {
                 safeAnotherTokenTransfer(_pid, address(msg.sender), eligibleAnotherToken);
             }
-        
+
         // Emit an event to log the harvest
         emit HarvestAnotherToken(msg.sender, _pid, eligibleAnotherToken);
    //     }
-        
+
     }
-    
+
      // Withdraw without caring about rewards. EMERGENCY ONLY.
     function emergencyWithdraw(uint256 _pid, uint256 _tokenId, address _to) public {
         // Get the current user's information for the specified tokenId
@@ -2872,13 +2872,13 @@ contract WaveEmissionDistributor is
                 uint256 blocksSinceLastReward = block.timestamp -
                     pool.lastRewardBlock;
 
-                // Calculate the total WAVE rewards for the pool based on the number of blocks, WAVE per block, and pool allocation points                
+                // Calculate the total WAVE rewards for the pool based on the number of blocks, WAVE per block, and pool allocation points
                 uint256 waveRewards = (blocksSinceLastReward *
                     wavePerBlock *
-                    pool.allocPoint) / 1000;
+                    pool.allocPoint) / DENOMINATOR;
                 // Calculate the WAVE rewards for the pool after taking a percentage for the treasury
                 uint256 waveRewardsForPool = (waveRewards * POOL_PERCENTAGE) /
-                    1000;
+                    DENOMINATOR;
                 // Update the accumulated WAVE per LP token based on the new rewards and total staked LP tokens
                 pool.accWAVEPerShare =
                     pool.accWAVEPerShare +
@@ -2898,7 +2898,7 @@ contract WaveEmissionDistributor is
     }
 
     // View function to see the pending WAVE rewards for a user
-    function pendingWave(address _user, uint256 _tokenId)  
+    function pendingWave(address _user, uint256 _tokenId)
         external
         view
         returns (uint256 pending)
@@ -2914,11 +2914,11 @@ contract WaveEmissionDistributor is
             // Calculate the WAVE rewards for the pool based on the number of blocks, WAVE per block, and pool allocation points
             uint256 waveRewards = (blocksSinceLastReward *
                 wavePerBlock *
-                pool.allocPoint) / 1000;
+                pool.allocPoint) / DENOMINATOR;
 
             // Calculate the WAVE rewards for the pool after taking a percentage for the treasury
             uint256 waveRewardsForPool = (waveRewards * POOL_PERCENTAGE) /
-                1000;
+                DENOMINATOR;
 
             // Update the accumulated WAVE per LP token based on the new rewards and total staked LP tokens
             accWAVEPerShare =
@@ -2948,10 +2948,10 @@ contract WaveEmissionDistributor is
         if (block.timestamp > poolAnotherToken.lastRewardBlock && anotherTokenSupply != 0) {
             uint256 blocksSinceLastReward = block.timestamp - poolAnotherToken.lastRewardBlock;
             // based on the pool weight (allocation points) we calculate the anotherToken rewarded for this specific pool
-            uint256 anotherTokenRewards = (blocksSinceLastReward + poolAnotherToken.anotherTokenPerBlock * poolAnotherToken.allocPoint) / 1000;
+            uint256 anotherTokenRewards = (blocksSinceLastReward + poolAnotherToken.anotherTokenPerBlock * poolAnotherToken.allocPoint) / DENOMINATOR;
             // we take parts of the rewards for treasury, these can be subject to change, so we recalculate it
             // a value of 1000 = 100%
-            uint256 anotherTokenRewardsForPool = (anotherTokenRewards * 1000) /1000;
+            uint256 anotherTokenRewardsForPool = (anotherTokenRewards * DENOMINATOR) /DENOMINATOR;
 
             // we calculate the new amount of accumulated anotherToken per veWAVE
             accAnotherTokenPerShare =
@@ -2979,10 +2979,10 @@ contract WaveEmissionDistributor is
                 // rewards for this pool based on his allocation points
                 uint256 anotherTokenRewards = (blocksSinceLastReward *
                     poolInfoAnotherToken[_pid].anotherTokenPerBlock *
-                    1000) / 1000;
+                    DENOMINATOR) / DENOMINATOR;
 
-                uint256 anotherTokenRewardsForPool = (anotherTokenRewards * 1000) /
-                    1000;
+                uint256 anotherTokenRewardsForPool = (anotherTokenRewards * DENOMINATOR) /
+                    DENOMINATOR;
 
                 poolAnotherToken.accAnotherTokenPerShare =
                     poolAnotherToken.accAnotherTokenPerShare +

@@ -2693,10 +2693,13 @@ contract WaveEmissionDistributor is
 
         IERC721(veWave).safeTransferFrom(address(this), msg.sender, _tokenId); // transfer veWAVE to his owner
 
-       for (uint i = 0; i < tokenIdsByUser[msg.sender].length; i++) {
-        if (tokenIdsByUser[msg.sender][i] == _tokenId) {
-            delete tokenIdsByUser[msg.sender][i];
-        }
+        for (uint i = 0; i < tokenIdsByUser[msg.sender].length;) {
+            if (tokenIdsByUser[msg.sender][i] == _tokenId) {
+                delete tokenIdsByUser[msg.sender][i];
+            }
+            unchecked {
+                ++i;
+            }
         }
 
         totalNftsByUser[msg.sender] = totalNftsByUser[msg.sender] - 1;
@@ -2775,10 +2778,13 @@ contract WaveEmissionDistributor is
         // Transfer the user's LP token back to them using the IERC721 contract
         IERC721(veWave).safeTransferFrom(address(this), msg.sender, _tokenId);
 
-        for (uint i = 0; i < tokenIdsByUser[msg.sender].length; i++) {
-        if (tokenIdsByUser[msg.sender][i] == _tokenId) {
-            delete tokenIdsByUser[msg.sender][i];
-        }
+        for (uint i = 0; i < tokenIdsByUser[msg.sender].length;) {
+            if (tokenIdsByUser[msg.sender][i] == _tokenId) {
+                delete tokenIdsByUser[msg.sender][i];
+            }
+            unchecked {
+                ++i;
+            }
         }
 
         totalNftsByUser[msg.sender] = totalNftsByUser[msg.sender] - 1;

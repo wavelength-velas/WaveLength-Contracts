@@ -2663,8 +2663,8 @@ contract WaveEmissionDistributor is
         uint256 accumulatedWAVE = (user.amount * pool.accWAVEPerShare) / ACC_WAVE_PRECISION;
         // subtracting the rewards the user is not eligible for
         uint256 eligibleWAVE = accumulatedWAVE - user.rewardDebt;
-        user.rewardDebt = accumulatedWAVE - (amount * pool.accWAVEPerShare) / ACC_WAVE_PRECISION; // update WAVE Reward Debt
         user.amount = user.amount - amount; // put user amount of UserInfo a zero
+        user.rewardDebt = (user.amount * pool.accWAVEPerShare) / ACC_WAVE_PRECISION; // update WAVE Reward Debt
         safeWAVETransfer(msg.sender, eligibleWAVE);
         /************************************************************/
 
@@ -2674,8 +2674,8 @@ contract WaveEmissionDistributor is
             uint256 accumulatedWAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
             // subtracting the rewards the user is not eligible for
             uint256 eligibleAnotherToken = accumulatedWAnotherToken - userAnotherToken.rewardDebt;
-            user.rewardDebt = accumulatedWAnotherToken - (amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION; // update AnotherToken Reward Debt
             userAnotherToken.amount = userAnotherToken.amount - amount; // put user amount of UserInfo a zero
+            user.rewardDebt = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION; // update AnotherToken Reward Debt
             safeAnotherTokenTransfer(_pid, msg.sender, eligibleAnotherToken);
         }
         /********************************************************************/

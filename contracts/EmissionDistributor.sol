@@ -2514,7 +2514,7 @@ contract WaveEmissionDistributor is
 
     PoolInfo[] public poolInfo;  // an array to store information of all pools of WAVE
     TokenInfo[] public tokenInfo; // mapping form poolId => user Address => User Info
-    mapping(address => mapping(uint256 => TokenInfo)) public tokenInfoCheck; // mapping form poolId => user Address => User Info
+    mapping(address => mapping(uint256 => uint256)) public tokenInfoCheck; // mapping form poolId => user Address => User Info
     mapping(address => mapping(uint256 => UserInfo)) public userInfo; // mapping form user Address => User Info
 
     uint256 public totalAmountLockedWave = 0; // total WAVE locked in pools
@@ -2587,11 +2587,6 @@ contract WaveEmissionDistributor is
         PoolInfo memory pool = updatePool();
         UserInfo storage user = userInfo[msg.sender][_tokenId];
 
-        // Take and write info about tokenInfo (user address & _numberNFT/tokenId
-        TokenInfo storage tokenInfoUser = tokenInfoCheck[msg.sender][_tokenId];
-        tokenInfoUser.user = msg.sender;
-        tokenInfoUser.numberNFT = _tokenId;
-
         totalNftsByUser[msg.sender] = totalNftsByUser[msg.sender] + 1;
         tokenIdsByUser[msg.sender].push(_tokenId);
 
@@ -2623,6 +2618,10 @@ contract WaveEmissionDistributor is
         uint256 finalMint = (mediumMint * 10 ** 18)/31556926;
 
         veWAVEReceipt(address(veWaveReceipt)).mint(msg.sender, finalMint);
+
+        // Take and write info about tokenInfo (user address & _numberNFT/tokenId
+        tokenInfoCheck[msg.sender][_tokenId] = finalMint;
+
         /*************************************************************/
         // Push the tokenInfo to the tokenInfo array
         tokenInfo.push(
@@ -2640,11 +2639,9 @@ contract WaveEmissionDistributor is
     }
 
     function withdrawAndDistribute(uint256 _pid, uint256 _tokenId) external {
-        TokenInfo storage tokenInfoUser = tokenInfoCheck[msg.sender][_tokenId];
-        // Check if msg.sender is the owner of the veWAVE
-        require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");  // Check if msg.sender is the owner of the veWAVE
+        uint256 numberVeWaveReceiptTokens = tokenInfoCheck[msg.sender][_tokenId];
         // Check if msg.sender have at least 1 veWAVEReceipt
-        require(veWaveReceipt.balanceOf(msg.sender) >= tokenInfoUser.numberVeWaveReceiptTokens, "You don't have any veWAVEReceipt");  // Check if msg.sender have at least 1 veWAVEReceipt
+        require(veWaveReceipt.balanceOf(msg.sender) >= numberVeWaveReceiptTokens, "You don't have any veWAVEReceipt");  // Check if msg.sender have at least 1 veWAVEReceipt
 
         // AnotherToken Rewards attributes
         PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
@@ -2681,13 +2678,11 @@ contract WaveEmissionDistributor is
         /********************************************************************/
 
         /******************** veWAVEReceipt Code ********************/
-        veWAVEReceipt(address(veWaveReceipt)).burn(msg.sender, tokenInfoUser.numberVeWaveReceiptTokens);
+        veWAVEReceipt(address(veWaveReceipt)).burn(msg.sender, numberVeWaveReceiptTokens);
         /*************************************************************/
 
         /* Token Info delete data */
-        tokenInfoUser.numberVeWaveReceiptTokens = 0;
-        tokenInfoUser.user = address(0);
-        tokenInfoUser.numberNFT = 0;
+        tokenInfoCheck[msg.sender][_tokenId] = 0;
         /***********************/
 
 

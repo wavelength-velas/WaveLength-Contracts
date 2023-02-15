@@ -2697,6 +2697,7 @@ contract WaveEmissionDistributor is
         for (uint i = 0; i < tokenIdsByCaller.length;) {
             if (tokenIdsByCaller[i] == _tokenId) {
                 delete tokenIdsByCaller[i];
+                break;
             }
             unchecked {
                 ++i;
@@ -2783,6 +2784,7 @@ contract WaveEmissionDistributor is
         for (uint i = 0; i < tokenIdsByCaller.length;) {
             if (tokenIdsByCaller[i] == _tokenId) {
                 delete tokenIdsByCaller[i];
+                break;
             }
             unchecked {
                 ++i;

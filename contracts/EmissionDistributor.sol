@@ -2464,6 +2464,8 @@ interface ve {
 
 pragma solidity 0.8.7;
 
+import "hardhat/console.sol";
+
 contract WaveEmissionDistributor is
     ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWAVE"),
     AccessControl, Ownable
@@ -2553,7 +2555,7 @@ contract WaveEmissionDistributor is
     event LogUpdatePoolAnotherToken(uint256 indexed pid, uint256 lastRewardBlock, uint256 totalAmountLockedWave, uint256 accWAVEPerShare);
 
     /* General Events */
-    event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount, address indexed to);
+    event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
 
     constructor(
        IERC721 _veWave,  // veWave ERC721 token
@@ -2761,9 +2763,10 @@ contract WaveEmissionDistributor is
     }
 
      // Withdraw without caring about rewards. EMERGENCY ONLY.
-    function emergencyWithdraw(uint256 _pid, uint256 _tokenId, address _to) public {
+    function emergencyWithdraw(uint256 _pid, uint256 _tokenId) public {
         // Get the current user's information for the specified tokenId
         UserInfo storage user = userInfo[msg.sender][_tokenId];
+        require(user.amount > 0, "caller didn't deposit any token");
         // Get the current user's information for the specified pid and tokenId
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
         // Get the current user's LP token amount
@@ -2789,7 +2792,7 @@ contract WaveEmissionDistributor is
         totalNftsByUser[msg.sender] = totalNftsByUser[msg.sender] - 1;
 
         // Emit an event to log the emergency withdraw
-        emit EmergencyWithdraw(msg.sender, _pid, amount, _to);
+        emit EmergencyWithdraw(msg.sender, _pid, amount);
     }
 
     // Add a new pool to the pool. Can only be called by the owner.

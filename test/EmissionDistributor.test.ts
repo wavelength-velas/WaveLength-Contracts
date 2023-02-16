@@ -154,7 +154,7 @@ describe('EmissionDistributor Test', () => {
   });
 
   it('harvestAndDistribute on EmissionDistributor', async () => {
-    expect(await emissionDistributor.harvestAndDistribute(1)).to.emit(emissionDistributor, 'Harvest');
+    expect(await emissionDistributor.harvestAndDistribute(0, 1)).to.emit(emissionDistributor, 'Harvest');
   });
 
   it('harvestAndDistributeAnotherToken on EmissionDistributor', async () => {

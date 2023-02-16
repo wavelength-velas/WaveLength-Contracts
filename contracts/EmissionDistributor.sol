@@ -2517,7 +2517,7 @@ contract WaveEmissionDistributor is
     PoolInfo[] public poolInfo;  // an array to store information of all pools of WAVE
     TokenInfo[] public tokenInfo; // mapping form poolId => user Address => User Info
     mapping(address => mapping(uint256 => uint256)) public tokenInfoCheck; // mapping form poolId => user Address => User Info
-    mapping(address => mapping(uint256 => UserInfo)) public userInfo; // mapping form user Address => User Info
+    mapping(uint256 => mapping(address => mapping(uint256 => UserInfo))) public userInfo; // mapping form poolId => user Address => User Info
 
     uint256 public totalAmountLockedWave = 0; // total WAVE locked in pools
     uint256 public wavePerBlock;     // WAVE distributed per block
@@ -2586,8 +2586,8 @@ contract WaveEmissionDistributor is
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
 
         // Wave Rewards attributes
-        PoolInfo memory pool = updatePool();
-        UserInfo storage user = userInfo[msg.sender][_tokenId];
+        PoolInfo memory pool = updatePool(_pid);
+        UserInfo storage user = userInfo[_pid][msg.sender][_tokenId];
 
         totalNftsByUser[msg.sender] = totalNftsByUser[msg.sender] + 1;
         tokenIdsByUser[msg.sender].push(_tokenId);
@@ -2650,8 +2650,8 @@ contract WaveEmissionDistributor is
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
 
         // Wave Rewards attributes
-        PoolInfo memory pool = updatePool();
-        UserInfo storage user = userInfo[msg.sender][_tokenId];
+        PoolInfo memory pool = updatePool(_pid);
+        UserInfo storage user = userInfo[_pid][msg.sender][_tokenId];
 
         /******************** WAVE Rewards Code ********************/
         uint256  amount = ve(address(veWave)).locking(_tokenId);  // amount of locked WAVE on that veWAVE
@@ -2708,11 +2708,11 @@ contract WaveEmissionDistributor is
         emit WithdrawAnotherToken(msg.sender, _pid, amount, msg.sender);
     }
 
-    function harvestAndDistribute(uint256 _tokenId) public {
+    function harvestAndDistribute(uint256 _pid, uint256 _tokenId) public {
         // Get the current pool information
-        PoolInfo memory pool = updatePool();
+        PoolInfo memory pool = updatePool(_pid);
         // Get the current user's information based on the tokenId
-        UserInfo storage user = userInfo[msg.sender][_tokenId];
+        UserInfo storage user = userInfo[_pid][msg.sender][_tokenId];
 
         // Call the harvest function on the chef contract with the farmPid and this contract's address
         chef.harvest(farmPid, address(this));
@@ -2765,7 +2765,7 @@ contract WaveEmissionDistributor is
      // Withdraw without caring about rewards. EMERGENCY ONLY.
     function emergencyWithdraw(uint256 _pid, uint256 _tokenId) public {
         // Get the current user's information for the specified tokenId
-        UserInfo storage user = userInfo[msg.sender][_tokenId];
+        UserInfo storage user = userInfo[_pid][msg.sender][_tokenId];
         require(user.amount > 0, "caller didn't deposit any token");
         // Get the current user's information for the specified pid and tokenId
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
@@ -2871,8 +2871,8 @@ contract WaveEmissionDistributor is
     }
 
     // Update reward variables of the given WAVE pool to be up-to-date.
-    function updatePool() public returns (PoolInfo memory pool) {
-         pool = poolInfo[0];
+    function updatePool(uint256 _pid) public returns (PoolInfo memory pool) {
+         pool = poolInfo[_pid];
          // Check if it's time to update the rewards based on the current timestamp
          if (block.timestamp > pool.lastRewardBlock) {
             // Only update if there are any LP tokens staked in the pool
@@ -2893,7 +2893,7 @@ contract WaveEmissionDistributor is
             }
             // Update the last reward block timestamp
             pool.lastRewardBlock = block.timestamp;
-            poolInfo[0] = pool;
+            poolInfo[_pid] = pool;
 
           /*  emit LogUpdatePool(
                 0,
@@ -2905,13 +2905,13 @@ contract WaveEmissionDistributor is
     }
 
     // View function to see the pending WAVE rewards for a user
-    function pendingWave(address _user, uint256 _tokenId)
+    function pendingWave(uint256 _pid, address _user, uint256 _tokenId)
         external
         view
         returns (uint256 pending)
     {
-       PoolInfo storage pool = poolInfo[0];
-        UserInfo storage user = userInfo[_user][_tokenId];
+        PoolInfo storage pool = poolInfo[_pid];
+        UserInfo storage user = userInfo[_pid][_user][_tokenId];
         // Get the accumulated WAVE per LP token
         uint256 accWAVEPerShare = pool.accWAVEPerShare;
         // Only update the rewards if it's time to do so and there are LP tokens staked in the pool

@@ -2572,6 +2572,8 @@ contract WaveEmissionDistributor is
     }
 
     function setFarmId(uint256 id) external onlyOwner {
+        (uint256 amount, ) = chef.userInfo(farmPid, address(this));
+        require(amount == 0, "In the now supported pool, the funds is still remaining");
         farmPid = id;
     }
 

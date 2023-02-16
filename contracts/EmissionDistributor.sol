@@ -2576,7 +2576,7 @@ contract WaveEmissionDistributor is
     }
 
     // Function to deposit veWAVE token to the contract and receive rewards
-    function depositToChef(uint256 _pid, uint256 _tokenId) external payable {
+    function depositToChef(uint256 _pid, uint256 _tokenId) external {
         // Check if msg.sender is the owner of the veWAVE
         address ownerOfTokenId = IERC721(veWave).ownerOf(_tokenId);
         require(ownerOfTokenId == msg.sender,"You are not the owner of this veWAVE");

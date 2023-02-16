@@ -2803,7 +2803,7 @@ contract WaveEmissionDistributor is
         poolInfo.push(
             PoolInfo({
                 allocPoint: _allocPoint,
-                lastRewardBlock: block.timestamp,
+                lastRewardBlock: block.number,
                 accWAVEPerShare: 0
             })
         );
@@ -2828,7 +2828,7 @@ contract WaveEmissionDistributor is
                 anotherTokenPerBlock: _anotherTokenPerBlock,
                 isClosed: _isClosed,
                 allocPoint: _allocPoint,
-                lastRewardBlock: block.timestamp,
+                lastRewardBlock: block.number,
                 accAnotherTokenPerShare: 0
             })
         );
@@ -2874,12 +2874,11 @@ contract WaveEmissionDistributor is
     function updatePool(uint256 _pid) public returns (PoolInfo memory pool) {
          pool = poolInfo[_pid];
          // Check if it's time to update the rewards based on the current timestamp
-         if (block.timestamp > pool.lastRewardBlock) {
+         if (block.number > pool.lastRewardBlock) {
             // Only update if there are any LP tokens staked in the pool
             if (totalAmountLockedWave > 0) {
                 // Calculate the number of blocks since the last reward update
-                uint256 blocksSinceLastReward = block.timestamp -
-                    pool.lastRewardBlock;
+                uint256 blocksSinceLastReward = block.number - pool.lastRewardBlock;
 
                 // Calculate the total WAVE rewards for the pool based on the number of blocks, WAVE per block, and pool allocation points
                 uint256 waveRewards = (blocksSinceLastReward * wavePerBlock) / DENOMINATOR;
@@ -2892,7 +2891,7 @@ contract WaveEmissionDistributor is
                     ((waveRewardsForPool * ACC_WAVE_PRECISION) / totalAmountLockedWave);
             }
             // Update the last reward block timestamp
-            pool.lastRewardBlock = block.timestamp;
+            pool.lastRewardBlock = block.number;
             poolInfo[_pid] = pool;
 
           /*  emit LogUpdatePool(
@@ -2916,8 +2915,8 @@ contract WaveEmissionDistributor is
         uint256 accWAVEPerShare = pool.accWAVEPerShare;
         // Only update the rewards if it's time to do so and there are LP tokens staked in the pool
 
-        if (block.timestamp > pool.lastRewardBlock && totalAmountLockedWave != 0) {
-            uint256 blocksSinceLastReward = block.timestamp - pool.lastRewardBlock;
+        if (block.number > pool.lastRewardBlock && totalAmountLockedWave != 0) {
+            uint256 blocksSinceLastReward = block.number - pool.lastRewardBlock;
             // Calculate the WAVE rewards for the pool based on the number of blocks, WAVE per block, and pool allocation points
             uint256 waveRewards = (blocksSinceLastReward * wavePerBlock) / DENOMINATOR;
 
@@ -2950,8 +2949,8 @@ contract WaveEmissionDistributor is
         // Calculate the pending AnotherToken rewards for the user based on their staked LP tokens and subtracting any rewards they are not eligible for or have already claimed
         uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
 
-        if (block.timestamp > poolAnotherToken.lastRewardBlock && anotherTokenSupply != 0) {
-            uint256 blocksSinceLastReward = block.timestamp - poolAnotherToken.lastRewardBlock;
+        if (block.number > poolAnotherToken.lastRewardBlock && anotherTokenSupply != 0) {
+            uint256 blocksSinceLastReward = block.number - poolAnotherToken.lastRewardBlock;
             // based on the pool weight (allocation points) we calculate the anotherToken rewarded for this specific pool
             uint256 anotherTokenRewards = (blocksSinceLastReward + poolAnotherToken.anotherTokenPerBlock * poolAnotherToken.allocPoint) / DENOMINATOR;
             // we take parts of the rewards for treasury, these can be subject to change, so we recalculate it
@@ -2974,12 +2973,11 @@ contract WaveEmissionDistributor is
     function updatePoolAnotherToken(uint256 _pid) public returns (PoolInfoAnotherToken memory poolAnotherToken) {
         poolAnotherToken = poolInfoAnotherToken[_pid];
 
-        if (block.timestamp > poolAnotherToken.lastRewardBlock) {
+        if (block.number > poolAnotherToken.lastRewardBlock) {
             // total of AnotherTokens staked for this pool
             uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
             if (anotherTokenSupply > 0) {
-                uint256 blocksSinceLastReward = block.timestamp -
-                    poolAnotherToken.lastRewardBlock;
+                uint256 blocksSinceLastReward = block.number - poolAnotherToken.lastRewardBlock;
 
                 // rewards for this pool based on his allocation points
                 uint256 anotherTokenRewards = (blocksSinceLastReward *
@@ -2993,7 +2991,7 @@ contract WaveEmissionDistributor is
                     poolAnotherToken.accAnotherTokenPerShare +
                     ((anotherTokenRewardsForPool * ACC_ANOTHERTOKEN_PRECISION) / anotherTokenSupply);
             }
-            poolAnotherToken.lastRewardBlock = block.timestamp;
+            poolAnotherToken.lastRewardBlock = block.number;
             poolInfoAnotherToken[_pid] = poolAnotherToken;
 
             /*emit LogUpdatePool(_pid, poolAnotherToken.lastRewardBlock, anotherTokenSupply, poolAnotherToken.accAnotherTokenPerShare);*/

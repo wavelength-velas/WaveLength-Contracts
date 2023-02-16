@@ -2656,7 +2656,7 @@ contract WaveEmissionDistributor is
         /******************** WAVE Rewards Code ********************/
         uint256  amount = ve(address(veWave)).locking(_tokenId);  // amount of locked WAVE on that veWAVE
         chef.withdrawAndHarvest(farmPid, amount, address(this));  // withdraw edveWAVE of MasterChef and harvest WAVE
-        totalAmountLockedWave = totalAmountLockedWave + amount; // amount of lockedWave on the contract - amount of locked Wave of that veWAVE
+        totalAmountLockedWave = totalAmountLockedWave - amount; // amount of lockedWave on the contract - amount of locked Wave of that veWAVE
         _burn(address(this), amount); // burn edveWAVE
         // this would  be the amount if the user joined right from the start of the farm
         uint256 accumulatedWAVE = (user.amount * pool.accWAVEPerShare) / ACC_WAVE_PRECISION;

@@ -2742,7 +2742,7 @@ contract WaveEmissionDistributor is
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
 
 
-     //  if (poolAnotherToken.isClosed == false) {
+        if (poolAnotherToken.isClosed == false) {
             // Calculate the total accumulated AnotherToken rewards for the user based on their LP token amount
             uint256 accumulatedAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
             // Subtract any rewards the user is not eligible for
@@ -2756,9 +2756,9 @@ contract WaveEmissionDistributor is
                 safeAnotherTokenTransfer(_pid, msg.sender, eligibleAnotherToken);
             }
 
-        // Emit an event to log the harvest
-        emit HarvestAnotherToken(msg.sender, _pid, eligibleAnotherToken);
-   //     }
+            // Emit an event to log the harvest
+            emit HarvestAnotherToken(msg.sender, _pid, eligibleAnotherToken);
+        }
 
     }
 

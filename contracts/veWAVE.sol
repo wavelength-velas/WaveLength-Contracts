@@ -1496,10 +1496,10 @@ contract ve is IERC721, IERC721Metadata {
         // Both can have >= 0 amount
         _checkpoint(_tokenId, _locked, LockedBalance(0,0));
 
-        assert(IERC20(token).transfer(msg.sender, value));
-
         // Burn the NFT
         _burn(_tokenId);
+
+        assert(IERC20(token).transfer(msg.sender, value));
 
         emit Withdraw(msg.sender, _tokenId, value, block.timestamp);
         emit Leave(msg.sender, value, 1);

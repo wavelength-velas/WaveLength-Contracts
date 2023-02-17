@@ -2679,7 +2679,7 @@ contract WaveEmissionDistributor is
             // subtracting the rewards the user is not eligible for
             uint256 eligibleAnotherToken = accumulatedWAnotherToken - userAnotherToken.rewardDebt;
             userAnotherToken.amount = userAnotherToken.amount - amount; // put user amount of UserInfo a zero
-            user.rewardDebt = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION; // update AnotherToken Reward Debt
+            userAnotherToken.rewardDebt = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION; // update AnotherToken Reward Debt
             safeAnotherTokenTransfer(_pid, msg.sender, eligibleAnotherToken);
         }
         /********************************************************************/

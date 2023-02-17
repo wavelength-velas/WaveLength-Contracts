@@ -786,7 +786,7 @@ contract ve is IERC721, IERC721Metadata {
 
     uint public epoch;
     mapping(uint => Point) public point_history; // epoch -> unsigned point
-    mapping(uint => Point[1000000000]) public user_point_history; // user -> Point[user_epoch]
+    mapping(uint => Point[1_000_000_000]) public user_point_history; // user -> Point[user_epoch]
 
     mapping(uint => uint) public user_point_epoch;
     mapping(uint => int128) public slope_changes; // time -> signed slope change
@@ -1423,7 +1423,7 @@ contract ve is IERC721, IERC721Metadata {
     /// @param _to Address to deposit
     function _create_lock(uint _value, uint _lock_duration, address _to) internal returns (uint) {
         uint unlock_time = (block.timestamp + _lock_duration) / WEEK * WEEK; // Locktime is rounded down to weeks
-        
+
         uint256 totalLockedTokenSupply = IERC20(token).balanceOf(address(this));
         uint256 totalFreshBeets = totalSupply();
         uint256 mintAmount;
@@ -1485,8 +1485,8 @@ contract ve is IERC721, IERC721Metadata {
         LockedBalance memory _locked = locked[_tokenId];
         require(block.timestamp >= _locked.end, "The lock didn't expire");
         uint value = uint(int256(_locked.amount));
-         
-       
+
+
         locked[_tokenId] = LockedBalance(0,0);
         uint supply_before = supply;
         supply = supply_before - value;
@@ -1496,10 +1496,10 @@ contract ve is IERC721, IERC721Metadata {
         // Both can have >= 0 amount
         _checkpoint(_tokenId, _locked, LockedBalance(0,0));
 
-        assert(IERC20(token).transfer(msg.sender, value));
-
         // Burn the NFT
         _burn(_tokenId);
+
+        assert(IERC20(token).transfer(msg.sender, value));
 
         emit Withdraw(msg.sender, _tokenId, value, block.timestamp);
         emit Leave(msg.sender, value, 1);

@@ -2613,7 +2613,7 @@ contract WaveEmissionDistributor is
         _mint(address(this), amount); // mint
         _approve(address(this), address(chef), amount);
         chef.deposit(farmPid, amount, address(this));
-        user.amount = amount;
+        user.amount = user.amount + amount;
         user.rewardDebt = user.rewardDebt + (amount * pool.accWAVEPerShare) / ACC_WAVE_PRECISION;
         /*************************************************************/
 

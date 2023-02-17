@@ -2521,6 +2521,7 @@ contract WaveEmissionDistributor is
 
     uint256 public totalAmountLockedWave = 0; // total WAVE locked in pools
     uint256 public wavePerBlock;     // WAVE distributed per block
+    uint256 public totalAmountAnotherToken = 0; // total amount anonther token
 
     mapping (address => uint[]) public tokenIdsByUser;
 
@@ -2601,6 +2602,7 @@ contract WaveEmissionDistributor is
         /******************** AnotherToken Rewards Code ********************/
         // AnotherToken Rewards Code
         if (poolAnotherToken.isClosed != true) {
+            totalAmountAnotherToken = totalAmountAnotherToken + amount;
             userAnotherToken.amount = userAnotherToken.amount + amount;
             userAnotherToken.rewardDebt = userAnotherToken.rewardDebt + (amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
         }
@@ -2671,6 +2673,7 @@ contract WaveEmissionDistributor is
 
         /******************** AnotherToken Rewards Code ********************/
         if (poolAnotherToken.isClosed == false) {
+            totalAmountAnotherToken = totalAmountAnotherToken - amount;
             // this would  be the amount if the user joined right from the start of the farm
             uint256 accumulatedWAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
             // subtracting the rewards the user is not eligible for
@@ -2948,10 +2951,8 @@ contract WaveEmissionDistributor is
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][_user][_tokenId];
         // Get the accumulated AnotherToken per LP token
         uint256 accAnotherTokenPerShare = poolAnotherToken.accAnotherTokenPerShare;
-        // Calculate the pending AnotherToken rewards for the user based on their staked LP tokens and subtracting any rewards they are not eligible for or have already claimed
-        uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
 
-        if (block.number > poolAnotherToken.lastRewardBlock && anotherTokenSupply != 0) {
+        if (block.number > poolAnotherToken.lastRewardBlock && totalAmountAnotherToken != 0) {
             uint256 blocksSinceLastReward = block.number - poolAnotherToken.lastRewardBlock;
             // based on the pool weight (allocation points) we calculate the anotherToken rewarded for this specific pool
             uint256 anotherTokenRewards = (blocksSinceLastReward + poolAnotherToken.anotherTokenPerBlock * poolAnotherToken.allocPoint) / DENOMINATOR;
@@ -2962,7 +2963,7 @@ contract WaveEmissionDistributor is
             // we calculate the new amount of accumulated anotherToken per veWAVE
             accAnotherTokenPerShare =
                 accAnotherTokenPerShare +
-                ((anotherTokenRewardsForPool * ACC_ANOTHERTOKEN_PRECISION) / anotherTokenSupply);
+                ((anotherTokenRewardsForPool * ACC_ANOTHERTOKEN_PRECISION) / totalAmountAnotherToken);
         }
         // Calculate the pending AnotherToken rewards for the user based on their staked LP tokens and subtracting any rewards they are not eligible for or have already claimed
         pending =
@@ -2976,9 +2977,7 @@ contract WaveEmissionDistributor is
         poolAnotherToken = poolInfoAnotherToken[_pid];
 
         if (block.number > poolAnotherToken.lastRewardBlock) {
-            // total of AnotherTokens staked for this pool
-            uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
-            if (anotherTokenSupply > 0) {
+            if (totalAmountAnotherToken > 0) {
                 uint256 blocksSinceLastReward = block.number - poolAnotherToken.lastRewardBlock;
 
                 // rewards for this pool based on his allocation points
@@ -2991,7 +2990,7 @@ contract WaveEmissionDistributor is
 
                 poolAnotherToken.accAnotherTokenPerShare =
                     poolAnotherToken.accAnotherTokenPerShare +
-                    ((anotherTokenRewardsForPool * ACC_ANOTHERTOKEN_PRECISION) / anotherTokenSupply);
+                    ((anotherTokenRewardsForPool * ACC_ANOTHERTOKEN_PRECISION) / totalAmountAnotherToken);
             }
             poolAnotherToken.lastRewardBlock = block.number;
             poolInfoAnotherToken[_pid] = poolAnotherToken;

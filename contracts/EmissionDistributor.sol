@@ -2948,6 +2948,7 @@ contract WaveEmissionDistributor is
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][_user][_tokenId];
         // Get the accumulated AnotherToken per LP token
         uint256 accAnotherTokenPerShare = poolAnotherToken.accAnotherTokenPerShare;
+        uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
 
         if (block.number > poolAnotherToken.lastRewardBlock && anotherTokenSupply != 0) {
             uint256 blocksSinceLastReward = block.number - poolAnotherToken.lastRewardBlock;
@@ -2974,6 +2975,7 @@ contract WaveEmissionDistributor is
         poolAnotherToken = poolInfoAnotherToken[_pid];
 
         if (block.number > poolAnotherToken.lastRewardBlock) {
+            uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
             if (anotherTokenSupply > 0) {
                 uint256 blocksSinceLastReward = block.number - poolAnotherToken.lastRewardBlock;
 

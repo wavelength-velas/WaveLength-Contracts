@@ -2601,7 +2601,7 @@ contract WaveEmissionDistributor is
 
         /******************** AnotherToken Rewards Code ********************/
         // AnotherToken Rewards Code
-        if (poolAnotherToken.isClosed != true) {
+        if (!poolAnotherToken.isClosed) {
             userAnotherToken.amount = userAnotherToken.amount + amount;
             userAnotherToken.rewardDebt = userAnotherToken.rewardDebt + (amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
         }
@@ -2679,7 +2679,7 @@ contract WaveEmissionDistributor is
         /************************************************************/
 
         /******************** AnotherToken Rewards Code ********************/
-        if (poolAnotherToken.isClosed == false) {
+        if (!poolAnotherToken.isClosed) {
             // this would  be the amount if the user joined right from the start of the farm
             uint256 accumulatedWAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
             // subtracting the rewards the user is not eligible for
@@ -2926,8 +2926,8 @@ contract WaveEmissionDistributor is
         uint256 accWAVEPerShare = pool.accWAVEPerShare;
         // Only update the rewards if it's time to do so and there are LP tokens staked in the pool
 
-        if (block.number > pool.lastRewardBlock && totalAmountLockedWave != 0) {
-            uint256 blocksSinceLastReward = block.number - pool.lastRewardBlock;
+        if (block.timestamp > pool.lastRewardBlock && totalAmountLockedWave > 0) {
+            uint256 blocksSinceLastReward = block.timestamp - pool.lastRewardBlock;
             // Calculate the WAVE rewards for the pool based on the number of blocks, WAVE per block, and pool allocation points
             uint256 waveRewards = (blocksSinceLastReward * wavePerBlock) / DENOMINATOR;
 
@@ -2960,8 +2960,8 @@ contract WaveEmissionDistributor is
         // Calculate the pending AnotherToken rewards for the user based on their staked LP tokens and subtracting any rewards they are not eligible for or have already claimed
         uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
 
-        if (block.number > poolAnotherToken.lastRewardBlock && anotherTokenSupply != 0) {
-            uint256 blocksSinceLastReward = block.number - poolAnotherToken.lastRewardBlock;
+        if (block.timestamp > poolAnotherToken.lastRewardBlock && anotherTokenSupply > 0) {
+            uint256 blocksSinceLastReward = block.timestamp - poolAnotherToken.lastRewardBlock;
             // based on the pool weight (allocation points) we calculate the anotherToken rewarded for this specific pool
             uint256 anotherTokenRewards = (blocksSinceLastReward + poolAnotherToken.anotherTokenPerBlock * poolAnotherToken.allocPoint) / DENOMINATOR;
             // we take parts of the rewards for treasury, these can be subject to change, so we recalculate it

@@ -2562,6 +2562,9 @@ contract WaveEmissionDistributor is
         uint256 _farmPid, // ID for the farming pool
         IERC20 _veWaveReceipt // veWave receipt token
     ) {
+        require(address(_veWave) != address(0), "invalid veWave's address");
+        require(address(_wave) != address(0), "invalid wave's address");
+        require(address(_chef) != address(0), "invalid master chef's address");
         veWave = _veWave;
         wave = _wave;
         chef = _chef;

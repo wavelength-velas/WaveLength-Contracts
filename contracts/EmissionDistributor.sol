@@ -2527,11 +2527,11 @@ contract WaveEmissionDistributor is
 
     uint256 private constant ACC_ANOTHERTOKEN_PRECISION = 1e12; // precision used for calculations involving another token
     uint256 private constant ACC_WAVE_PRECISION = 1e12;   // Precision for accumulating WAVE
-    uint256 public constant POOL_PERCENTAGE = 876;   // Percentage of WAVE allocated to pools
+    uint256 public constant POOL_PERCENTAGE = 0.876e3;   // Percentage of WAVE allocated to pools
 
     WAVEMasterChef public chef;  // MasterChef contract for controlling distribution
     uint256 public farmPid;  // ID for the farming pool
-    uint256 public constant DENOMINATOR = 1000;  // Constant denominator for calculating allocation points
+    uint256 public constant DENOMINATOR = 1e3;  // Constant denominator for calculating allocation points
 
     IERC721 public veWave;  // veWave ERC721 token
     IERC20 public wave;  // WAVE ERC20 token
@@ -2562,6 +2562,9 @@ contract WaveEmissionDistributor is
         uint256 _farmPid, // ID for the farming pool
         IERC20 _veWaveReceipt // veWave receipt token
     ) {
+        require(address(_veWave) != address(0), "invalid veWave's address");
+        require(address(_wave) != address(0), "invalid wave's address");
+        require(address(_chef) != address(0), "invalid master chef's address");
         veWave = _veWave;
         wave = _wave;
         chef = _chef;
@@ -2598,7 +2601,7 @@ contract WaveEmissionDistributor is
 
         /******************** AnotherToken Rewards Code ********************/
         // AnotherToken Rewards Code
-        if (poolAnotherToken.isClosed != true) {
+        if (!poolAnotherToken.isClosed) {
             userAnotherToken.amount = userAnotherToken.amount + amount;
             userAnotherToken.rewardDebt = userAnotherToken.rewardDebt + (amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
         }
@@ -2617,7 +2620,7 @@ contract WaveEmissionDistributor is
         // Mint the veWAVEReceipt token for the user based on the locked time of the veWAVE token
         uint256 timeDays = ve(address(veWave)).locked__end(_tokenId) - block.timestamp;
         uint256 mediumMint = timeDays + 86400;
-        uint256 finalMint = (mediumMint * 10 ** 18)/31556926;
+        uint256 finalMint = (mediumMint * 10 ** 18)/31_556_926;
 
         veWAVEReceipt(address(veWaveReceipt)).mint(msg.sender, finalMint);
 
@@ -2676,7 +2679,7 @@ contract WaveEmissionDistributor is
         /************************************************************/
 
         /******************** AnotherToken Rewards Code ********************/
-        if (poolAnotherToken.isClosed == false) {
+        if (!poolAnotherToken.isClosed) {
             // this would  be the amount if the user joined right from the start of the farm
             uint256 accumulatedWAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) / ACC_ANOTHERTOKEN_PRECISION;
             // subtracting the rewards the user is not eligible for
@@ -2923,8 +2926,8 @@ contract WaveEmissionDistributor is
         uint256 accWAVEPerShare = pool.accWAVEPerShare;
         // Only update the rewards if it's time to do so and there are LP tokens staked in the pool
 
-        if (block.number > pool.lastRewardBlock && totalAmountLockedWave != 0) {
-            uint256 blocksSinceLastReward = block.number - pool.lastRewardBlock;
+        if (block.timestamp > pool.lastRewardBlock && totalAmountLockedWave > 0) {
+            uint256 blocksSinceLastReward = block.timestamp - pool.lastRewardBlock;
             // Calculate the WAVE rewards for the pool based on the number of blocks, WAVE per block, and pool allocation points
             uint256 waveRewards = (blocksSinceLastReward * wavePerBlock) / DENOMINATOR;
 
@@ -2957,8 +2960,8 @@ contract WaveEmissionDistributor is
         // Calculate the pending AnotherToken rewards for the user based on their staked LP tokens and subtracting any rewards they are not eligible for or have already claimed
         uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
 
-        if (block.number > poolAnotherToken.lastRewardBlock && anotherTokenSupply != 0) {
-            uint256 blocksSinceLastReward = block.number - poolAnotherToken.lastRewardBlock;
+        if (block.timestamp > poolAnotherToken.lastRewardBlock && anotherTokenSupply > 0) {
+            uint256 blocksSinceLastReward = block.timestamp - poolAnotherToken.lastRewardBlock;
             // based on the pool weight (allocation points) we calculate the anotherToken rewarded for this specific pool
             uint256 anotherTokenRewards = (blocksSinceLastReward + poolAnotherToken.anotherTokenPerBlock * poolAnotherToken.allocPoint) / DENOMINATOR;
             // we take parts of the rewards for treasury, these can be subject to change, so we recalculate it

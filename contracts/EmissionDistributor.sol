@@ -2464,8 +2464,6 @@ interface ve {
 
 pragma solidity 0.8.7;
 
-import "hardhat/console.sol";
-
 contract WaveEmissionDistributor is
     ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWAVE"),
     AccessControl, Ownable
@@ -2640,6 +2638,14 @@ contract WaveEmissionDistributor is
         // Emit events for deposit
         emit Deposit(msg.sender, 0, amount, msg.sender);
         emit DepositAnotherToken(msg.sender, _pid, amount, msg.sender);
+    }
+
+    function depositAnotherToken(uint256 _pid, uint256 _amount) external onlyOwner {
+        require(_pid < totalPidsAnotherToken, "invalid pool id");
+        PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
+        if (poolAnotherToken.isClosed == false) {
+            IERC20(poolAnotherToken.tokenReward).transferFrom(msg.sender, address(this), amount);
+        }
     }
 
     function withdrawAndDistribute(uint256 _pid, uint256 _tokenId) external {
@@ -2948,6 +2954,7 @@ contract WaveEmissionDistributor is
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][_user][_tokenId];
         // Get the accumulated AnotherToken per LP token
         uint256 accAnotherTokenPerShare = poolAnotherToken.accAnotherTokenPerShare;
+        // Calculate the pending AnotherToken rewards for the user based on their staked LP tokens and subtracting any rewards they are not eligible for or have already claimed
         uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
 
         if (block.number > poolAnotherToken.lastRewardBlock && anotherTokenSupply != 0) {
@@ -2975,6 +2982,7 @@ contract WaveEmissionDistributor is
         poolAnotherToken = poolInfoAnotherToken[_pid];
 
         if (block.number > poolAnotherToken.lastRewardBlock) {
+            // total of AnotherTokens staked for this pool
             uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
             if (anotherTokenSupply > 0) {
                 uint256 blocksSinceLastReward = block.number - poolAnotherToken.lastRewardBlock;

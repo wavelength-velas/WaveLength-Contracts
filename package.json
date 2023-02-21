@@ -1,7 +1,4 @@
 {
-  "scripts": {
-    "test:emissiondistributor": "npx hardhat test test/EmissionDistributor.test.ts"
-  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.1",
     "@nomiclabs/hardhat-etherscan": "^3.1.2",
@@ -27,7 +24,8 @@
     "typescript": "^4.9.3"
   },
   "scripts": {
-    "test": "npx hardhat test test/WAVEToken.test.ts"
+    "test:emissiondistributor": "npx hardhat test test/EmissionDistributor.test.ts",
+    "test:rewarder": "npx hardhat test test/Rewarder.test.ts"
   },
   "dependencies": {
     "@nomiclabs/hardhat-waffle": "^2.0.3",

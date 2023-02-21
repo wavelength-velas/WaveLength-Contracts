@@ -1,16 +1,15 @@
 import { ethers } from 'hardhat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-import { BigNumber } from 'ethers';
 import { expect } from 'chai';
 
-import { deployContract, duration, advanceTimeAndBlock, getBlockTime, advanceBlocks } from './utilities';
+import { deployContract, duration, advanceBlocks } from './utilities';
 import { ERC20Mock } from '../typechain-types/mocks/ERC20Mock.sol';
 import { WAVEToken } from '../typechain-types/WAVEToken.sol/WAVEToken';
 import { WAVEMasterChef } from '../typechain-types/WAVEMasterChef.sol/WAVEMasterChef';
 import { RewarderMock } from '../typechain-types/mocks/RewarderMock.sol/RewarderMock';
 import { Ve } from '../typechain-types/veWAVE.sol/Ve';
-import { VeWAVEReceipt } from '../typechain-types/veWAVEReceipt.sol/VeWAVEReceipt';
 import { WaveEmissionDistributor } from '../typechain-types/EmissionDistributor.sol/WaveEmissionDistributor';
+import { deployEmissionDistributor, deployRewarder } from './utilities/EmissionDistributor.behavior';
 
 describe('Rewarder Test', () => {
   let testToken1: ERC20Mock;
@@ -20,7 +19,6 @@ describe('Rewarder Test', () => {
   let masterChef: WAVEMasterChef;
   let rewarder: RewarderMock;
   let veWave: Ve;
-  let waveReceipt: VeWAVEReceipt;
   let emissionDistributor: WaveEmissionDistributor;
   let owner: SignerWithAddress;
   let treasury: SignerWithAddress;
@@ -40,46 +38,16 @@ describe('Rewarder Test', () => {
       'T2',
       ethers.utils.parseEther('10'),
     ]);
-    rewardToken = await deployContract('contracts/mocks/ERC20Mock.sol:ERC20Mock', [
-      'Reward Token',
-      'RewardT',
-      ethers.utils.parseEther('0'),
-    ]);
+
+    [waveToken, masterChef, veWave, , emissionDistributor] = await deployEmissionDistributor(owner, treasury);
+
+    [rewardToken, rewarder] = await deployRewarder(masterChef.address);
 
     await testToken1.transfer(user1.address, ethers.utils.parseEther('5'));
     await testToken2.transfer(user1.address, ethers.utils.parseEther('5'));
 
-    waveToken = await deployContract('contracts/EmissionDistributor.sol:WAVEToken', []);
-    await waveToken.mint(owner.address, ethers.utils.parseEther('10'));
     await waveToken.transfer(user1.address, ethers.utils.parseEther('5'));
     await waveToken.transfer(user2.address, ethers.utils.parseEther('5'));
-
-    masterChef = await deployContract('contracts/WAVEMasterChef.sol:WAVEMasterChef', [
-      waveToken.address,
-      treasury.address,
-      ethers.utils.parseEther('1'),
-      1,
-    ]);
-    await waveToken.transferOwnership(masterChef.address);
-
-    rewarder = await deployContract('contracts/mocks/RewarderMock.sol:RewarderMock', [
-      ethers.utils.parseEther('1'),
-      rewardToken.address,
-      masterChef.address,
-    ]);
-
-    veWave = await deployContract('contracts/veWAVE.sol:ve', [waveToken.address]);
-
-    waveReceipt = await deployContract('contracts/veWAVEReceipt.sol:veWAVEReceipt', []);
-
-    emissionDistributor = await deployContract('contracts/EmissionDistributor.sol:WaveEmissionDistributor', [
-      veWave.address,
-      waveToken.address,
-      masterChef.address,
-      0,
-      waveReceipt.address,
-    ]);
-    await waveReceipt.transferOwnership(emissionDistributor.address);
 
     await emissionDistributor.add(ethers.utils.parseEther('1'));
     await emissionDistributor.addAnotherToken(

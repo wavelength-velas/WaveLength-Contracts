@@ -522,11 +522,19 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 }
 
 contract ERC20Mock is ERC20 {
+    uint8 private decimal;
+
     constructor(
         string memory name,
         string memory symbol,
+        uint8 _decimal,
         uint256 supply
     ) public ERC20(name, symbol) {
+        decimal = _decimal;
         _mint(msg.sender, supply);
+    }
+
+    function decimals() public view virtual override returns (uint8) {
+        return decimal;
     }
 }

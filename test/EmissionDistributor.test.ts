@@ -6,17 +6,15 @@ import { expect } from 'chai';
 import { WAVEToken } from '../typechain-types/WAVEToken.sol/WAVEToken';
 import { WAVEMasterChef } from '../typechain-types/WAVEMasterChef.sol/WAVEMasterChef';
 import { Ve } from '../typechain-types/veWAVE.sol/Ve';
-import { VeWAVEReceipt } from '../typechain-types/veWAVEReceipt.sol/VeWAVEReceipt';
 import { WaveEmissionDistributor } from '../typechain-types/EmissionDistributor.sol/WaveEmissionDistributor';
 import { RewarderMock } from '../typechain-types/mocks/RewarderMock.sol/RewarderMock';
 import { ERC20Mock } from '../typechain-types/mocks/ERC20Mock.sol/ERC20Mock';
-import { deployContract, duration } from './utilities';
+import { initEmissionDistributor, initRewarder, duration } from './utilities';
 
 describe('EmissionDistributor Test', () => {
   let waveToken: WAVEToken;
   let masterChef: WAVEMasterChef;
   let veWave: Ve;
-  let waveReceipt: VeWAVEReceipt;
   let emissionDistributor: WaveEmissionDistributor;
   let rewarder: RewarderMock;
   let rewardToken: ERC20Mock;
@@ -26,43 +24,16 @@ describe('EmissionDistributor Test', () => {
   before(async () => {
     [owner, treasury] = await ethers.getSigners();
 
-    waveToken = await deployContract('contracts/EmissionDistributor.sol:WAVEToken', []);
-    await waveToken.mint(owner.address, ethers.utils.parseEther('10'));
+    [waveToken, masterChef, veWave, , emissionDistributor] = await initEmissionDistributor(owner, treasury);
 
-    masterChef = await deployContract('contracts/WAVEMasterChef.sol:WAVEMasterChef', [
-      waveToken.address,
-      treasury.address,
-      ethers.utils.parseEther('1'),
-      1,
-    ]);
-    await waveToken.transferOwnership(masterChef.address);
+    [rewardToken, rewarder] = await initRewarder(masterChef.address);
+  });
 
-    veWave = await deployContract('contracts/veWAVE.sol:ve', [waveToken.address]);
-    await waveToken.approve(veWave.address, ethers.utils.parseEther('5'));
-    await veWave.create_lock(ethers.utils.parseEther('5'), duration.weeks('2'));
+  it('create lock on veWave', async () => {
+    const waveTokenAmount = ethers.utils.parseEther('5');
 
-    waveReceipt = await deployContract('contracts/veWAVEReceipt.sol:veWAVEReceipt', []);
-
-    emissionDistributor = await deployContract('contracts/EmissionDistributor.sol:WaveEmissionDistributor', [
-      veWave.address,
-      waveToken.address,
-      masterChef.address,
-      0,
-      waveReceipt.address,
-    ]);
-    await waveReceipt.transferOwnership(emissionDistributor.address);
-
-    rewardToken = await deployContract('contracts/mocks/ERC20Mock.sol:ERC20Mock', [
-      'Reward',
-      'RewardT',
-      ethers.utils.parseEther('1000'),
-    ]);
-
-    rewarder = await deployContract('contracts/mocks/RewarderMock.sol:RewarderMock', [
-      ethers.utils.parseEther('1'),
-      rewardToken.address,
-      masterChef.address,
-    ]);
+    await waveToken.approve(veWave.address, waveTokenAmount);
+    await veWave.create_lock(waveTokenAmount, duration.weeks('2'));
   });
 
   it('add pool with lp address(emissiondistributor) and rewarder address(zero)', async () => {

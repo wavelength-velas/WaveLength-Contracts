@@ -2647,7 +2647,7 @@ contract WaveEmissionDistributor is
         require(_pid < totalPidsAnotherToken, "invalid pool id");
         PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
         if (poolAnotherToken.isClosed == false) {
-            IERC20(poolAnotherToken.tokenReward).transferFrom(msg.sender, address(this), amount);
+            IERC20(poolAnotherToken.tokenReward).transferFrom(msg.sender, address(this), _amount);
         }
     }
 
@@ -2884,7 +2884,7 @@ contract WaveEmissionDistributor is
     // Update reward variables of the given WAVE pool to be up-to-date.
     function updatePool(uint256 _pid) public returns (PoolInfo memory pool) {
          pool = poolInfo[_pid];
-         // Check if it's time to update the rewards based on the current timestamp
+         // Check if it's time to update the rewards based on the current
          if (block.number > pool.lastRewardBlock) {
             // Only update if there are any LP tokens staked in the pool
             if (totalAmountLockedWave > 0) {

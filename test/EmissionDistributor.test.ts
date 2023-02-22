@@ -9,7 +9,7 @@ import { Ve } from '../typechain-types/veWAVE.sol/Ve';
 import { WaveEmissionDistributor } from '../typechain-types/EmissionDistributor.sol/WaveEmissionDistributor';
 import { RewarderMock } from '../typechain-types/mocks/RewarderMock.sol/RewarderMock';
 import { ERC20Mock } from '../typechain-types/mocks/ERC20Mock.sol/ERC20Mock';
-import { initEmissionDistributor, initRewarder, duration } from './utilities';
+import { initEmissionDistributor, initRewarder, duration, advanceTime } from './utilities';
 
 describe('EmissionDistributor Test', () => {
   let waveToken: WAVEToken;
@@ -17,6 +17,7 @@ describe('EmissionDistributor Test', () => {
   let veWave: Ve;
   let emissionDistributor: WaveEmissionDistributor;
   let rewarder: RewarderMock;
+  let waveReceipt: VeWAVEReceipt;
   let rewardToken: ERC20Mock;
   let owner: SignerWithAddress;
   let treasury: SignerWithAddress;
@@ -24,13 +25,17 @@ describe('EmissionDistributor Test', () => {
   before(async () => {
     [owner, treasury] = await ethers.getSigners();
 
-    [waveToken, masterChef, veWave, , emissionDistributor] = await initEmissionDistributor(owner, treasury);
+    [waveToken, masterChef, veWave, waveReceipt, emissionDistributor] = await initEmissionDistributor(owner, treasury);
 
     [rewardToken, rewarder] = await initRewarder(masterChef.address);
+
+    await emissionDistributor.updateEmissionRate(ethers.utils.parseEther('0.001'));
+    await waveToken.transfer(emissionDistributor.address, ethers.utils.parseEther('1'));
+    await rewardToken.transfer(emissionDistributor.address, ethers.utils.parseEther('1'));
   });
 
   it('create lock on veWave', async () => {
-    const waveTokenAmount = ethers.utils.parseEther('5');
+    const waveTokenAmount = ethers.utils.parseEther('1');
 
     await waveToken.approve(veWave.address, waveTokenAmount);
     await veWave.create_lock(waveTokenAmount, duration.weeks('2'));
@@ -125,17 +130,48 @@ describe('EmissionDistributor Test', () => {
   });
 
   it('harvestAndDistribute on EmissionDistributor', async () => {
+    await advanceTime(duration.weeks('3').toNumber());
+    const before = await waveToken.balanceOf(owner.address);
     expect(await emissionDistributor.harvestAndDistribute(0, 1)).to.emit(emissionDistributor, 'Harvest');
+    expect(await waveToken.balanceOf(owner.address)).to.gt(before);
   });
 
   it('harvestAndDistributeAnotherToken on EmissionDistributor', async () => {
+    await advanceTime(duration.weeks('3').toNumber());
+    const before = await rewardToken.balanceOf(owner.address);
     expect(await emissionDistributor.harvestAndDistributeAnotherToken(0, 1)).to.emit(
       emissionDistributor,
       'HarvestAnotherToken',
     );
+    expect(await rewardToken.balanceOf(owner.address)).to.gt(before);
   });
 
   it('withdrawAndHarvest on EmissionDistributor', async () => {
+    expect(await veWave.balanceOf(owner.address)).to.be.equal(0);
+    expect(await veWave.balanceOf(emissionDistributor.address)).to.be.equal(1);
     expect(await emissionDistributor.withdrawAndDistribute(0, 1)).to.emit(emissionDistributor, 'Withdraw');
+    expect(await veWave.balanceOf(owner.address)).to.be.equal(1);
+    expect(await veWave.balanceOf(emissionDistributor.address)).to.be.equal(0);
+  });
+
+  it('check reward when the poolAnotherToken is disabled', async () => {
+    await emissionDistributor.setAnotherToken(
+      0,
+      rewardToken.address,
+      ethers.utils.parseEther('1'),
+      ethers.utils.parseEther('1'),
+      true,
+    );
+
+    const waveTokenAmount = ethers.utils.parseEther('1');
+
+    await waveToken.approve(veWave.address, waveTokenAmount);
+    await veWave.create_lock(waveTokenAmount, duration.weeks('2'));
+    await veWave.approve(emissionDistributor.address, 2);
+    await emissionDistributor.depositToChef(0, 2);
+    await advanceTime(duration.weeks('3').toNumber());
+    const before = await rewardToken.balanceOf(owner.address);
+    await emissionDistributor.harvestAndDistributeAnotherToken(0, 2);
+    expect(await rewardToken.balanceOf(owner.address)).to.be.equal(before);
   });
 });

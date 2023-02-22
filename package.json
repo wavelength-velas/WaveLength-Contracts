@@ -25,7 +25,8 @@
   },
   "scripts": {
     "test:emissiondistributor": "npx hardhat test test/EmissionDistributor.test.ts",
-    "test:rewarder": "npx hardhat test test/Rewarder.test.ts"
+    "test:rewarder": "npx hardhat test test/Rewarder.test.ts",
+    "test:vewavereceipt": "npx hardhat test test/VEWaveReceipt.test.ts"
   },
   "dependencies": {
     "@nomiclabs/hardhat-waffle": "^2.0.3",

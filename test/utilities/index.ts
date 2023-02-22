@@ -9,6 +9,7 @@ import { VeWAVEReceipt } from '../../typechain-types/veWAVEReceipt.sol/VeWAVERec
 import { WaveEmissionDistributor } from '../../typechain-types/EmissionDistributor.sol/WaveEmissionDistributor';
 import { RewarderMock } from '../../typechain-types/mocks/RewarderMock.sol/RewarderMock';
 import { ERC20Mock } from '../../typechain-types/mocks/ERC20Mock.sol/ERC20Mock';
+import { REWARDReceiptMasterChef } from '../../typechain-types/WaveReceiptMasterChef.sol/REWARDReceiptMasterChef';
 
 export * from './time';
 
@@ -47,6 +48,18 @@ export async function deployChef(
 
 export async function deployERC20Mock(name: string, symbol: string, supply: number, decimals = 18): Promise<WAVEToken> {
   return deployContract('contracts/mocks/ERC20Mock.sol:ERC20Mock', [name, symbol, decimals, bn(supply)]);
+}
+
+export async function deployRewardReceiptChef(
+  rewardToken: string,
+  rewaderPerBlock = bn(1),
+  startBlock = 0,
+): Promise<REWARDReceiptMasterChef> {
+  return deployContract('contracts/WaveReceiptMasterChef.sol:REWARDReceiptMasterChef', [
+    rewardToken,
+    rewaderPerBlock,
+    startBlock,
+  ]);
 }
 
 export const initEmissionDistributor = async (

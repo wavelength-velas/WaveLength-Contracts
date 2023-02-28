@@ -1441,7 +1441,7 @@ contract ve is IERC721, IERC721Metadata {
 
         require(_value > 0); // dev: need non-zero value
         require(unlock_time > block.timestamp, 'Can only lock until time in the future');
-        require(unlock_time <= block.timestamp + MAXTIME, 'Voting lock can be 6 months max');
+        require(unlock_time <= block.timestamp + MAXTIME, 'Voting lock can be 1 year max');
 
         ++tokenId;
         uint _tokenId = tokenId;
@@ -1471,7 +1471,7 @@ contract ve is IERC721, IERC721Metadata {
         require(_locked.end > block.timestamp, 'Lock expired');
         require(_locked.amount > 0, 'Nothing is locked');
         require(unlock_time > _locked.end, 'Can only increase lock duration');
-        require(unlock_time <= block.timestamp + MAXTIME, 'Voting lock can be 6 months max');
+        require(unlock_time <= block.timestamp + MAXTIME, 'Voting lock can be 1 year max');
 
         _deposit_for(_tokenId, 0, unlock_time, _locked, DepositType.INCREASE_UNLOCK_TIME);
     }

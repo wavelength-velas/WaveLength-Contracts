@@ -210,7 +210,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     function withdrawAndDistribute(uint256 _pid, uint256 _tokenId) external {
         uint256 numberVeWaveReceiptTokens = tokenInfoCheck[msg.sender][_tokenId];
         // Check if msg.sender have at least 1 veWAVEReceipt
-        require(veWaveReceipt.balanceOf(msg.sender) >= numberVeWaveReceiptTokens, "You don't have any veWAVEReceipt"); // Check if msg.sender have at least 1 veWAVEReceipt
+        require(veWaveReceipt.balanceOf(msg.sender) >= numberVeWaveReceiptTokens, "You don't have any veWAVEReceipt");
 
         // AnotherToken Rewards attributes
         PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
@@ -278,6 +278,9 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     }
 
     function harvestAndDistribute(uint256 _pid, uint256 _tokenId) public {
+        uint256 numberVeWaveReceiptTokens = tokenInfoCheck[msg.sender][_tokenId];
+        // Check if msg.sender have at least 1 veWAVEReceipt
+        require(veWaveReceipt.balanceOf(msg.sender) >= numberVeWaveReceiptTokens, "You don't have any veWAVEReceipt");
         // Get the current pool information
         PoolInfo memory pool = updatePool(_pid);
         // Get the current user's information based on the tokenId
@@ -300,7 +303,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         }
 
         // Emit an event to log the harvest
-        emit Harvest(msg.sender, 0, eligibleWAVE);
+        emit Harvest(msg.sender, _pid, eligibleWAVE);
     }
 
     function harvestAndDistributeAnotherToken(uint256 _pid, uint256 _tokenId) public {

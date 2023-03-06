@@ -26,11 +26,14 @@
   "scripts": {
     "test:emissiondistributor": "npx hardhat test test/EmissionDistributor.test.ts",
     "test:rewarder": "npx hardhat test test/Rewarder.test.ts",
-    "test:vewavereceipt": "npx hardhat test test/VEWaveReceipt.test.ts"
+    "test:vewavereceipt": "npx hardhat test test/VEWaveReceipt.test.ts",
+    "deploy:velas": "npx hardhat run scripts/deploy_with_ethers.ts --network velas"
   },
   "dependencies": {
     "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@openzeppelin/contracts": "^4.8.2",
     "dotenv": "^16.0.3",
-    "hardhat-deploy-fake-erc20": "^0.0.3-alpha"
+    "hardhat-deploy-fake-erc20": "^0.0.3-alpha",
+    "web3": "^1.8.2"
   }
 }

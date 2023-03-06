@@ -11,7 +11,7 @@ contract veWAVEReceipt is ERC20("veWAVEReceipt", "veWAVEReceipt"), Ownable {
         _mint(_to, _amount);
     }
 
-    function burn(address _to, uint256 _amount) public onlyOwner {
-        _burn(_to, _amount);
+    function burn(address _from, uint256 _amount) public onlyOwner {
+        _burn(_from, _amount);
     }
 }

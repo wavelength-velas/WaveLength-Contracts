@@ -399,7 +399,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         emit LogPoolAnotherTokenAddition(totalPidsAnotherToken - 1, _tokenReward, _isClosed, _allocPoint);
     }
 
-    function set(uint256 _allocPoint, bool _isClosed) public onlyOwner {
+    function set(uint256 _allocPoint) public onlyOwner {
         // we re-adjust the total allocation points
         poolInfo[0].allocPoint = _allocPoint;
         emit LogSetPool(_allocPoint);

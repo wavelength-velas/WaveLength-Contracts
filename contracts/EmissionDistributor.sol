@@ -64,6 +64,8 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
 
     uint256 public totalAmountLockedWave = 0; // total WAVE locked in pools
     uint256 public wavePerBlock; // WAVE distributed per block
+    uint256 public totalAllocPoint = 0; // Total allocation points. Must be the sum of all allocation points in all pools.
+    uint256 public totalAnotherAllocPoint = 0;
 
     mapping(address => uint256[]) public tokenIdsByUser;
 
@@ -371,6 +373,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256 _allocPoint
     ) public onlyOwner {
         poolInfo.push(PoolInfo({ allocPoint: _allocPoint, lastRewardBlock: block.number, accWAVEPerShare: 0 }));
+        totalAllocPoint = totalAllocPoint + _allocPoint;
         // Emit an event to log the pool addition
         emit LogPoolAddition(0, _allocPoint);
     }
@@ -395,6 +398,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         );
 
         totalPidsAnotherToken++;
+        totalAnotherAllocPoint = totalAnotherAllocPoint + _allocPoint;
         // Emit an event to log the pool addition
         emit LogPoolAnotherTokenAddition(totalPidsAnotherToken - 1, _tokenReward, _isClosed, _allocPoint);
     }
@@ -434,7 +438,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
                 uint256 blocksSinceLastReward = block.number - pool.lastRewardBlock;
 
                 // Calculate the total WAVE rewards for the pool based on the number of blocks, WAVE per block, and pool allocation points
-                uint256 waveRewards = (blocksSinceLastReward * wavePerBlock) / DENOMINATOR;
+                uint256 waveRewards = (blocksSinceLastReward * wavePerBlock * pool.allocPoint) / totalAllocPoint;
                 // Calculate the WAVE rewards for the pool after taking a percentage for the treasury
                 uint256 waveRewardsForPool = (waveRewards * POOL_PERCENTAGE) / DENOMINATOR;
                 // Update the accumulated WAVE per LP token based on the new rewards and total staked LP tokens
@@ -467,10 +471,11 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256 accWAVEPerShare = pool.accWAVEPerShare;
         // Only update the rewards if it's time to do so and there are LP tokens staked in the pool
 
-        if (block.timestamp > pool.lastRewardBlock && totalAmountLockedWave > 0) {
-            uint256 blocksSinceLastReward = block.timestamp - pool.lastRewardBlock;
-            // Calculate the WAVE rewards for the pool based on the number of blocks, WAVE per block, and pool allocation points
-            uint256 waveRewards = (blocksSinceLastReward * wavePerBlock) / DENOMINATOR;
+        if (block.number > pool.lastRewardBlock && totalAmountLockedWave > 0) {
+            uint256 blocksSinceLastReward = block.number - pool.lastRewardBlock;
+            // Calculate the WAVE rewards for the pool based on the number of blocks, WAVE per block, and
+            // pool allocation points
+            uint256 waveRewards = (blocksSinceLastReward * wavePerBlock * pool.allocPoint) / totalAllocPoint;
 
             // Calculate the WAVE rewards for the pool after taking a percentage for the treasury
             uint256 waveRewardsForPool = (waveRewards * POOL_PERCENTAGE) / DENOMINATOR;
@@ -478,7 +483,8 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
             // Update the accumulated WAVE per LP token based on the new rewards and total staked LP tokens
             accWAVEPerShare = accWAVEPerShare + ((waveRewardsForPool * ACC_WAVE_PRECISION) / totalAmountLockedWave);
         }
-        // Calculate the pending WAVE rewards for the user based on their staked LP tokens and subtracting any rewards they are not eligible for or have already claimed
+        // Calculate the pending WAVE rewards for the user based on their staked LP tokens and
+        // subtracting any rewards they are not eligible for or have already claimed
         pending = (user.amount * accWAVEPerShare) / ACC_WAVE_PRECISION - user.rewardDebt;
     }
 
@@ -492,17 +498,17 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][_user][_tokenId];
         // Get the accumulated AnotherToken per LP token
         uint256 accAnotherTokenPerShare = poolAnotherToken.accAnotherTokenPerShare;
-        // Calculate the pending AnotherToken rewards for the user based on their staked LP tokens and subtracting any rewards they are not eligible for or have already claimed
+        // Calculate the pending AnotherToken rewards for the user based on their staked LP tokens and
+        // subtracting any rewards they are not eligible for or have already claimed
         uint256 anotherTokenSupply = IERC20(poolInfoAnotherToken[_pid].tokenReward).balanceOf(address(this));
 
-        if (block.timestamp > poolAnotherToken.lastRewardBlock && anotherTokenSupply > 0) {
-            uint256 blocksSinceLastReward = block.timestamp - poolAnotherToken.lastRewardBlock;
+        if (block.number > poolAnotherToken.lastRewardBlock && anotherTokenSupply > 0) {
+            uint256 blocksSinceLastReward = block.number - poolAnotherToken.lastRewardBlock;
             // based on the pool weight (allocation points) we calculate the anotherToken rewarded for this specific pool
             uint256 anotherTokenRewards = (blocksSinceLastReward +
                 poolAnotherToken.anotherTokenPerBlock *
-                poolAnotherToken.allocPoint) / DENOMINATOR;
-            // we take parts of the rewards for treasury, these can be subject to change, so we recalculate it
-            // a value of 1000 = 100%
+                poolAnotherToken.allocPoint) / totalAnotherAllocPoint;
+            // we take parts of the rewards for treasury, these can be subject to change, so we recalculate it a value of 1000 = 100%
             uint256 anotherTokenRewardsForPool = (anotherTokenRewards * DENOMINATOR) / DENOMINATOR;
 
             // we calculate the new amount of accumulated anotherToken per veWAVE
@@ -529,8 +535,8 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
 
                 // rewards for this pool based on his allocation points
                 uint256 anotherTokenRewards = (blocksSinceLastReward *
-                    poolInfoAnotherToken[_pid].anotherTokenPerBlock *
-                    DENOMINATOR) / DENOMINATOR;
+                    poolAnotherToken.anotherTokenPerBlock *
+                    poolAnotherToken.allocPoint) / totalAnotherAllocPoint;
 
                 uint256 anotherTokenRewardsForPool = (anotherTokenRewards * DENOMINATOR) / DENOMINATOR;
 

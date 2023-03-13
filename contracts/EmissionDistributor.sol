@@ -204,7 +204,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     function depositAnotherToken(uint256 _pid, uint256 _amount) external onlyOwner {
         require(_pid < totalPidsAnotherToken, "invalid pool id");
         PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
-        if (poolAnotherToken.isClosed == false) {
+        if (!poolAnotherToken.isClosed) {
             IERC20(poolAnotherToken.tokenReward).transferFrom(msg.sender, address(this), _amount);
         }
     }
@@ -314,7 +314,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         // Get the current user's information for the specified pid and tokenId
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
 
-        if (poolAnotherToken.isClosed == false) {
+        if (!poolAnotherToken.isClosed) {
             // Calculate the total accumulated AnotherToken rewards for the user based on their LP token amount
             uint256 accumulatedAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) /
                 ACC_ANOTHERTOKEN_PRECISION;

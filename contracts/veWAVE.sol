@@ -749,9 +749,10 @@ contract ve is IERC721, IERC721Metadata {
         _mint(_to, _tokenId);
 
         _deposit_for(_tokenId, _value, unlock_time, locked[_tokenId], DepositType.CREATE_LOCK_TYPE);
-        return _tokenId;
 
         emit Enter(msg.sender, _value, mintAmount);
+
+        return _tokenId;
     }
 
     /// @notice Deposit `_value` tokens for `msg.sender` and lock for `_lock_duration`

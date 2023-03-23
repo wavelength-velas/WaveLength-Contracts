@@ -59,7 +59,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
 
     PoolInfo[] public poolInfo; // an array to store information of all pools of WAVE
     TokenInfo[] public tokenInfo; // mapping form poolId => user Address => User Info
-    mapping(address => mapping(uint256 => uint256)) public tokenInfoCheck; // mapping form poolId => user Address => User Info
+    mapping(uint256 => mapping(address => mapping(uint256 => uint256))) public tokenInfoCheck; // mapping form poolId => user Address => User Info
     mapping(uint256 => mapping(address => mapping(uint256 => UserInfo))) public userInfo; // mapping form poolId => user Address => User Info
 
     uint256 public totalAmountLockedWave = 0; // total WAVE locked in pools
@@ -189,7 +189,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         veWAVEReceipt(address(veWaveReceipt)).mint(msg.sender, finalMint);
 
         // Take and write info about tokenInfo (user address & _numberNFT/tokenId
-        tokenInfoCheck[msg.sender][_tokenId] = finalMint;
+        tokenInfoCheck[_pid][msg.sender][_tokenId] = finalMint;
 
         /*************************************************************/
         // Push the tokenInfo to the tokenInfo array
@@ -204,13 +204,13 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     function depositAnotherToken(uint256 _pid, uint256 _amount) external onlyOwner {
         require(_pid < totalPidsAnotherToken, "invalid pool id");
         PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
-        if (poolAnotherToken.isClosed == false) {
+        if (!poolAnotherToken.isClosed) {
             IERC20(poolAnotherToken.tokenReward).transferFrom(msg.sender, address(this), _amount);
         }
     }
 
     function withdrawAndDistribute(uint256 _pid, uint256 _tokenId) external {
-        uint256 numberVeWaveReceiptTokens = tokenInfoCheck[msg.sender][_tokenId];
+        uint256 numberVeWaveReceiptTokens = tokenInfoCheck[_pid][msg.sender][_tokenId];
         // Check if msg.sender have at least 1 veWAVEReceipt
         require(veWaveReceipt.balanceOf(msg.sender) >= numberVeWaveReceiptTokens, "You don't have any veWAVEReceipt");
 
@@ -256,7 +256,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         /*************************************************************/
 
         /* Token Info delete data */
-        tokenInfoCheck[msg.sender][_tokenId] = 0;
+        tokenInfoCheck[_pid][msg.sender][_tokenId] = 0;
         /***********************/
 
         IERC721(veWave).safeTransferFrom(address(this), msg.sender, _tokenId); // transfer veWAVE to his owner
@@ -280,7 +280,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     }
 
     function harvestAndDistribute(uint256 _pid, uint256 _tokenId) public {
-        uint256 numberVeWaveReceiptTokens = tokenInfoCheck[msg.sender][_tokenId];
+        uint256 numberVeWaveReceiptTokens = tokenInfoCheck[_pid][msg.sender][_tokenId];
         // Check if msg.sender have at least 1 veWAVEReceipt
         require(veWaveReceipt.balanceOf(msg.sender) >= numberVeWaveReceiptTokens, "You don't have any veWAVEReceipt");
         // Get the current pool information
@@ -314,7 +314,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         // Get the current user's information for the specified pid and tokenId
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
 
-        if (poolAnotherToken.isClosed == false) {
+        if (!poolAnotherToken.isClosed) {
             // Calculate the total accumulated AnotherToken rewards for the user based on their LP token amount
             uint256 accumulatedAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) /
                 ACC_ANOTHERTOKEN_PRECISION;

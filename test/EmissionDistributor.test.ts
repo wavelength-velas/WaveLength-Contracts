@@ -3,13 +3,14 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { BigNumber } from 'ethers';
 import { expect } from 'chai';
 
-import { WAVEToken } from '../typechain-types/WAVEToken.sol/WAVEToken';
-import { WAVEMasterChef } from '../typechain-types/WAVEMasterChef.sol/WAVEMasterChef';
-import { Ve } from '../typechain-types/veWAVE.sol/Ve';
-import { WaveEmissionDistributor } from '../typechain-types/EmissionDistributor.sol/WaveEmissionDistributor';
-import { RewarderMock } from '../typechain-types/mocks/RewarderMock.sol/RewarderMock';
-import { ERC20Mock } from '../typechain-types/mocks/ERC20Mock.sol/ERC20Mock';
+import { WAVEToken } from '../typechain-types/contracts/WAVEToken';
+import { WAVEMasterChef } from '../typechain-types/contracts/WAVEMasterChef.sol/WAVEMasterChef';
+import { Ve } from '../typechain-types/contracts/veWAVE.sol/Ve';
+import { WaveEmissionDistributor } from '../typechain-types/contracts/EmissionDistributor.sol/WaveEmissionDistributor';
+import { RewarderMock } from '../typechain-types/contracts/mocks/RewarderMock.sol/RewarderMock';
+import { ERC20Mock } from '../typechain-types/contracts/mocks/ERC20Mock.sol/ERC20Mock';
 import { initEmissionDistributor, initRewarder, duration, advanceTime } from './utilities';
+// import { VeWAVEReceipt } from '../typechain-types/contracts/VeWAVEReceipt';
 
 describe('EmissionDistributor Test', () => {
   let waveToken: WAVEToken;
@@ -17,7 +18,7 @@ describe('EmissionDistributor Test', () => {
   let veWave: Ve;
   let emissionDistributor: WaveEmissionDistributor;
   let rewarder: RewarderMock;
-  let waveReceipt: VeWAVEReceipt;
+  // let waveReceipt: VeWAVEReceipt;
   let rewardToken: ERC20Mock;
   let owner: SignerWithAddress;
   let treasury: SignerWithAddress;
@@ -25,7 +26,7 @@ describe('EmissionDistributor Test', () => {
   before(async () => {
     [owner, treasury] = await ethers.getSigners();
 
-    [waveToken, masterChef, veWave, waveReceipt, emissionDistributor] = await initEmissionDistributor(owner, treasury);
+    [waveToken, masterChef, veWave, , emissionDistributor] = await initEmissionDistributor(owner, treasury);
 
     [rewardToken, rewarder] = await initRewarder(masterChef.address);
 
@@ -146,9 +147,18 @@ describe('EmissionDistributor Test', () => {
     expect(await rewardToken.balanceOf(owner.address)).to.gt(before);
   });
 
+  it('emergencyWithdraw on EmissionDistributor', async () => {
+    await expect(emissionDistributor.connect(treasury).emergencyWithdraw(0, 1)).to.be.revertedWith(
+      'You are not the owner of this veWAVE',
+    );
+  });
+
   it('withdrawAndHarvest on EmissionDistributor', async () => {
     expect(await veWave.balanceOf(owner.address)).to.be.equal(0);
     expect(await veWave.balanceOf(emissionDistributor.address)).to.be.equal(1);
+    await expect(emissionDistributor.withdrawAndDistribute(1, 1)).to.be.revertedWith(
+      'You are not the owner of this veWAVE',
+    );
     expect(await emissionDistributor.withdrawAndDistribute(0, 1)).to.emit(emissionDistributor, 'Withdraw');
     expect(await veWave.balanceOf(owner.address)).to.be.equal(1);
     expect(await veWave.balanceOf(emissionDistributor.address)).to.be.equal(0);

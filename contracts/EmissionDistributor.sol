@@ -59,7 +59,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
 
     PoolInfo[] public poolInfo; // an array to store information of all pools of WAVE
     TokenInfo[] public tokenInfo; // mapping form poolId => user Address => User Info
-    mapping(uint256 => mapping(address => mapping(uint256 => uint256))) public tokenInfoCheck; // mapping form poolId => user Address => User Info
+    mapping(uint256 => mapping(address => mapping(uint256 => TokenInfo))) public tokenInfoCheck; // mapping form poolId => user Address => User Info
     mapping(uint256 => mapping(address => mapping(uint256 => UserInfo))) public userInfo; // mapping form poolId => user Address => User Info
 
     uint256 public totalAmountLockedWave = 0; // total WAVE locked in pools
@@ -184,12 +184,15 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         // Mint the veWAVEReceipt token for the user based on the locked time of the veWAVE token
         uint256 timeDays = ve(address(veWave)).locked__end(_tokenId) - block.timestamp;
         uint256 mediumMint = timeDays + 86400;
-        uint256 finalMint = (mediumMint * 10**18) / 31_556_926;
+        uint256 finalMint = (mediumMint * 10 ** 18) / 31_556_926;
 
         veWAVEReceipt(address(veWaveReceipt)).mint(msg.sender, finalMint);
 
         // Take and write info about tokenInfo (user address & _numberNFT/tokenId
-        tokenInfoCheck[_pid][msg.sender][_tokenId] = finalMint;
+        TokenInfo storage tokenInfoUser = tokenInfoCheck[_pid][msg.sender][_tokenId];
+        tokenInfoUser.user = msg.sender;
+        tokenInfoUser.numberNFT = _tokenId;
+        tokenInfoUser.numberVeWaveReceiptTokens = finalMint;
 
         /*************************************************************/
         // Push the tokenInfo to the tokenInfo array
@@ -210,9 +213,14 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     }
 
     function withdrawAndDistribute(uint256 _pid, uint256 _tokenId) external {
-        uint256 numberVeWaveReceiptTokens = tokenInfoCheck[_pid][msg.sender][_tokenId];
+        TokenInfo storage tokenInfoUser = tokenInfoCheck[_pid][msg.sender][_tokenId];
+        // Check if msg.sender is the owner of the veWAVE
+        require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");
         // Check if msg.sender have at least 1 veWAVEReceipt
-        require(veWaveReceipt.balanceOf(msg.sender) >= numberVeWaveReceiptTokens, "You don't have any veWAVEReceipt");
+        require(
+            veWaveReceipt.balanceOf(address(msg.sender)) >= tokenInfoUser.numberVeWaveReceiptTokens,
+            "You don't have any veWAVEReceipt"
+        );
 
         // AnotherToken Rewards attributes
         PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
@@ -252,11 +260,13 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         /********************************************************************/
 
         /******************** veWAVEReceipt Code ********************/
-        veWAVEReceipt(address(veWaveReceipt)).burn(msg.sender, numberVeWaveReceiptTokens);
+        veWAVEReceipt(address(veWaveReceipt)).burn(msg.sender, tokenInfoUser.numberVeWaveReceiptTokens);
         /*************************************************************/
 
         /* Token Info delete data */
-        tokenInfoCheck[_pid][msg.sender][_tokenId] = 0;
+        tokenInfoUser.numberVeWaveReceiptTokens = 0;
+        tokenInfoUser.user = address(0);
+        tokenInfoUser.numberNFT = 0;
         /***********************/
 
         IERC721(veWave).safeTransferFrom(address(this), msg.sender, _tokenId); // transfer veWAVE to his owner
@@ -280,9 +290,9 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     }
 
     function harvestAndDistribute(uint256 _pid, uint256 _tokenId) public {
-        uint256 numberVeWaveReceiptTokens = tokenInfoCheck[_pid][msg.sender][_tokenId];
-        // Check if msg.sender have at least 1 veWAVEReceipt
-        require(veWaveReceipt.balanceOf(msg.sender) >= numberVeWaveReceiptTokens, "You don't have any veWAVEReceipt");
+        TokenInfo storage tokenInfoUser = tokenInfoCheck[_pid][msg.sender][_tokenId];
+        // Check if msg.sender is the owner of the veWAVE
+        require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");
         // Get the current pool information
         PoolInfo memory pool = updatePool(_pid);
         // Get the current user's information based on the tokenId
@@ -336,9 +346,11 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
 
     // Withdraw without caring about rewards. EMERGENCY ONLY.
     function emergencyWithdraw(uint256 _pid, uint256 _tokenId) public {
+        TokenInfo storage tokenInfoUser = tokenInfoCheck[_pid][msg.sender][_tokenId];
+        // Check if msg.sender is the owner of the veWAVE
+        require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");
         // Get the current user's information for the specified tokenId
         UserInfo storage user = userInfo[_pid][msg.sender][_tokenId];
-        require(user.amount > 0, "caller didn't deposit any token");
         // Get the current user's information for the specified pid and tokenId
         UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
         // Get the current user's LP token amount
@@ -460,11 +472,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     }
 
     // View function to see the pending WAVE rewards for a user
-    function pendingWave(
-        uint256 _pid,
-        address _user,
-        uint256 _tokenId
-    ) external view returns (uint256 pending) {
+    function pendingWave(uint256 _pid, address _user, uint256 _tokenId) external view returns (uint256 pending) {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user][_tokenId];
         // Get the accumulated WAVE per LP token
@@ -565,11 +573,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     }
 
     // Safe anotherToken transfer function, just in case if rounding error causes pool to not have enough anotherToken.
-    function safeAnotherTokenTransfer(
-        uint256 _pid,
-        address _to,
-        uint256 _amount
-    ) internal {
+    function safeAnotherTokenTransfer(uint256 _pid, address _to, uint256 _amount) internal {
         // Get the specified anotherToken pool
         PoolInfoAnotherToken memory pool = poolInfoAnotherToken[_pid];
         // Check the balance of anotherToken in the pool

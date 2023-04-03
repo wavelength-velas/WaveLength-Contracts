@@ -66,7 +66,7 @@ export const initEmissionDistributor = async (
   owner: SignerWithAddress,
   treasury: SignerWithAddress,
 ): Promise<[WAVEToken, WAVEMasterChef, Ve, VeWAVEReceipt, WaveEmissionDistributor]> => {
-  const waveToken: WAVEToken = await deployContract('contracts/EmissionDistributor.sol:WAVEToken', []);
+  const waveToken: WAVEToken = await deployContract('contracts/WAVEToken.sol:WAVEToken', []);
   const waveTokenAmount = bn(10);
   await waveToken.mint(owner.address, waveTokenAmount);
 

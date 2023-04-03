@@ -2,13 +2,20 @@ import { ethers } from 'hardhat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { expect } from 'chai';
 
-import { ERC20Mock } from '../typechain-types/mocks/ERC20Mock.sol';
-import { WAVEToken } from '../typechain-types/WAVEToken.sol/WAVEToken';
-import { WAVEMasterChef } from '../typechain-types/WAVEMasterChef.sol/WAVEMasterChef';
-import { RewarderMock } from '../typechain-types/mocks/RewarderMock.sol/RewarderMock';
-import { Ve } from '../typechain-types/veWAVE.sol/Ve';
-import { WaveEmissionDistributor } from '../typechain-types/EmissionDistributor.sol/WaveEmissionDistributor';
-import { initEmissionDistributor, initRewarder, duration, advanceBlocks, deployERC20Mock, advanceTime } from './utilities';
+import { ERC20Mock } from '../typechain-types/contracts/mocks/ERC20Mock.sol';
+import { WAVEToken } from '../typechain-types/contracts/WAVEToken';
+import { WAVEMasterChef } from '../typechain-types/contracts/WAVEMasterChef.sol/WAVEMasterChef';
+import { RewarderMock } from '../typechain-types/contracts/mocks/RewarderMock.sol/RewarderMock';
+import { Ve } from '../typechain-types/contracts/veWAVE.sol/Ve';
+import { WaveEmissionDistributor } from '../typechain-types/contracts/EmissionDistributor.sol/WaveEmissionDistributor';
+import {
+  initEmissionDistributor,
+  initRewarder,
+  duration,
+  advanceBlocks,
+  deployERC20Mock,
+  advanceTime,
+} from './utilities';
 
 describe('Rewarder Test', () => {
   let testToken1: ERC20Mock;

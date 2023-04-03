@@ -2,15 +2,22 @@ import { ethers } from 'hardhat';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { expect } from 'chai';
 
-import { REWARDReceiptMasterChef } from '../typechain-types/WaveReceiptMasterChef.sol/REWARDReceiptMasterChef';
-import { WAVEToken } from '../typechain-types/WAVEToken.sol/WAVEToken';
-import { WAVEMasterChef } from '../typechain-types/WAVEMasterChef.sol/WAVEMasterChef';
-import { Ve } from '../typechain-types/veWAVE.sol/Ve';
-import { WaveEmissionDistributor } from '../typechain-types/EmissionDistributor.sol/WaveEmissionDistributor';
-import { RewarderMock } from '../typechain-types/mocks/RewarderMock.sol/RewarderMock';
-import { ERC20Mock } from '../typechain-types/mocks/ERC20Mock.sol/ERC20Mock';
-import { VeWAVEReceipt } from '../typechain-types/veWAVEReceipt.sol/VeWAVEReceipt';
-import { deployRewardReceiptChef, initEmissionDistributor, initRewarder, duration, deployContract, advanceTime } from './utilities';
+import { REWARDReceiptMasterChef } from '../typechain-types/contracts/WaveReceiptMasterChef.sol/REWARDReceiptMasterChef';
+import { WAVEToken } from '../typechain-types/contracts/WAVEToken';
+import { WAVEMasterChef } from '../typechain-types/contracts/WAVEMasterChef.sol/WAVEMasterChef';
+import { Ve } from '../typechain-types/contracts/veWAVE.sol/Ve';
+import { WaveEmissionDistributor } from '../typechain-types/contracts/EmissionDistributor.sol/WaveEmissionDistributor';
+import { RewarderMock } from '../typechain-types/contracts/mocks/RewarderMock.sol/RewarderMock';
+import { ERC20Mock } from '../typechain-types/contracts/mocks/ERC20Mock.sol/ERC20Mock';
+import { VeWAVEReceipt } from '../typechain-types/contracts/VeWAVEReceipt';
+import {
+  deployRewardReceiptChef,
+  initEmissionDistributor,
+  initRewarder,
+  duration,
+  // deployContract,
+  advanceTime,
+} from './utilities';
 
 describe('veWaveReceipt Test', () => {
   let waveToken: WAVEToken;

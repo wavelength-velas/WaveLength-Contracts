@@ -84,7 +84,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     IERC20 public veWaveReceipt; // veWave receipt token
 
     /* WAVE Rewards Events*/
-    event LogSetPool(uint256 allocPoint);
+    event LogSetPool(uint256 indexed pid, uint256 allocPoint);
     event Harvest(address indexed user, uint256 indexed pid, uint256 amount);
     event LogPoolAddition(uint256 indexed pid, uint256 allocPoint);
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount, address indexed to);
@@ -245,16 +245,16 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         /************************************************************/
 
         /******************** AnotherToken Rewards Code ********************/
+        // this would  be the amount if the user joined right from the start of the farm
+        uint256 accumulatedWAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) /
+            ACC_ANOTHERTOKEN_PRECISION;
+        // subtracting the rewards the user is not eligible for
+        uint256 eligibleAnotherToken = accumulatedWAnotherToken - userAnotherToken.rewardDebt;
+        userAnotherToken.amount = userAnotherToken.amount - amount; // put user amount of UserInfo a zero
+        userAnotherToken.rewardDebt =
+            (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) /
+            ACC_ANOTHERTOKEN_PRECISION; // update AnotherToken Reward Debt
         if (!poolAnotherToken.isClosed) {
-            // this would  be the amount if the user joined right from the start of the farm
-            uint256 accumulatedWAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) /
-                ACC_ANOTHERTOKEN_PRECISION;
-            // subtracting the rewards the user is not eligible for
-            uint256 eligibleAnotherToken = accumulatedWAnotherToken - userAnotherToken.rewardDebt;
-            userAnotherToken.amount = userAnotherToken.amount - amount; // put user amount of UserInfo a zero
-            userAnotherToken.rewardDebt =
-                (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) /
-                ACC_ANOTHERTOKEN_PRECISION; // update AnotherToken Reward Debt
             safeAnotherTokenTransfer(_pid, msg.sender, eligibleAnotherToken);
         }
         /********************************************************************/
@@ -415,10 +415,12 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         emit LogPoolAnotherTokenAddition(totalPidsAnotherToken - 1, _tokenReward, _isClosed, _allocPoint);
     }
 
-    function set(uint256 _allocPoint) public onlyOwner {
+    function set(uint256 _pid, uint256 _allocPoint) public onlyOwner {
         // we re-adjust the total allocation points
-        poolInfo[0].allocPoint = _allocPoint;
-        emit LogSetPool(_allocPoint);
+        totalAllocPoint -= poolInfo[_pid].allocPoint;
+        totalAllocPoint += _allocPoint;
+        poolInfo[_pid].allocPoint = _allocPoint;
+        emit LogSetPool(_pid, _allocPoint);
     }
 
     // Update the given Another Token pool's. Can only be called by the owner.
@@ -431,6 +433,8 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     ) public onlyOwner {
         // Update the allocation point, token reward, block reward and closed status of the specified AnotherToken pool
         PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
+        totalAnotherAllocPoint -= poolAnotherToken.allocPoint;
+        totalAnotherAllocPoint += _allocPoint;
         poolAnotherToken.allocPoint = _allocPoint;
         poolAnotherToken.tokenReward = _tokenReward;
         poolAnotherToken.anotherTokenPerBlock = _anotherTokenPerBlock;

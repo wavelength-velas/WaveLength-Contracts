@@ -245,16 +245,16 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         /************************************************************/
 
         /******************** AnotherToken Rewards Code ********************/
+        // this would  be the amount if the user joined right from the start of the farm
+        uint256 accumulatedWAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) /
+            ACC_ANOTHERTOKEN_PRECISION;
+        // subtracting the rewards the user is not eligible for
+        uint256 eligibleAnotherToken = accumulatedWAnotherToken - userAnotherToken.rewardDebt;
+        userAnotherToken.amount = userAnotherToken.amount - amount; // put user amount of UserInfo a zero
+        userAnotherToken.rewardDebt =
+            (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) /
+            ACC_ANOTHERTOKEN_PRECISION; // update AnotherToken Reward Debt
         if (!poolAnotherToken.isClosed) {
-            // this would  be the amount if the user joined right from the start of the farm
-            uint256 accumulatedWAnotherToken = (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) /
-                ACC_ANOTHERTOKEN_PRECISION;
-            // subtracting the rewards the user is not eligible for
-            uint256 eligibleAnotherToken = accumulatedWAnotherToken - userAnotherToken.rewardDebt;
-            userAnotherToken.amount = userAnotherToken.amount - amount; // put user amount of UserInfo a zero
-            userAnotherToken.rewardDebt =
-                (userAnotherToken.amount * poolAnotherToken.accAnotherTokenPerShare) /
-                ACC_ANOTHERTOKEN_PRECISION; // update AnotherToken Reward Debt
             safeAnotherTokenTransfer(_pid, msg.sender, eligibleAnotherToken);
         }
         /********************************************************************/

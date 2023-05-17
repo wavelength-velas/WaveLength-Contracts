@@ -274,7 +274,8 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256[] storage tokenIdsByCaller = tokenIdsByUser[msg.sender];
         for (uint256 i = 0; i < tokenIdsByCaller.length; ) {
             if (tokenIdsByCaller[i] == _tokenId) {
-                delete tokenIdsByCaller[i];
+                tokenIdsByCaller[i] = tokenIdsByCaller[tokenIdsByCaller.length - 1];
+                tokenIdsByUser[msg.sender].pop();
                 break;
             }
             unchecked {
@@ -365,7 +366,8 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256[] memory tokenIdsByCaller = tokenIdsByUser[msg.sender];
         for (uint256 i = 0; i < tokenIdsByCaller.length; ) {
             if (tokenIdsByCaller[i] == _tokenId) {
-                delete tokenIdsByCaller[i];
+                tokenIdsByCaller[i] = tokenIdsByCaller[tokenIdsByCaller.length - 1];
+                tokenIdsByUser[msg.sender].pop();
                 break;
             }
             unchecked {

@@ -657,7 +657,7 @@ contract ve is IERC721, IERC721Metadata {
 
         address from = msg.sender;
         if (_value != 0 && deposit_type != DepositType.MERGE_TYPE) {
-            assert(IERC20(token).transferFrom(from, address(this), _value));
+            IERC20(token).safeTransferFrom(from, address(this), _value);
         }
 
         emit Deposit(from, _tokenId, _value, _locked.end, deposit_type, block.timestamp);
@@ -800,7 +800,7 @@ contract ve is IERC721, IERC721Metadata {
         // Burn the NFT
         _burn(_tokenId);
 
-        assert(IERC20(token).transfer(msg.sender, value));
+        IERC20(token).safeTransfer(msg.sender, value);
 
         emit Withdraw(msg.sender, _tokenId, value, block.timestamp);
         emit Leave(msg.sender, value, 1);

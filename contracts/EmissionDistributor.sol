@@ -201,14 +201,14 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         // Events
         // Emit events for deposit
         emit Deposit(msg.sender, 0, amount, msg.sender);
-        emit DepositAnotherToken(msg.sender, _pid, amount, msg.sender);
+        if (!poolAnotherToken.isClosed) emit DepositAnotherToken(msg.sender, _pid, amount, msg.sender);
     }
 
     function depositAnotherToken(uint256 _pid, uint256 _amount) external onlyOwner {
         require(_pid < totalPidsAnotherToken, "invalid pool id");
         PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
         if (!poolAnotherToken.isClosed) {
-            IERC20(poolAnotherToken.tokenReward).transferFrom(msg.sender, address(this), _amount);
+            IERC20(poolAnotherToken.tokenReward).safeTransferFrom(msg.sender, address(this), _amount);
         }
     }
 
@@ -274,7 +274,8 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256[] storage tokenIdsByCaller = tokenIdsByUser[msg.sender];
         for (uint256 i = 0; i < tokenIdsByCaller.length; ) {
             if (tokenIdsByCaller[i] == _tokenId) {
-                delete tokenIdsByCaller[i];
+                tokenIdsByCaller[i] = tokenIdsByCaller[tokenIdsByCaller.length - 1];
+                tokenIdsByUser[msg.sender].pop();
                 break;
             }
             unchecked {
@@ -286,7 +287,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
 
         // Events
         emit Withdraw(msg.sender, 0, amount, msg.sender);
-        emit WithdrawAnotherToken(msg.sender, _pid, amount, msg.sender);
+        if (!poolAnotherToken.isClosed) emit WithdrawAnotherToken(msg.sender, _pid, amount, msg.sender);
     }
 
     function harvestAndDistribute(uint256 _pid, uint256 _tokenId) public {
@@ -365,7 +366,8 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256[] memory tokenIdsByCaller = tokenIdsByUser[msg.sender];
         for (uint256 i = 0; i < tokenIdsByCaller.length; ) {
             if (tokenIdsByCaller[i] == _tokenId) {
-                delete tokenIdsByCaller[i];
+                tokenIdsByCaller[i] = tokenIdsByCaller[tokenIdsByCaller.length - 1];
+                tokenIdsByUser[msg.sender].pop();
                 break;
             }
             unchecked {
@@ -387,7 +389,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         poolInfo.push(PoolInfo({ allocPoint: _allocPoint, lastRewardBlock: block.number, accWAVEPerShare: 0 }));
         totalAllocPoint = totalAllocPoint + _allocPoint;
         // Emit an event to log the pool addition
-        emit LogPoolAddition(0, _allocPoint);
+        emit LogPoolAddition(poolInfo.length - 1, _allocPoint);
     }
 
     // Add a new AnotherToken to the pool. Can only be called by the owner.
@@ -569,10 +571,10 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256 waveBalance = wave.balanceOf(address(this));
         // If the requested amount is more than the balance, transfer the entire balance
         if (_amount > waveBalance) {
-            wave.transfer(_to, waveBalance);
+            wave.safeTransfer(_to, waveBalance);
         } else {
             // Otherwise, transfer the requested amount
-            wave.transfer(_to, _amount);
+            wave.safeTransfer(_to, _amount);
         }
     }
 
@@ -584,10 +586,10 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256 anotherTokenBalance = IERC20(pool.tokenReward).balanceOf(address(this));
         // If the requested amount is more than the balance, transfer the entire balance
         if (_amount > anotherTokenBalance) {
-            IERC20(pool.tokenReward).transfer(_to, anotherTokenBalance);
+            IERC20(pool.tokenReward).safeTransfer(_to, anotherTokenBalance);
         } else {
             // Otherwise, transfer the requested amount
-            IERC20(pool.tokenReward).transfer(_to, _amount);
+            IERC20(pool.tokenReward).safeTransfer(_to, _amount);
         }
     }
 

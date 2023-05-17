@@ -208,7 +208,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         require(_pid < totalPidsAnotherToken, "invalid pool id");
         PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
         if (!poolAnotherToken.isClosed) {
-            IERC20(poolAnotherToken.tokenReward).transferFrom(msg.sender, address(this), _amount);
+            IERC20(poolAnotherToken.tokenReward).safeTransferFrom(msg.sender, address(this), _amount);
         }
     }
 
@@ -571,10 +571,10 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256 waveBalance = wave.balanceOf(address(this));
         // If the requested amount is more than the balance, transfer the entire balance
         if (_amount > waveBalance) {
-            wave.transfer(_to, waveBalance);
+            wave.safeTransfer(_to, waveBalance);
         } else {
             // Otherwise, transfer the requested amount
-            wave.transfer(_to, _amount);
+            wave.safeTransfer(_to, _amount);
         }
     }
 
@@ -586,10 +586,10 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256 anotherTokenBalance = IERC20(pool.tokenReward).balanceOf(address(this));
         // If the requested amount is more than the balance, transfer the entire balance
         if (_amount > anotherTokenBalance) {
-            IERC20(pool.tokenReward).transfer(_to, anotherTokenBalance);
+            IERC20(pool.tokenReward).safeTransfer(_to, anotherTokenBalance);
         } else {
             // Otherwise, transfer the requested amount
-            IERC20(pool.tokenReward).transfer(_to, _amount);
+            IERC20(pool.tokenReward).safeTransfer(_to, _amount);
         }
     }
 

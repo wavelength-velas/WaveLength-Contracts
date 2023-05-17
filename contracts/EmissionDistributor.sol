@@ -201,7 +201,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         // Events
         // Emit events for deposit
         emit Deposit(msg.sender, 0, amount, msg.sender);
-        emit DepositAnotherToken(msg.sender, _pid, amount, msg.sender);
+        if (!poolAnotherToken.isClosed) emit DepositAnotherToken(msg.sender, _pid, amount, msg.sender);
     }
 
     function depositAnotherToken(uint256 _pid, uint256 _amount) external onlyOwner {
@@ -287,7 +287,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
 
         // Events
         emit Withdraw(msg.sender, 0, amount, msg.sender);
-        emit WithdrawAnotherToken(msg.sender, _pid, amount, msg.sender);
+        if (!poolAnotherToken.isClosed) emit WithdrawAnotherToken(msg.sender, _pid, amount, msg.sender);
     }
 
     function harvestAndDistribute(uint256 _pid, uint256 _tokenId) public {
@@ -389,7 +389,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         poolInfo.push(PoolInfo({ allocPoint: _allocPoint, lastRewardBlock: block.number, accWAVEPerShare: 0 }));
         totalAllocPoint = totalAllocPoint + _allocPoint;
         // Emit an event to log the pool addition
-        emit LogPoolAddition(0, _allocPoint);
+        emit LogPoolAddition(poolInfo.length - 1, _allocPoint);
     }
 
     // Add a new AnotherToken to the pool. Can only be called by the owner.

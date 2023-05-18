@@ -144,6 +144,11 @@ contract ve is IERC721, IERC721Metadata {
         _entered_state = _not_entered;
     }
 
+    modifier onlyVoter() {
+        require(msg.sender == voter);
+        _;
+    }
+
     /// @notice Contract constructor
     /// @param token_addr `ERC20CRV` token address
     constructor(address token_addr) {
@@ -664,28 +669,23 @@ contract ve is IERC721, IERC721Metadata {
         emit Supply(supply_before, supply);
     }
 
-    function setVoter(address _voter) external {
-        require(msg.sender == voter);
+    function setVoter(address _voter) external onlyVoter {
         voter = _voter;
     }
 
-    function voting(uint256 _tokenId) external {
-        require(msg.sender == voter);
+    function voting(uint256 _tokenId) external onlyVoter {
         voted[_tokenId] = true;
     }
 
-    function abstain(uint256 _tokenId) external {
-        require(msg.sender == voter);
+    function abstain(uint256 _tokenId) external onlyVoter {
         voted[_tokenId] = false;
     }
 
-    function attach(uint256 _tokenId) external {
-        require(msg.sender == voter);
+    function attach(uint256 _tokenId) external onlyVoter {
         attachments[_tokenId] = attachments[_tokenId] + 1;
     }
 
-    function detach(uint256 _tokenId) external {
-        require(msg.sender == voter);
+    function detach(uint256 _tokenId) external onlyVoter {
         attachments[_tokenId] = attachments[_tokenId] - 1;
     }
 

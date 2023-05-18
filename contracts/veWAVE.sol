@@ -661,7 +661,7 @@ contract ve is IERC721, IERC721Metadata {
         }
 
         emit Deposit(from, _tokenId, _value, _locked.end, deposit_type, block.timestamp);
-        emit Supply(supply_before, supply_before + _value);
+        emit Supply(supply_before, supply);
     }
 
     function setVoter(address _voter) external {

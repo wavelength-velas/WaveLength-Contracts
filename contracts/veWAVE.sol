@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.11;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
@@ -142,6 +142,11 @@ contract ve is IERC721, IERC721Metadata {
         _entered_state = _entered;
         _;
         _entered_state = _not_entered;
+    }
+
+    modifier onlyVoter() {
+        require(msg.sender == voter);
+        _;
     }
 
     /// @notice Contract constructor
@@ -289,7 +294,7 @@ contract ve is IERC721, IERC721Metadata {
     ///      Throws if `_tokenId` is owned by someone.
     function _addTokenTo(address _to, uint256 _tokenId) internal {
         // Throws if `_tokenId` is owned by someone
-        assert(idToOwner[_tokenId] == address(0));
+        require(idToOwner[_tokenId] == address(0));
         // Change the owner
         idToOwner[_tokenId] = _to;
         // Update owner token index tracking
@@ -302,7 +307,7 @@ contract ve is IERC721, IERC721Metadata {
     ///      Throws if `_from` is not the current owner.
     function _removeTokenFrom(address _from, uint256 _tokenId) internal {
         // Throws if `_from` is not the current owner
-        assert(idToOwner[_tokenId] == _from);
+        require(idToOwner[_tokenId] == _from);
         // Change the owner
         idToOwner[_tokenId] = address(0);
         // Update owner token index tracking
@@ -315,7 +320,7 @@ contract ve is IERC721, IERC721Metadata {
     ///      Throws if `_owner` is not the current owner.
     function _clearApproval(address _owner, uint256 _tokenId) internal {
         // Throws if `_owner` is not the current owner
-        assert(idToOwner[_tokenId] == _owner);
+        require(idToOwner[_tokenId] == _owner);
         if (idToApprovals[_tokenId] != address(0)) {
             // Reset approvals
             idToApprovals[_tokenId] = address(0);
@@ -462,7 +467,7 @@ contract ve is IERC721, IERC721Metadata {
     /// @param _approved True if the operators is approved, false to revoke approval.
     function setApprovalForAll(address _operator, bool _approved) external {
         // Throws if `_operator` is the `msg.sender`
-        assert(_operator != msg.sender);
+        require(_operator != msg.sender);
         ownerToOperators[msg.sender][_operator] = _approved;
         emit ApprovalForAll(msg.sender, _operator, _approved);
     }
@@ -475,7 +480,7 @@ contract ve is IERC721, IERC721Metadata {
     /// @return A boolean that indicates if the operation was successful.
     function _mint(address _to, uint256 _tokenId) internal returns (bool) {
         // Throws if `_to` is zero address
-        assert(_to != address(0));
+        require(_to != address(0));
         // Add NFT. Throws if `_tokenId` is owned by someone
         _addTokenTo(_to, _tokenId);
         emit Transfer(address(0), _to, _tokenId);
@@ -661,31 +666,26 @@ contract ve is IERC721, IERC721Metadata {
         }
 
         emit Deposit(from, _tokenId, _value, _locked.end, deposit_type, block.timestamp);
-        emit Supply(supply_before, supply_before + _value);
+        emit Supply(supply_before, supply);
     }
 
-    function setVoter(address _voter) external {
-        require(msg.sender == voter);
+    function setVoter(address _voter) external onlyVoter {
         voter = _voter;
     }
 
-    function voting(uint256 _tokenId) external {
-        require(msg.sender == voter);
+    function voting(uint256 _tokenId) external onlyVoter {
         voted[_tokenId] = true;
     }
 
-    function abstain(uint256 _tokenId) external {
-        require(msg.sender == voter);
+    function abstain(uint256 _tokenId) external onlyVoter {
         voted[_tokenId] = false;
     }
 
-    function attach(uint256 _tokenId) external {
-        require(msg.sender == voter);
+    function attach(uint256 _tokenId) external onlyVoter {
         attachments[_tokenId] = attachments[_tokenId] + 1;
     }
 
-    function detach(uint256 _tokenId) external {
-        require(msg.sender == voter);
+    function detach(uint256 _tokenId) external onlyVoter {
         attachments[_tokenId] = attachments[_tokenId] - 1;
     }
 
@@ -765,7 +765,7 @@ contract ve is IERC721, IERC721Metadata {
     /// @notice Extend the unlock time for `_tokenId`
     /// @param _lock_duration New number of seconds until tokens unlock
     function increase_unlock_time(uint256 _tokenId, uint256 _lock_duration) external nonreentrant {
-        assert(_isApprovedOrOwner(msg.sender, _tokenId));
+        require(_isApprovedOrOwner(msg.sender, _tokenId));
 
         LockedBalance memory _locked = locked[_tokenId];
         uint256 unlock_time = ((block.timestamp + _lock_duration) / WEEK) * WEEK; // Locktime is rounded down to weeks
@@ -781,7 +781,7 @@ contract ve is IERC721, IERC721Metadata {
     /// @notice Withdraw all tokens for `_tokenId`
     /// @dev Only possible if the lock has expired
     function leave(uint256 _tokenId) external nonreentrant {
-        assert(_isApprovedOrOwner(msg.sender, _tokenId));
+        require(_isApprovedOrOwner(msg.sender, _tokenId));
         require(attachments[_tokenId] == 0 && !voted[_tokenId], "attached");
 
         LockedBalance memory _locked = locked[_tokenId];
@@ -879,7 +879,7 @@ contract ve is IERC721, IERC721Metadata {
     function _balanceOfAtNFT(uint256 _tokenId, uint256 _block) internal view returns (uint256) {
         // Copying and pasting totalSupply code because Vyper cannot pass by
         // reference yet
-        assert(_block <= block.number);
+        require(_block <= block.number);
 
         // Binary search
         uint256 _min = 0;
@@ -975,7 +975,7 @@ contract ve is IERC721, IERC721Metadata {
     /// @param _block Block to calculate the total voting power at
     /// @return Total voting power at `_block`
     function totalSupplyAt(uint256 _block) external view returns (uint256) {
-        assert(_block <= block.number);
+        require(_block <= block.number);
         uint256 _epoch = epoch;
         uint256 target_epoch = _find_block_epoch(_block, _epoch);
 

@@ -58,8 +58,8 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     mapping(uint256 => mapping(address => mapping(uint256 => UserInfoAnotherToken))) public userInfoAnotherToken; // mapping form poolId => user Address => User Info
 
     PoolInfo[] public poolInfo; // an array to store information of all pools of WAVE
-    TokenInfo[] public tokenInfo; // mapping form poolId => user Address => User Info
-    mapping(uint256 => mapping(address => mapping(uint256 => TokenInfo))) public tokenInfoCheck; // mapping form poolId => user Address => User Info
+    TokenInfo[] public tokenInfo; // an array to store information of all tokens of WAVE
+    mapping(uint256 => mapping(address => mapping(uint256 => TokenInfo))) public tokenInfoCheck; // mapping form poolId => user Address => Token Info
     mapping(uint256 => mapping(address => mapping(uint256 => UserInfo))) public userInfo; // mapping form poolId => user Address => User Info
 
     uint256 public totalAmountLockedWave; // total WAVE locked in pools

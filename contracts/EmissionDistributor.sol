@@ -54,7 +54,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     /****************************************************************/
 
     PoolInfoAnotherToken[] public poolInfoAnotherToken; // an array to store information of all pools of another token
-    uint256 public totalPidsAnotherToken = 0; // total number of another token pools
+    uint256 public totalPidsAnotherToken; // total number of another token pools
     mapping(uint256 => mapping(address => mapping(uint256 => UserInfoAnotherToken))) public userInfoAnotherToken; // mapping form poolId => user Address => User Info
 
     PoolInfo[] public poolInfo; // an array to store information of all pools of WAVE
@@ -62,10 +62,10 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     mapping(uint256 => mapping(address => mapping(uint256 => TokenInfo))) public tokenInfoCheck; // mapping form poolId => user Address => User Info
     mapping(uint256 => mapping(address => mapping(uint256 => UserInfo))) public userInfo; // mapping form poolId => user Address => User Info
 
-    uint256 public totalAmountLockedWave = 0; // total WAVE locked in pools
+    uint256 public totalAmountLockedWave; // total WAVE locked in pools
     uint256 public wavePerBlock; // WAVE distributed per block
-    uint256 public totalAllocPoint = 0; // Total allocation points. Must be the sum of all allocation points in all pools.
-    uint256 public totalAnotherAllocPoint = 0;
+    uint256 public totalAllocPoint; // Total allocation points. Must be the sum of all allocation points in all pools.
+    uint256 public totalAnotherAllocPoint;
 
     mapping(address => uint256[]) public tokenIdsByUser;
 

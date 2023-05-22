@@ -89,6 +89,12 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     event LogPoolAddition(uint256 indexed pid, uint256 allocPoint);
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount, address indexed to);
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount, address indexed to);
+    event LogUpdatePool(
+        uint256 indexed pid,
+        uint256 lastRewardBlock,
+        uint256 totalAmountLockedWave,
+        uint256 accWAVEPerShare
+    );
 
     /* AnotherToken Rewards Events*/
     event LogSetPoolAnotherToken(
@@ -114,6 +120,8 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     );
 
     /* General Events */
+    event SetFarmId(uint256 indexed id);
+    event UpdateEmissionRate(uint256 wavePerBlock);
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
 
     constructor(
@@ -137,6 +145,8 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         (uint256 amount, ) = chef.userInfo(farmPid, address(this));
         require(amount == 0, "In the now supported pool, the funds is still remaining");
         farmPid = id;
+
+        emit SetFarmId(id);
     }
 
     // Function to deposit veWAVE token to the contract and receive rewards
@@ -209,6 +219,8 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
         if (!poolAnotherToken.isClosed) {
             IERC20(poolAnotherToken.tokenReward).safeTransferFrom(msg.sender, address(this), _amount);
+
+            emit DepositAnotherToken(msg.sender, _pid, _amount, address(this));
         }
     }
 
@@ -468,12 +480,12 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
             pool.lastRewardBlock = block.number;
             poolInfo[_pid] = pool;
 
-            /*  emit LogUpdatePool(
-                0,
+            emit LogUpdatePool(
+                _pid,
                 pool.lastRewardBlock,
                 totalAmountLockedWave,
                 pool.accWAVEPerShare
-            ); */
+            );
         }
     }
 
@@ -561,7 +573,12 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
             poolAnotherToken.lastRewardBlock = block.number;
             poolInfoAnotherToken[_pid] = poolAnotherToken;
 
-            /*emit LogUpdatePool(_pid, poolAnotherToken.lastRewardBlock, anotherTokenSupply, poolAnotherToken.accAnotherTokenPerShare);*/
+            emit LogUpdatePoolAnotherToken(
+                _pid,
+                poolAnotherToken.lastRewardBlock,
+                anotherTokenSupply,
+                poolAnotherToken.accAnotherTokenPerShare
+            );
         }
     }
 
@@ -599,5 +616,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         require(_wavePerBlock <= 6e18, "maximum emission rate of 6 anothertoken per block exceeded");
         // Update the emission rate
         wavePerBlock = _wavePerBlock;
+
+        emit UpdateEmissionRate(wavePerBlock);
     }
 }

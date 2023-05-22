@@ -74,6 +74,9 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     uint256 private constant ACC_ANOTHERTOKEN_PRECISION = 1e12; // precision used for calculations involving another token
     uint256 private constant ACC_WAVE_PRECISION = 1e12; // Precision for accumulating WAVE
     uint256 public constant POOL_PERCENTAGE = 0.876e3; // Percentage of WAVE allocated to pools
+    uint256 public constant ONE_DAY = 24 * 3600;
+    uint256 public constant MINT_PRECISION = 1e18;
+    uint256 public constant MINT_DENOMINATOR = 31_556_926;
 
     WAVEMasterChef public chef; // MasterChef contract for controlling distribution
     uint256 public farmPid; // ID for the farming pool
@@ -193,8 +196,8 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         /******************** veWAVEReceipt Code ********************/
         // Mint the veWAVEReceipt token for the user based on the locked time of the veWAVE token
         uint256 timeDays = ve(address(veWave)).locked__end(_tokenId) - block.timestamp;
-        uint256 mediumMint = timeDays + 86400;
-        uint256 finalMint = (mediumMint * 10 ** 18) / 31_556_926;
+        uint256 mediumMint = timeDays + ONE_DAY;
+        uint256 finalMint = (mediumMint * MINT_PRECISION) / MINT_DENOMINATOR;
 
         veWAVEReceipt(address(veWaveReceipt)).mint(msg.sender, finalMint);
 

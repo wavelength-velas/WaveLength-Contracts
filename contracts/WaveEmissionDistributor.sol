@@ -315,7 +315,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         if (!poolAnotherToken.isClosed) emit WithdrawAnotherToken(msg.sender, _pid, amount, msg.sender);
     }
 
-    function harvestAndDistribute(uint256 _pid, uint256 _tokenId) public validPid(_pid) {
+    function harvestAndDistribute(uint256 _pid, uint256 _tokenId) external validPid(_pid) {
         TokenInfo storage tokenInfoUser = tokenInfoCheck[_pid][msg.sender][_tokenId];
         // Check if msg.sender is the owner of the veWAVE
         require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");
@@ -344,7 +344,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         emit Harvest(msg.sender, _pid, eligibleWAVE);
     }
 
-    function harvestAndDistributeAnotherToken(uint256 _pid, uint256 _tokenId) public validAnotherPid(_pid) {
+    function harvestAndDistributeAnotherToken(uint256 _pid, uint256 _tokenId) external validAnotherPid(_pid) {
         // Get the current pool information for the specified pid
         PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
         // Get the current user's information for the specified pid and tokenId
@@ -371,7 +371,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     }
 
     // Withdraw without caring about rewards. EMERGENCY ONLY.
-    function emergencyWithdraw(uint256 _pid, uint256 _tokenId) public validPid(_pid) validAnotherPid(_pid) {
+    function emergencyWithdraw(uint256 _pid, uint256 _tokenId) external validPid(_pid) validAnotherPid(_pid) {
         TokenInfo storage tokenInfoUser = tokenInfoCheck[_pid][msg.sender][_tokenId];
         // Check if msg.sender is the owner of the veWAVE
         require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");
@@ -410,7 +410,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     function add(
         // Add a new pool with the specified allocation point and current timestamp to the poolInfo array
         uint256 _allocPoint
-    ) public onlyOwner {
+    ) external onlyOwner {
         poolInfo.push(PoolInfo({ allocPoint: _allocPoint, lastRewardBlock: block.number, accWAVEPerShare: 0 }));
         totalAllocPoint = totalAllocPoint + _allocPoint;
         // Emit an event to log the pool addition
@@ -423,7 +423,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256 _anotherTokenPerBlock,
         bool _isClosed,
         uint256 _allocPoint
-    ) public onlyOwner {
+    ) external onlyOwner {
         // Add a new pool with the specified token reward, block reward, closed status, allocation point and current timestamp to the poolInfoAnotherToken array
         poolInfoAnotherToken.push(
             PoolInfoAnotherToken({
@@ -442,7 +442,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         emit LogPoolAnotherTokenAddition(totalPidsAnotherToken - 1, _tokenReward, _isClosed, _allocPoint);
     }
 
-    function set(uint256 _pid, uint256 _allocPoint) public onlyOwner validPid(_pid) {
+    function set(uint256 _pid, uint256 _allocPoint) external onlyOwner validPid(_pid) {
         // we re-adjust the total allocation points
         totalAllocPoint -= poolInfo[_pid].allocPoint;
         totalAllocPoint += _allocPoint;
@@ -457,7 +457,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256 _allocPoint,
         uint256 _anotherTokenPerBlock,
         bool _isClosed
-    ) public onlyOwner validAnotherPid(_pid) {
+    ) external onlyOwner validAnotherPid(_pid) {
         // Update the allocation point, token reward, block reward and closed status of the specified AnotherToken pool
         PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
         totalAnotherAllocPoint -= poolAnotherToken.allocPoint;
@@ -624,7 +624,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     }
 
     // Update the emission rate of the WAVE token
-    function updateEmissionRate(uint256 _wavePerBlock) public onlyOwner {
+    function updateEmissionRate(uint256 _wavePerBlock) external onlyOwner {
         // Ensure the emission rate does not exceed the maximum of 6 anothertoken per block
         require(_wavePerBlock <= 6e18, "maximum emission rate of 6 anothertoken per block exceeded");
         // Update the emission rate

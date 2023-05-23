@@ -73,6 +73,11 @@ contract ve is IERC721, IERC721Metadata {
     event ShareRevenue(uint256 amount);
     event Withdraw(address indexed provider, uint256 tokenId, uint256 value, uint256 ts);
     event Supply(uint256 prevSupply, uint256 supply);
+    event SetVoter(address indexed voter);
+    event Voting(uint256 indexed tokenId);
+    event Abstain(uint256 indexed tokenId);
+    event Attach(uint256 indexed tokenId, uint256 attachment);
+    event Detach(uint256 indexed tokenId, uint256 attachment);
 
     uint256 internal constant WEEK = 1 weeks;
     uint256 internal constant MAXTIME = 1 * 365 * 86400;
@@ -671,10 +676,14 @@ contract ve is IERC721, IERC721Metadata {
 
     function setVoter(address _voter) external onlyVoter {
         voter = _voter;
+
+        emit SetVoter(voter);
     }
 
     function voting(uint256 _tokenId) external onlyVoter {
         voted[_tokenId] = true;
+
+        emit Voting(_tokenId);
     }
 
     function abstain(uint256 _tokenId) external onlyVoter {
@@ -683,10 +692,14 @@ contract ve is IERC721, IERC721Metadata {
 
     function attach(uint256 _tokenId) external onlyVoter {
         attachments[_tokenId] = attachments[_tokenId] + 1;
+
+        emit Attach(_tokenId, attachments[_tokenId]);
     }
 
     function detach(uint256 _tokenId) external onlyVoter {
         attachments[_tokenId] = attachments[_tokenId] - 1;
+
+        emit Detach(_tokenId, attachments[_tokenId]);
     }
 
     function merge(uint256 _from, uint256 _to) external {
@@ -819,7 +832,8 @@ contract ve is IERC721, IERC721Metadata {
         // Binary search
         uint256 _min = 0;
         uint256 _max = max_epoch;
-        for (uint256 i = 0; i < 128; ++i) {
+        uint256 bitLength = 128;
+        for (uint256 i = 0; i < bitLength; ++i) {
             // Will be always enough for 128-bit numbers
             if (_min >= _max) {
                 break;

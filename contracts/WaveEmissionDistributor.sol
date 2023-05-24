@@ -54,14 +54,17 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     }
     /****************************************************************/
 
-    PoolInfoAnotherToken[] public poolInfoAnotherToken; // an array to store information of all pools of another token
-    uint256 public totalPidsAnotherToken; // total number of another token pools
+    mapping(uint256 => PoolInfoAnotherToken) public poolInfoAnotherToken; // an array to store information of all pools of another token
     mapping(uint256 => mapping(address => mapping(uint256 => UserInfoAnotherToken))) public userInfoAnotherToken; // mapping form poolId => user Address => User Info
 
-    PoolInfo[] public poolInfo; // an array to store information of all pools of WAVE
-    TokenInfo[] public tokenInfo; // an array to store information of all tokens of WAVE
+    mapping(uint256 => PoolInfo) public poolInfo; // an array to store information of all pools of WAVE
+    mapping(uint256 => TokenInfo) public tokenInfo; // an array to store information of all tokens of WAVE
     mapping(uint256 => mapping(address => mapping(uint256 => TokenInfo))) public tokenInfoCheck; // mapping form poolId => user Address => Token Info
     mapping(uint256 => mapping(address => mapping(uint256 => UserInfo))) public userInfo; // mapping form poolId => user Address => User Info
+
+    uint256 public totalPidsAnotherToken; // total number of another token pools
+    uint256 public totalPids; // total number of pools
+    uint256 public totalToken; // total number of tokens
 
     uint256 public totalAmountLockedWave; // total WAVE locked in pools
     uint256 public wavePerBlock; // WAVE distributed per block
@@ -129,12 +132,12 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
 
     modifier validPid(uint256 pid) {
-        _require(pid < poolInfo.length, Errors.INVALID_PID);
+        _require(pid < totalPids, Errors.INVALID_PID);
         _;
     }
 
     modifier validAnotherPid(uint256 pid) {
-        _require(pid < poolInfoAnotherToken.length, Errors.INVALID_ANOTHER_PID);
+        _require(pid < totalPidsAnotherToken, Errors.INVALID_ANOTHER_PID);
         _;
     }
 
@@ -220,11 +223,16 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
 
         /*************************************************************/
         // Push the tokenInfo to the tokenInfo array
-        tokenInfo.push(TokenInfo({ user: msg.sender, numberNFT: _tokenId, numberVeWaveReceiptTokens: finalMint }));
+        tokenInfo[totalToken] = TokenInfo({
+            user: msg.sender,
+            numberNFT: _tokenId,
+            numberVeWaveReceiptTokens: finalMint
+        });
+        totalToken++;
 
         // Events
         // Emit events for deposit
-        emit Deposit(msg.sender, 0, amount, msg.sender);
+        emit Deposit(msg.sender, _pid, amount, msg.sender);
         if (!poolAnotherToken.isClosed) emit DepositAnotherToken(msg.sender, _pid, amount, msg.sender);
     }
 
@@ -311,7 +319,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         totalNftsByUser[msg.sender] = totalNftsByUser[msg.sender] - 1;
 
         // Events
-        emit Withdraw(msg.sender, 0, amount, msg.sender);
+        emit Withdraw(msg.sender, _pid, amount, msg.sender);
         if (!poolAnotherToken.isClosed) emit WithdrawAnotherToken(msg.sender, _pid, amount, msg.sender);
     }
 
@@ -411,10 +419,11 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         // Add a new pool with the specified allocation point and current timestamp to the poolInfo array
         uint256 _allocPoint
     ) external onlyOwner {
-        poolInfo.push(PoolInfo({ allocPoint: _allocPoint, lastRewardBlock: block.number, accWAVEPerShare: 0 }));
+        poolInfo[totalPids] = PoolInfo({ allocPoint: _allocPoint, lastRewardBlock: block.number, accWAVEPerShare: 0 });
         totalAllocPoint = totalAllocPoint + _allocPoint;
+        totalPids++;
         // Emit an event to log the pool addition
-        emit LogPoolAddition(poolInfo.length - 1, _allocPoint);
+        emit LogPoolAddition(totalPids - 1, _allocPoint);
     }
 
     // Add a new AnotherToken to the pool. Can only be called by the owner.
@@ -425,16 +434,14 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256 _allocPoint
     ) external onlyOwner {
         // Add a new pool with the specified token reward, block reward, closed status, allocation point and current timestamp to the poolInfoAnotherToken array
-        poolInfoAnotherToken.push(
-            PoolInfoAnotherToken({
-                tokenReward: _tokenReward,
-                anotherTokenPerBlock: _anotherTokenPerBlock,
-                isClosed: _isClosed,
-                allocPoint: _allocPoint,
-                lastRewardBlock: block.number,
-                accAnotherTokenPerShare: 0
-            })
-        );
+        poolInfoAnotherToken[totalPidsAnotherToken] = PoolInfoAnotherToken({
+            tokenReward: _tokenReward,
+            anotherTokenPerBlock: _anotherTokenPerBlock,
+            isClosed: _isClosed,
+            allocPoint: _allocPoint,
+            lastRewardBlock: block.number,
+            accAnotherTokenPerShare: 0
+        });
 
         totalPidsAnotherToken++;
         totalAnotherAllocPoint = totalAnotherAllocPoint + _allocPoint;

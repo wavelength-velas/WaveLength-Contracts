@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+import "./libraries/Errors.sol";
 import "./WAVEMasterChef.sol";
 import "./veWAVE.sol";
 import "./veWAVEReceipt.sol";
@@ -128,12 +129,12 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
 
     modifier validPid(uint256 pid) {
-        require(pid < poolInfo.length, "Not valid pool id");
+        _require(pid < poolInfo.length, Errors.INVALID_PID);
         _;
     }
 
     modifier validAnotherPid(uint256 pid) {
-        require(pid < poolInfoAnotherToken.length, "Not valid pool id for another token");
+        _require(pid < poolInfoAnotherToken.length, Errors.INVALID_ANOTHER_PID);
         _;
     }
 
@@ -144,9 +145,9 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         uint256 _farmPid, // ID for the farming pool
         IERC20 _veWaveReceipt // veWave receipt token
     ) {
-        require(address(_veWave) != address(0), "invalid veWave's address");
-        require(address(_wave) != address(0), "invalid wave's address");
-        require(address(_chef) != address(0), "invalid master chef's address");
+        _require(address(_veWave) != address(0), Errors.INVALID_VEWAVE_ADDRESS);
+        _require(address(_wave) != address(0), Errors.INVALID_WAVE_ADDRESS);
+        _require(address(_chef) != address(0), Errors.INVALID_MASTERCHEF_ADDRESS);
         veWave = _veWave;
         wave = _wave;
         chef = _chef;
@@ -156,7 +157,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
 
     function setFarmId(uint256 id) external onlyOwner {
         (uint256 amount, ) = chef.userInfo(farmPid, address(this));
-        require(amount == 0, "In the now supported pool, the funds is still remaining");
+        _require(amount == 0, Errors.FUND_STILL_REMAINING);
         farmPid = id;
 
         emit SetFarmId(id);
@@ -166,7 +167,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     function depositToChef(uint256 _pid, uint256 _tokenId) external validPid(_pid) validAnotherPid(_pid) {
         // Check if msg.sender is the owner of the veWAVE
         address ownerOfTokenId = IERC721(veWave).ownerOf(_tokenId);
-        require(ownerOfTokenId == msg.sender, "You are not the owner of this veWAVE");
+        _require(ownerOfTokenId == msg.sender, Errors.NOT_OWNER_VEWAVE);
 
         // AnotherToken Rewards attributes
         PoolInfoAnotherToken memory poolAnotherToken = updatePoolAnotherToken(_pid);
@@ -227,8 +228,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         if (!poolAnotherToken.isClosed) emit DepositAnotherToken(msg.sender, _pid, amount, msg.sender);
     }
 
-    function depositAnotherToken(uint256 _pid, uint256 _amount) external onlyOwner {
-        require(_pid < totalPidsAnotherToken, "invalid pool id");
+    function depositAnotherToken(uint256 _pid, uint256 _amount) external onlyOwner validAnotherPid(_pid) {
         PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
         if (!poolAnotherToken.isClosed) {
             IERC20(poolAnotherToken.tokenReward).safeTransferFrom(msg.sender, address(this), _amount);
@@ -240,11 +240,11 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     function withdrawAndDistribute(uint256 _pid, uint256 _tokenId) external {
         TokenInfo storage tokenInfoUser = tokenInfoCheck[_pid][msg.sender][_tokenId];
         // Check if msg.sender is the owner of the veWAVE
-        require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");
+        _require(tokenInfoUser.numberNFT != 0, Errors.NOT_OWNER_VEWAVE);
         // Check if msg.sender have at least 1 veWAVEReceipt
-        require(
+        _require(
             veWaveReceipt.balanceOf(address(msg.sender)) >= tokenInfoUser.numberVeWaveReceiptTokens,
-            "You don't have any veWAVEReceipt"
+            Errors.NOT_ENOUGH_VEWAVERECEIPT
         );
 
         // AnotherToken Rewards attributes
@@ -318,7 +318,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     function harvestAndDistribute(uint256 _pid, uint256 _tokenId) external validPid(_pid) {
         TokenInfo storage tokenInfoUser = tokenInfoCheck[_pid][msg.sender][_tokenId];
         // Check if msg.sender is the owner of the veWAVE
-        require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");
+        _require(tokenInfoUser.numberNFT != 0, Errors.NOT_OWNER_VEWAVE);
         // Get the current pool information
         PoolInfo memory pool = updatePool(_pid);
         // Get the current user's information based on the tokenId
@@ -374,7 +374,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     function emergencyWithdraw(uint256 _pid, uint256 _tokenId) external validPid(_pid) validAnotherPid(_pid) {
         TokenInfo storage tokenInfoUser = tokenInfoCheck[_pid][msg.sender][_tokenId];
         // Check if msg.sender is the owner of the veWAVE
-        require(tokenInfoUser.numberNFT != 0, "You are not the owner of this veWAVE");
+        _require(tokenInfoUser.numberNFT != 0, Errors.NOT_OWNER_VEWAVE);
         // Get the current user's information for the specified tokenId
         UserInfo storage user = userInfo[_pid][msg.sender][_tokenId];
         // Get the current user's information for the specified pid and tokenId
@@ -493,17 +493,16 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
             pool.lastRewardBlock = block.number;
             poolInfo[_pid] = pool;
 
-            emit LogUpdatePool(
-                _pid,
-                pool.lastRewardBlock,
-                totalAmountLockedWave,
-                pool.accWAVEPerShare
-            );
+            emit LogUpdatePool(_pid, pool.lastRewardBlock, totalAmountLockedWave, pool.accWAVEPerShare);
         }
     }
 
     // View function to see the pending WAVE rewards for a user
-    function pendingWave(uint256 _pid, address _user, uint256 _tokenId) external view validPid(_pid) returns (uint256 pending) {
+    function pendingWave(
+        uint256 _pid,
+        address _user,
+        uint256 _tokenId
+    ) external view validPid(_pid) returns (uint256 pending) {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user][_tokenId];
         // Get the accumulated WAVE per LP token
@@ -563,7 +562,9 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     }
 
     // Update reward variables of the given anotherToken pool to be up-to-date.
-    function updatePoolAnotherToken(uint256 _pid) public validPid(_pid) validAnotherPid(_pid) returns (PoolInfoAnotherToken memory poolAnotherToken) {
+    function updatePoolAnotherToken(
+        uint256 _pid
+    ) public validPid(_pid) validAnotherPid(_pid) returns (PoolInfoAnotherToken memory poolAnotherToken) {
         poolAnotherToken = poolInfoAnotherToken[_pid];
 
         if (block.number > poolAnotherToken.lastRewardBlock) {
@@ -626,7 +627,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     // Update the emission rate of the WAVE token
     function updateEmissionRate(uint256 _wavePerBlock) external onlyOwner {
         // Ensure the emission rate does not exceed the maximum of 6 anothertoken per block
-        require(_wavePerBlock <= 6e18, "maximum emission rate of 6 anothertoken per block exceeded");
+        _require(_wavePerBlock <= 6e18, Errors.EXCEEDED_PER_BLOCK);
         // Update the emission rate
         wavePerBlock = _wavePerBlock;
 

@@ -79,7 +79,7 @@ export const initEmissionDistributor = async (
 
   const farmPid = 0;
   const emissionDistributor: WaveEmissionDistributor = await deployContract(
-    'contracts/EmissionDistributor.sol:WaveEmissionDistributor',
+    'contracts/WaveEmissionDistributor.sol:WaveEmissionDistributor',
     [veWave.address, waveToken.address, masterChef.address, farmPid, waveReceipt.address],
   );
   await waveReceipt.transferOwnership(emissionDistributor.address);

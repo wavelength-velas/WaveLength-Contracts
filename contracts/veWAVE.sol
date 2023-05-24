@@ -8,6 +8,8 @@ import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 
+import "./libraries/Errors.sol";
+
 /**
  * @title   Voting Escrow
  * @author  Curve Finance
@@ -143,14 +145,14 @@ contract ve is IERC721, IERC721Metadata {
     uint8 internal constant _entered = 2;
     uint8 internal _entered_state = 1;
     modifier nonreentrant() {
-        require(_entered_state == _not_entered);
+        _require(_entered_state == _not_entered, Errors.REENTRANCY);
         _entered_state = _entered;
         _;
         _entered_state = _not_entered;
     }
 
     modifier onlyVoter() {
-        require(msg.sender == voter);
+        _require(msg.sender == voter, Errors.NOT_VOTER);
         _;
     }
 
@@ -299,7 +301,7 @@ contract ve is IERC721, IERC721Metadata {
     ///      Throws if `_tokenId` is owned by someone.
     function _addTokenTo(address _to, uint256 _tokenId) internal {
         // Throws if `_tokenId` is owned by someone
-        require(idToOwner[_tokenId] == address(0));
+        _require(idToOwner[_tokenId] == address(0), Errors.ALREADY_OWNED);
         // Change the owner
         idToOwner[_tokenId] = _to;
         // Update owner token index tracking
@@ -312,7 +314,7 @@ contract ve is IERC721, IERC721Metadata {
     ///      Throws if `_from` is not the current owner.
     function _removeTokenFrom(address _from, uint256 _tokenId) internal {
         // Throws if `_from` is not the current owner
-        require(idToOwner[_tokenId] == _from);
+        _require(idToOwner[_tokenId] == _from, Errors.NOT_FROM);
         // Change the owner
         idToOwner[_tokenId] = address(0);
         // Update owner token index tracking
@@ -325,7 +327,7 @@ contract ve is IERC721, IERC721Metadata {
     ///      Throws if `_owner` is not the current owner.
     function _clearApproval(address _owner, uint256 _tokenId) internal {
         // Throws if `_owner` is not the current owner
-        require(idToOwner[_tokenId] == _owner);
+        _require(idToOwner[_tokenId] == _owner, Errors.NOT_OWNER);
         if (idToApprovals[_tokenId] != address(0)) {
             // Reset approvals
             idToApprovals[_tokenId] = address(0);
@@ -344,9 +346,9 @@ contract ve is IERC721, IERC721Metadata {
         uint256 _tokenId,
         address _sender
     ) internal {
-        require(attachments[_tokenId] == 0 && !voted[_tokenId], "attached");
+        _require(attachments[_tokenId] == 0 && !voted[_tokenId], Errors.ATTACHED);
         // Check requirements
-        require(_isApprovedOrOwner(_sender, _tokenId));
+        _require(_isApprovedOrOwner(_sender, _tokenId), Errors.NOT_APPROVED);
         // Clear approval. Throws if `_from` is not the current owner
         _clearApproval(_from, _tokenId);
         // Remove NFT. Throws if `_tokenId` is not a valid NFT
@@ -452,13 +454,13 @@ contract ve is IERC721, IERC721Metadata {
     function approve(address _approved, uint256 _tokenId) public {
         address owner = idToOwner[_tokenId];
         // Throws if `_tokenId` is not a valid NFT
-        require(owner != address(0));
+        _require(owner != address(0), Errors.INVALID_OWNER);
         // Throws if `_approved` is the current owner
-        require(_approved != owner);
+        _require(_approved != owner, Errors.NOT_MATCH_OWNER_APPROVED);
         // Check requirements
         bool senderIsOwner = (idToOwner[_tokenId] == msg.sender);
         bool senderIsApprovedForAll = (ownerToOperators[owner])[msg.sender];
-        require(senderIsOwner || senderIsApprovedForAll);
+        _require(senderIsOwner || senderIsApprovedForAll, Errors.NOT_APPROVED);
         // Set the approval
         idToApprovals[_tokenId] = _approved;
         emit Approval(owner, _approved, _tokenId);
@@ -472,7 +474,7 @@ contract ve is IERC721, IERC721Metadata {
     /// @param _approved True if the operators is approved, false to revoke approval.
     function setApprovalForAll(address _operator, bool _approved) external {
         // Throws if `_operator` is the `msg.sender`
-        require(_operator != msg.sender);
+        _require(_operator != msg.sender, Errors.NOT_OPERATOR);
         ownerToOperators[msg.sender][_operator] = _approved;
         emit ApprovalForAll(msg.sender, _operator, _approved);
     }
@@ -485,7 +487,7 @@ contract ve is IERC721, IERC721Metadata {
     /// @return A boolean that indicates if the operation was successful.
     function _mint(address _to, uint256 _tokenId) internal returns (bool) {
         // Throws if `_to` is zero address
-        require(_to != address(0));
+        _require(_to != address(0), Errors.INVALID_TO);
         // Add NFT. Throws if `_tokenId` is owned by someone
         _addTokenTo(_to, _tokenId);
         emit Transfer(address(0), _to, _tokenId);
@@ -703,10 +705,10 @@ contract ve is IERC721, IERC721Metadata {
     }
 
     function merge(uint256 _from, uint256 _to) external {
-        require(attachments[_from] == 0 && !voted[_from], "attached");
-        require(_from != _to);
-        require(_isApprovedOrOwner(msg.sender, _from));
-        require(_isApprovedOrOwner(msg.sender, _to));
+        _require(attachments[_from] == 0 && !voted[_from], Errors.ATTACHED);
+        _require(_from != _to, Errors.EQUAL_FROM_TO);
+        _require(_isApprovedOrOwner(msg.sender, _from), Errors.NOT_APPROVED);
+        _require(_isApprovedOrOwner(msg.sender, _to), Errors.NOT_APPROVED);
 
         LockedBalance memory _locked0 = locked[_from];
         LockedBalance memory _locked1 = locked[_to];
@@ -753,9 +755,9 @@ contract ve is IERC721, IERC721Metadata {
             mintAmount = shareOfFreshBeets;
         }
 
-        require(_value > 0); // dev: need non-zero value
-        require(unlock_time > block.timestamp, "Can only lock until time in the future");
-        require(unlock_time <= block.timestamp + MAXTIME, "Voting lock can be 6 months max");
+        _require(_value > 0, Errors.ZERO_VALUE); // dev: need non-zero value
+        _require(unlock_time > block.timestamp, Errors.UNLOCK_TIME);
+        _require(unlock_time <= block.timestamp + MAXTIME, Errors.OVER_MAX_TIME);
 
         ++tokenId;
         uint256 _tokenId = tokenId;
@@ -778,15 +780,15 @@ contract ve is IERC721, IERC721Metadata {
     /// @notice Extend the unlock time for `_tokenId`
     /// @param _lock_duration New number of seconds until tokens unlock
     function increase_unlock_time(uint256 _tokenId, uint256 _lock_duration) external nonreentrant {
-        require(_isApprovedOrOwner(msg.sender, _tokenId));
+        _require(_isApprovedOrOwner(msg.sender, _tokenId), Errors.NOT_APPROVED);
 
         LockedBalance memory _locked = locked[_tokenId];
         uint256 unlock_time = ((block.timestamp + _lock_duration) / WEEK) * WEEK; // Locktime is rounded down to weeks
 
-        require(_locked.end > block.timestamp, "Lock expired");
-        require(_locked.amount > 0, "Nothing is locked");
-        require(unlock_time > _locked.end, "Can only increase lock duration");
-        require(unlock_time <= block.timestamp + MAXTIME, "Voting lock can be 6 months max");
+        _require(_locked.end > block.timestamp, Errors.LOCK_EXPIRED);
+        _require(_locked.amount > 0, Errors.NOTHING_LOCK);
+        _require(unlock_time > _locked.end, Errors.INCREASE_LOCK_DURATION);
+        _require(unlock_time <= block.timestamp + MAXTIME, Errors.OVER_MAX_TIME);
 
         _deposit_for(_tokenId, 0, unlock_time, _locked, DepositType.INCREASE_UNLOCK_TIME);
     }
@@ -794,11 +796,11 @@ contract ve is IERC721, IERC721Metadata {
     /// @notice Withdraw all tokens for `_tokenId`
     /// @dev Only possible if the lock has expired
     function leave(uint256 _tokenId) external nonreentrant {
-        require(_isApprovedOrOwner(msg.sender, _tokenId));
-        require(attachments[_tokenId] == 0 && !voted[_tokenId], "attached");
+        _require(_isApprovedOrOwner(msg.sender, _tokenId), Errors.NOT_APPROVED);
+        _require(attachments[_tokenId] == 0 && !voted[_tokenId], Errors.ATTACHED);
 
         LockedBalance memory _locked = locked[_tokenId];
-        require(block.timestamp >= _locked.end, "The lock didn't expire");
+        _require(block.timestamp >= _locked.end, Errors.NOT_EXPIRED);
         uint256 value = uint256(int256(_locked.amount));
 
         locked[_tokenId] = LockedBalance(0, 0);
@@ -870,7 +872,7 @@ contract ve is IERC721, IERC721Metadata {
     /// @dev Returns current token URI metadata
     /// @param _tokenId Token ID to fetch URI for.
     function tokenURI(uint256 _tokenId) external view returns (string memory) {
-        require(idToOwner[_tokenId] != address(0), "Query for nonexistent token");
+        _require(idToOwner[_tokenId] != address(0), Errors.INVALID_TOKEN);
         LockedBalance memory _locked = locked[_tokenId];
         return
             _tokenURI(_tokenId, _balanceOfNFT(_tokenId, block.timestamp), _locked.end, uint256(int256(_locked.amount)));
@@ -893,7 +895,7 @@ contract ve is IERC721, IERC721Metadata {
     function _balanceOfAtNFT(uint256 _tokenId, uint256 _block) internal view returns (uint256) {
         // Copying and pasting totalSupply code because Vyper cannot pass by
         // reference yet
-        require(_block <= block.number);
+        _require(_block <= block.number, Errors.INVALID_BLOCK_NUMBER);
 
         // Binary search
         uint256 _min = 0;
@@ -989,7 +991,7 @@ contract ve is IERC721, IERC721Metadata {
     /// @param _block Block to calculate the total voting power at
     /// @return Total voting power at `_block`
     function totalSupplyAt(uint256 _block) external view returns (uint256) {
-        require(_block <= block.number);
+        _require(_block <= block.number, Errors.INVALID_BLOCK_NUMBER);
         uint256 _epoch = epoch;
         uint256 target_epoch = _find_block_epoch(_block, _epoch);
 
@@ -1072,7 +1074,7 @@ contract ve is IERC721, IERC721Metadata {
     }
 
     function _burn(uint256 _tokenId) internal {
-        require(_isApprovedOrOwner(msg.sender, _tokenId), "caller is not owner nor approved");
+        _require(_isApprovedOrOwner(msg.sender, _tokenId), Errors.NOT_APPROVED);
 
         address owner = ownerOf(_tokenId);
 

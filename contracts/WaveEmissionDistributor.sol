@@ -386,13 +386,11 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         // Get the current user's information for the specified tokenId
         UserInfo storage user = userInfo[_pid][msg.sender][_tokenId];
         // Get the current user's information for the specified pid and tokenId
-        UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
+        // UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
         // Get the current user's LP token amount
         uint256 amount = user.amount;
-        user.amount = 0;
-        user.rewardDebt = 0;
-        userAnotherToken.amount = 0;
-        userAnotherToken.rewardDebt = 0;
+        delete userInfo[_pid][msg.sender][_tokenId];
+        delete userInfoAnotherToken[_pid][msg.sender][_tokenId];
         // Transfer the user's LP token back to them using the IERC721 contract
         IERC721(veWave).safeTransferFrom(address(this), msg.sender, _tokenId);
 

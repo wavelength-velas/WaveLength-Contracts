@@ -148,17 +148,13 @@ describe('EmissionDistributor Test', () => {
   });
 
   it('emergencyWithdraw on EmissionDistributor', async () => {
-    await expect(emissionDistributor.connect(treasury).emergencyWithdraw(0, 1)).to.be.revertedWith(
-      'You are not the owner of this veWAVE',
-    );
+    await expect(emissionDistributor.connect(treasury).emergencyWithdraw(0, 1)).to.be.revertedWith('BAL#706');
   });
 
   it('withdrawAndHarvest on EmissionDistributor', async () => {
     expect(await veWave.balanceOf(owner.address)).to.be.equal(0);
     expect(await veWave.balanceOf(emissionDistributor.address)).to.be.equal(1);
-    await expect(emissionDistributor.withdrawAndDistribute(1, 1)).to.be.revertedWith(
-      'You are not the owner of this veWAVE',
-    );
+    await expect(emissionDistributor.withdrawAndDistribute(1, 1)).to.be.revertedWith('BAL#706');
     expect(await emissionDistributor.withdrawAndDistribute(0, 1)).to.emit(emissionDistributor, 'Withdraw');
     expect(await veWave.balanceOf(owner.address)).to.be.equal(1);
     expect(await veWave.balanceOf(emissionDistributor.address)).to.be.equal(0);

@@ -78,6 +78,7 @@ library Errors {
     uint256 internal constant NOT_OWNER_VEWAVE = 706;
     uint256 internal constant NOT_ENOUGH_VEWAVERECEIPT = 707;
     uint256 internal constant EXCEEDED_PER_BLOCK = 708;
+    uint256 internal constant NOT_ADDED_ANOTHER = 709;
 
     // veWave
     uint256 internal constant REENTRANCY = 801;

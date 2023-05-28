@@ -420,6 +420,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         poolInfo[totalPids] = PoolInfo({ allocPoint: _allocPoint, lastRewardBlock: block.number, accWAVEPerShare: 0 });
         totalAllocPoint = totalAllocPoint + _allocPoint;
         totalPids++;
+        _require(totalPids <= totalPidsAnotherToken, Errors.NOT_ADDED_ANOTHER);
         // Emit an event to log the pool addition
         emit LogPoolAddition(totalPids - 1, _allocPoint);
     }

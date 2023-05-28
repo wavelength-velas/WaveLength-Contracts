@@ -16,7 +16,7 @@ import "./libraries/Errors.sol";
  * @notice  Votes have a weight depending on time, so that users are
  *          committed to the future of (whatever they are voting for)
  * @dev     Vote weight decays linearly over time. Lock time cannot be
- *          more than `MAXTIME` (4 years).
+ *          more than `MAXTIME` (1 year).
 
  *          Voting escrow to have time-weighted votes
  *          Votes have a weight depending on time, so that users are committed
@@ -29,7 +29,7 @@ import "./libraries/Errors.sol";
  *            |  /
  *            |/
  *          0 +--------+------> time
- *                maxtime (4 years?)
+ *                maxtime (1 year)
  */
 
 contract ve is IERC721, IERC721Metadata {

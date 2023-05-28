@@ -81,6 +81,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     uint256 public constant ONE_DAY = 24 * 3600;
     uint256 public constant MINT_PRECISION = 1e18;
     uint256 public constant MINT_DENOMINATOR = 31_556_926;
+    uint256 public constant POOL_PERCENTAGE_ANOTHER = 1e3;
 
     WAVEMasterChef public chef; // MasterChef contract for controlling distribution
     uint256 public farmPid; // ID for the farming pool
@@ -553,7 +554,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
                 poolAnotherToken.anotherTokenPerBlock *
                 poolAnotherToken.allocPoint) / totalAnotherAllocPoint;
             // we take parts of the rewards for treasury, these can be subject to change, so we recalculate it a value of 1000 = 100%
-            uint256 anotherTokenRewardsForPool = (anotherTokenRewards * DENOMINATOR) / DENOMINATOR;
+            uint256 anotherTokenRewardsForPool = (anotherTokenRewards * POOL_PERCENTAGE_ANOTHER) / DENOMINATOR;
 
             // we calculate the new amount of accumulated anotherToken per veWAVE
             accAnotherTokenPerShare =

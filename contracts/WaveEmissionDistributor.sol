@@ -412,7 +412,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         // Transfer the user's LP token back to them using the IERC721 contract
         IERC721(veWave).safeTransferFrom(address(this), msg.sender, _tokenId);
 
-        uint256[] memory tokenIdsByCaller = tokenIdsByUser[msg.sender];
+        uint256[] storage tokenIdsByCaller = tokenIdsByUser[msg.sender];
         for (uint256 i = 0; i < tokenIdsByCaller.length; ) {
             if (tokenIdsByCaller[i] == _tokenId) {
                 tokenIdsByCaller[i] = tokenIdsByCaller[tokenIdsByCaller.length - 1];

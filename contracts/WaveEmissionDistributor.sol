@@ -198,7 +198,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
                 userAnotherToken.rewardDebt +
                 (amount * poolAnotherToken.accAnotherTokenPerShare) /
                 ACC_ANOTHERTOKEN_PRECISION;
-            IERC20(poolAnotherToken.tokenReward).safeTransferFrom(msg.sender, address(this), _amount);
+            IERC20(poolAnotherToken.tokenReward).safeTransferFrom(msg.sender, address(this), amount);
         }
         /*******************************************************************/
 

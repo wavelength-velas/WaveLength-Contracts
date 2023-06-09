@@ -618,7 +618,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
                     poolAnotherToken.anotherTokenPerBlock *
                     poolAnotherToken.allocPoint) / totalAnotherAllocPoint;
 
-                uint256 anotherTokenRewardsForPool = (anotherTokenRewards * DENOMINATOR) / DENOMINATOR;
+                uint256 anotherTokenRewardsForPool = (anotherTokenRewards * POOL_PERCENTAGE_ANOTHER) / DENOMINATOR;
 
                 poolAnotherToken.accAnotherTokenPerShare =
                     poolAnotherToken.accAnotherTokenPerShare +

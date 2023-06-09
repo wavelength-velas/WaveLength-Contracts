@@ -36,9 +36,9 @@ contract ve is IERC721, IERC721Metadata {
     using SafeERC20 for IERC20;
 
     enum DepositType {
-        DEPOSIT_FOR_TYPE,
+        // DEPOSIT_FOR_TYPE,
         CREATE_LOCK_TYPE,
-        INCREASE_LOCK_AMOUNT,
+        // INCREASE_LOCK_AMOUNT,
         INCREASE_UNLOCK_TIME,
         MERGE_TYPE
     }
@@ -486,8 +486,6 @@ contract ve is IERC721, IERC721Metadata {
     /// @param _tokenId The token id to mint.
     /// @return A boolean that indicates if the operation was successful.
     function _mint(address _to, uint256 _tokenId) internal returns (bool) {
-        // Throws if `_to` is zero address
-        _require(_to != address(0), Errors.INVALID_TO);
         // Add NFT. Throws if `_tokenId` is owned by someone
         _addTokenTo(_to, _tokenId);
         emit Transfer(address(0), _to, _tokenId);
@@ -656,9 +654,7 @@ contract ve is IERC721, IERC721Metadata {
         (old_locked.amount, old_locked.end) = (_locked.amount, _locked.end);
         // Adding to existing lock, or if a lock is expired - creating a new one
         _locked.amount += int128(int256(_value));
-        if (unlock_time != 0) {
-            _locked.end = unlock_time;
-        }
+        _locked.end = unlock_time;
         locked[_tokenId] = _locked;
 
         // Possibilities:
@@ -786,7 +782,6 @@ contract ve is IERC721, IERC721Metadata {
         uint256 unlock_time = ((block.timestamp + _lock_duration) / WEEK) * WEEK; // Locktime is rounded down to weeks
 
         _require(_locked.end > block.timestamp, Errors.LOCK_EXPIRED);
-        _require(_locked.amount > 0, Errors.NOTHING_LOCK);
         _require(unlock_time > _locked.end, Errors.INCREASE_LOCK_DURATION);
         _require(unlock_time <= block.timestamp + MAXTIME, Errors.OVER_MAX_TIME);
 
@@ -1055,9 +1050,6 @@ contract ve is IERC721, IERC721Metadata {
         // Inspired by OraclizeAPI's implementation - MIT license
         // https://github.com/oraclize/ethereum-api/blob/b42146b063c7d6ee1358846c198246239e9360e8/oraclizeAPI_0.4.25.sol
 
-        if (value == 0) {
-            return "0";
-        }
         uint256 temp = value;
         uint256 digits;
         while (temp != 0) {
@@ -1074,8 +1066,6 @@ contract ve is IERC721, IERC721Metadata {
     }
 
     function _burn(uint256 _tokenId) internal {
-        _require(_isApprovedOrOwner(msg.sender, _tokenId), Errors.NOT_APPROVED);
-
         address owner = ownerOf(_tokenId);
 
         // Clear approval

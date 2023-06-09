@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 import "./libraries/Errors.sol";
@@ -14,7 +13,7 @@ import "./WAVEMasterChef.sol";
 import "./veWAVE.sol";
 import "./veWAVEReceipt.sol";
 
-contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWAVE"), AccessControl, Ownable {
+contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWAVE"), Ownable {
     using SafeERC20 for IERC20;
 
     // TokenInfo Struct
@@ -198,7 +197,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
                 userAnotherToken.rewardDebt +
                 (amount * poolAnotherToken.accAnotherTokenPerShare) /
                 ACC_ANOTHERTOKEN_PRECISION;
-            IERC20(poolAnotherToken.tokenReward).safeTransferFrom(msg.sender, address(this), _amount);
+            IERC20(poolAnotherToken.tokenReward).safeTransferFrom(msg.sender, address(this), amount);
         }
         /*******************************************************************/
 
@@ -412,7 +411,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         // Transfer the user's LP token back to them using the IERC721 contract
         IERC721(veWave).safeTransferFrom(address(this), msg.sender, _tokenId);
 
-        uint256[] memory tokenIdsByCaller = tokenIdsByUser[msg.sender];
+        uint256[] storage tokenIdsByCaller = tokenIdsByUser[msg.sender];
         for (uint256 i = 0; i < tokenIdsByCaller.length; ) {
             if (tokenIdsByCaller[i] == _tokenId) {
                 tokenIdsByCaller[i] = tokenIdsByCaller[tokenIdsByCaller.length - 1];

@@ -430,29 +430,33 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     }
 
     /**
-     * @notice Add a new pool to the pool. Can only be called by the owner.
+     * @notice Add a new pool to the pool and another token. Can only be called by the owner.
      */
     function add(
         // Add a new pool with the specified allocation point and current timestamp to the poolInfo array
-        uint256 _allocPoint
+        uint256 _allocPoint,
+        address _anotherTokenReward,
+        uint256 _anotherTokenPerBlock,
+        bool _anotherIsClosed,
+        uint256 _anotherAllocPoint
     ) external onlyOwner {
         poolInfo[totalPids] = PoolInfo({ allocPoint: _allocPoint, lastRewardBlock: block.number, accWAVEPerShare: 0 });
         totalAllocPoint = totalAllocPoint + _allocPoint;
         totalPids++;
-        _require(totalPids <= totalPidsAnotherToken, Errors.NOT_ADDED_ANOTHER);
+        addAnotherToken(_anotherTokenReward, _anotherTokenPerBlock, _anotherIsClosed, _anotherAllocPoint);
         // Emit an event to log the pool addition
         emit LogPoolAddition(totalPids - 1, _allocPoint);
     }
 
     /**
-     * @notice Add a new AnotherToken to the pool. Can only be called by the owner.
+     * @notice Add a new AnotherToken to the pool
      */
     function addAnotherToken(
         address _tokenReward,
         uint256 _anotherTokenPerBlock,
         bool _isClosed,
         uint256 _allocPoint
-    ) external onlyOwner {
+    ) private {
         // Add a new pool with the specified token reward, block reward, closed status, allocation point and current timestamp to the poolInfoAnotherToken array
         poolInfoAnotherToken[totalPidsAnotherToken] = PoolInfoAnotherToken({
             tokenReward: _tokenReward,

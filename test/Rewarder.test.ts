@@ -7,7 +7,7 @@ import { WAVEToken } from '../typechain-types/contracts/WAVEToken';
 import { WAVEMasterChef } from '../typechain-types/contracts/WAVEMasterChef.sol/WAVEMasterChef';
 import { RewarderMock } from '../typechain-types/contracts/mocks/RewarderMock.sol/RewarderMock';
 import { Ve } from '../typechain-types/contracts/veWAVE.sol/Ve';
-import { WaveEmissionDistributor } from '../typechain-types/contracts/EmissionDistributor.sol/WaveEmissionDistributor';
+import { WaveEmissionDistributor } from '../typechain-types/contracts/WaveEmissionDistributor';
 import {
   initEmissionDistributor,
   initRewarder,
@@ -47,8 +47,11 @@ describe('Rewarder Test', () => {
     await waveToken.transfer(user1.address, ethers.utils.parseEther('5'));
     await waveToken.transfer(user2.address, ethers.utils.parseEther('5'));
 
-    await emissionDistributor.add(ethers.utils.parseEther('1'));
-    await emissionDistributor.addAnotherToken(
+    await rewardToken.transfer(user1.address, ethers.utils.parseEther('5'));
+    await rewardToken.transfer(user2.address, ethers.utils.parseEther('5'));
+
+    await emissionDistributor.add(
+      ethers.utils.parseEther('1'),
       rewardToken.address,
       ethers.utils.parseEther('1'),
       false,
@@ -77,12 +80,14 @@ describe('Rewarder Test', () => {
       await waveToken.connect(user1).approve(veWave.address, user1Staking);
       await veWave.connect(user1).create_lock(user1Staking, lockTime);
       await veWave.connect(user1).approve(emissionDistributor.address, user1TokenId);
+      await rewardToken.connect(user1).approve(emissionDistributor.address, ethers.utils.parseEther('5'));
       await emissionDistributor.connect(user1).depositToChef(0, user1TokenId);
       // User2 staking
       const user2Staking = ethers.utils.parseEther('1');
       await waveToken.connect(user2).approve(veWave.address, user2Staking);
       await veWave.connect(user2).create_lock(user2Staking, lockTime);
       await veWave.connect(user2).approve(emissionDistributor.address, user2TokenId);
+      await rewardToken.connect(user2).approve(emissionDistributor.address, ethers.utils.parseEther('5'));
       await emissionDistributor.connect(user2).depositToChef(0, user2TokenId);
     });
 
@@ -109,12 +114,14 @@ describe('Rewarder Test', () => {
       await waveToken.connect(user1).approve(veWave.address, stakingAmount);
       await veWave.connect(user1).create_lock(stakingAmount, user1LockTime);
       await veWave.connect(user1).approve(emissionDistributor.address, user1TokenId);
+      await rewardToken.connect(user1).approve(emissionDistributor.address, ethers.utils.parseEther('5'));
       await emissionDistributor.connect(user1).depositToChef(0, user1TokenId);
       // // User2 staking
       const user2LockTime = duration.weeks('2');
       await waveToken.connect(user2).approve(veWave.address, stakingAmount);
       await veWave.connect(user2).create_lock(stakingAmount, user2LockTime);
       await veWave.connect(user2).approve(emissionDistributor.address, user2TokenId);
+      await rewardToken.connect(user2).approve(emissionDistributor.address, ethers.utils.parseEther('5'));
       await emissionDistributor.connect(user2).depositToChef(0, user2TokenId);
     });
 

@@ -6,7 +6,7 @@ import { expect } from 'chai';
 import { WAVEToken } from '../typechain-types/contracts/WAVEToken';
 import { WAVEMasterChef } from '../typechain-types/contracts/WAVEMasterChef.sol/WAVEMasterChef';
 import { Ve } from '../typechain-types/contracts/veWAVE.sol/Ve';
-import { WaveEmissionDistributor } from '../typechain-types/contracts/EmissionDistributor.sol/WaveEmissionDistributor';
+import { WaveEmissionDistributor } from '../typechain-types/contracts/WaveEmissionDistributor';
 import { RewarderMock } from '../typechain-types/contracts/mocks/RewarderMock.sol/RewarderMock';
 import { ERC20Mock } from '../typechain-types/contracts/mocks/ERC20Mock.sol/ERC20Mock';
 import { initEmissionDistributor, initRewarder, duration, advanceTime } from './utilities';
@@ -32,7 +32,7 @@ describe('EmissionDistributor Test', () => {
 
     await emissionDistributor.updateEmissionRate(ethers.utils.parseEther('0.001'));
     await waveToken.transfer(emissionDistributor.address, ethers.utils.parseEther('1'));
-    await rewardToken.transfer(emissionDistributor.address, ethers.utils.parseEther('1'));
+    // await rewardToken.transfer(emissionDistributor.address, ethers.utils.parseEther('1'));
   });
 
   it('create lock on veWave', async () => {
@@ -75,37 +75,23 @@ describe('EmissionDistributor Test', () => {
   });
 
   it('add main pool to emissiondistributor', async () => {
-    const allocPoint = ethers.utils.parseEther('1');
-    await expect(emissionDistributor.connect(treasury).add(allocPoint)).to.be.revertedWith(
-      'Ownable: caller is not the owner',
-    );
-
-    expect(await emissionDistributor.add(allocPoint))
-      .to.be.emit(emissionDistributor, 'LogPoolAddition')
-      .withArgs(0, allocPoint);
-    const poolInfo = await emissionDistributor.poolInfo(0);
-    expect(poolInfo.allocPoint).to.equal(allocPoint);
-  });
-
-  it('add another pool to emissiondistributor', async () => {
     const anotherTokenPerBlock = ethers.utils.parseEther('1');
     const allocPoint = ethers.utils.parseEther('1');
     await expect(
       emissionDistributor
         .connect(treasury)
-        .addAnotherToken(rewardToken.address, anotherTokenPerBlock, false, allocPoint),
+        .add(allocPoint, rewardToken.address, ethers.utils.parseEther('1'), false, ethers.utils.parseEther('1')),
     ).to.be.revertedWith('Ownable: caller is not the owner');
 
-    expect(
-      await emissionDistributor.addAnotherToken(
-        rewardToken.address,
-        ethers.utils.parseEther('1'),
-        false,
-        ethers.utils.parseEther('1'),
-      ),
-    )
-      .to.be.emit(emissionDistributor, 'LogPoolAnotherTokenAddition')
-      .withArgs(0, rewardToken.address, false, allocPoint);
+    await emissionDistributor.add(
+      allocPoint,
+      rewardToken.address,
+      ethers.utils.parseEther('1'),
+      false,
+      ethers.utils.parseEther('1'),
+    );
+    const poolInfo = await emissionDistributor.poolInfo(0);
+    expect(poolInfo.allocPoint).to.equal(allocPoint);
     expect(await emissionDistributor.totalPidsAnotherToken()).to.equal(1);
     const poolInfoAnotherToken = await emissionDistributor.poolInfoAnotherToken(0);
     expect(poolInfoAnotherToken.tokenReward).to.equal(rewardToken.address);
@@ -121,6 +107,7 @@ describe('EmissionDistributor Test', () => {
   });
 
   it('depositToChef on EmissionDistributor', async () => {
+    await rewardToken.approve(emissionDistributor.address, ethers.utils.parseEther('1'));
     expect(await emissionDistributor.depositToChef(0, 1))
       .to.emit(emissionDistributor, 'Deposit')
       .withArgs(owner.address, 0, 1, owner.address);

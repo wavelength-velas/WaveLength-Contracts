@@ -6,7 +6,7 @@ import { REWARDReceiptMasterChef } from '../typechain-types/contracts/WaveReceip
 import { WAVEToken } from '../typechain-types/contracts/WAVEToken';
 import { WAVEMasterChef } from '../typechain-types/contracts/WAVEMasterChef.sol/WAVEMasterChef';
 import { Ve } from '../typechain-types/contracts/veWAVE.sol/Ve';
-import { WaveEmissionDistributor } from '../typechain-types/contracts/EmissionDistributor.sol/WaveEmissionDistributor';
+import { WaveEmissionDistributor } from '../typechain-types/contracts/WaveEmissionDistributor';
 import { RewarderMock } from '../typechain-types/contracts/mocks/RewarderMock.sol/RewarderMock';
 import { ERC20Mock } from '../typechain-types/contracts/mocks/ERC20Mock.sol/ERC20Mock';
 import { VeWAVEReceipt } from '../typechain-types/contracts/VeWAVEReceipt';
@@ -50,14 +50,13 @@ describe('veWaveReceipt Test', () => {
     await masterChef.add(200, emissionDistributor.address, rewarder.address);
 
     const allocPoint = ethers.utils.parseEther('1');
-    await emissionDistributor.add(allocPoint);
-
     const anotherPerBlock = ethers.utils.parseEther('1');
-    await emissionDistributor.addAnotherToken(rewardToken.address, anotherPerBlock, false, allocPoint);
+    await emissionDistributor.add(allocPoint, rewardToken.address, anotherPerBlock, false, allocPoint);
 
     await emissionDistributor.updateEmissionRate(ethers.utils.parseEther('1'));
 
     await veWave.approve(emissionDistributor.address, 1);
+    await rewardToken.approve(emissionDistributor.address, ethers.utils.parseEther('5'));
     await emissionDistributor.depositToChef(0, 1);
   });
 

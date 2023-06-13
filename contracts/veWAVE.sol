@@ -85,6 +85,7 @@ contract ve is IERC721, IERC721Metadata {
     uint256 internal constant MAXTIME = 1 * 365 * 86400;
     int128 internal constant iMAXTIME = 1 * 365 * 86400;
     uint256 internal constant MULTIPLIER = 1 ether;
+    uint256 internal constant BIT_LENGTH = 128;
     address public immutable token;
     uint256 public supply;
     mapping(uint256 => LockedBalance) public locked;
@@ -829,8 +830,7 @@ contract ve is IERC721, IERC721Metadata {
         // Binary search
         uint256 _min = 0;
         uint256 _max = max_epoch;
-        uint256 bitLength = 128;
-        for (uint256 i = 0; i < bitLength; ++i) {
+        for (uint256 i = 0; i < BIT_LENGTH; ++i) {
             // Will be always enough for 128-bit numbers
             if (_min >= _max) {
                 break;
@@ -895,7 +895,7 @@ contract ve is IERC721, IERC721Metadata {
         // Binary search
         uint256 _min = 0;
         uint256 _max = user_point_epoch[_tokenId];
-        for (uint256 i = 0; i < 128; ++i) {
+        for (uint256 i = 0; i < BIT_LENGTH; ++i) {
             // Will be always enough for 128-bit numbers
             if (_min >= _max) {
                 break;

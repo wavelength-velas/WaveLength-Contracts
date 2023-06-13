@@ -895,7 +895,7 @@ contract ve is IERC721, IERC721Metadata {
         // Binary search
         uint256 _min = 0;
         uint256 _max = user_point_epoch[_tokenId];
-        for (uint256 i = 0; i < 128; ++i) {
+        for (uint256 i = 0; i < BIT_LENGTH; ++i) {
             // Will be always enough for 128-bit numbers
             if (_min >= _max) {
                 break;

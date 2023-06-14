@@ -687,6 +687,8 @@ contract ve is IERC721, IERC721Metadata {
 
     function abstain(uint256 _tokenId) external onlyVoter {
         voted[_tokenId] = false;
+
+        emit Abstain(_tokenId);
     }
 
     function attach(uint256 _tokenId) external onlyVoter {

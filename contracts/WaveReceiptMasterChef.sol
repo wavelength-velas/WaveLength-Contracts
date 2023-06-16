@@ -1,4 +1,4 @@
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -78,7 +78,7 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Collection of functions related to the address type
@@ -293,7 +293,7 @@ library Address {
     }
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @title SafeERC20
@@ -387,7 +387,7 @@ library SafeERC20 {
     }
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library for managing
@@ -742,7 +742,7 @@ library EnumerableSet {
     }
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the optional metadata functions from the ERC20 standard.
@@ -766,7 +766,7 @@ interface IERC20Metadata is IERC20 {
     function decimals() external view returns (uint8);
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Provides information about the current execution context, including the
@@ -788,7 +788,7 @@ abstract contract Context {
     }
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -1138,7 +1138,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     ) internal virtual {}
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -1206,7 +1206,7 @@ abstract contract Ownable is Context {
     }
 }
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.19;
 
 contract veREWARDReceipt is ERC20("veREWARDReceipt", "veREWARDReceipt"), Ownable {
 
@@ -1220,7 +1220,7 @@ contract veREWARDReceipt is ERC20("veREWARDReceipt", "veREWARDReceipt"), Ownable
     }
 }
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.19;
 
 /*
     This master chef is based on SUSHI's version with some adjustments:
@@ -1363,7 +1363,7 @@ contract REWARDReceiptMasterChef is Ownable {
 
         poolInfo[0].allocPoint = _allocPoint;
 
-       
+
         emit LogSetPool(
             0,
             _allocPoint,
@@ -1400,7 +1400,7 @@ contract REWARDReceiptMasterChef is Ownable {
                 accRewardPerShare +
                 ((rewardRewardsForPool * ACC_REWARD_PRECISION) / lpSupply);
         }
-      
+
         pending =
             (user.amount * accRewardPerShare) /
             ACC_REWARD_PRECISION -
@@ -1449,7 +1449,7 @@ contract REWARDReceiptMasterChef is Ownable {
         UserInfo storage user = userInfo[0][_to];
 
         user.amount = user.amount + _amount;
-       
+
         user.rewardDebt =
             user.rewardDebt +
             (_amount * pool.accRewardPerShare) /

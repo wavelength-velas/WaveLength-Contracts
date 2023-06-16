@@ -1,4 +1,4 @@
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This is an empty interface used to represent either ERC20-conforming token contracts or ETH (using the zero
@@ -11,7 +11,7 @@ interface IAsset {
     // solhint-disable-previous-line no-empty-blocks
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev https://eips.ethereum.org/EIPS/eip-712[EIP 712] is a standard for hashing and signing of typed structured data.
@@ -97,7 +97,7 @@ abstract contract EIP712 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the SignatureValidator helper, used to support meta-transactions.
@@ -114,7 +114,7 @@ interface ISignaturesValidator {
     function getNextNonce(address user) external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the TemporarilyPausable helper.
@@ -138,7 +138,7 @@ interface ITemporarilyPausable {
         );
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthentication {
     /**
@@ -147,7 +147,7 @@ interface IAuthentication {
     function getActionId(bytes4 selector) external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable
 
@@ -326,7 +326,7 @@ library Errors {
     uint256 internal constant INSUFFICIENT_FLASH_LOAN_FEE_AMOUNT = 602;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Collection of functions related to the address type
@@ -387,7 +387,7 @@ library Address {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's uintXX/intXX casting operators with added overflow
@@ -418,7 +418,7 @@ library SafeCast {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library for managing
@@ -556,7 +556,7 @@ library EnumerableSet {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /* solhint-disable */
 
@@ -1045,7 +1045,7 @@ library LogExpMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow checks.
@@ -1124,7 +1124,7 @@ library Math {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library BalanceAllocation {
     using Math for uint256;
@@ -1384,7 +1384,7 @@ library BalanceAllocation {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // Based on the ReentrancyGuard library from OpenZeppelin contracts, altered to reduce bytecode size.
 // Modifier code is inlined by the compiler, which causes its code to appear multiple times in the codebase. By using
@@ -1455,7 +1455,7 @@ abstract contract ReentrancyGuard {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Full external interface for the Vault core contract - no external or public methods exist in the contract that
@@ -2201,7 +2201,7 @@ interface IVault is ISignaturesValidator, ITemporarilyPausable {
     // solhint-disable-previous-line func-name-mixedcase
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Building block for performing access control on external functions.
@@ -2254,7 +2254,7 @@ abstract contract Authentication is IAuthentication {
     function _canPerform(bytes32 actionId, address user) internal view virtual returns (bool);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Utility for signing Solidity function calls.
@@ -2389,7 +2389,7 @@ abstract contract SignaturesValidator is ISignaturesValidator, EIP712 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Allows for a contract to be paused during an initial period after deployment, disabling functionality. Can be
@@ -2502,7 +2502,7 @@ abstract contract TemporarilyPausable is ITemporarilyPausable {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Manages access control of Vault permissioned functions by relying on the Authorizer and signature validation.
@@ -2554,7 +2554,7 @@ abstract contract VaultAuthorization is
 
     constructor(IAuthorizer authorizer)
         // The Vault is a singleton, so it simply uses its own address to disambiguate action identifiers.
-        Authentication(bytes32(uint256(address(this))))
+        Authentication(bytes32(uint256(uint160(address(this)))))
         SignaturesValidator("Balancer V2 Vault")
     {
         _setAuthorizer(authorizer);
@@ -2652,7 +2652,7 @@ abstract contract VaultAuthorization is
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Maintains the Pool ID data structure, implements Pool ID creation and registration, and defines useful modifiers
@@ -2755,7 +2755,7 @@ abstract contract PoolRegistry is ReentrancyGuard, VaultAuthorization {
 
         serialized |= bytes32(uint256(nonce));
         serialized |= bytes32(uint256(specialization)) << (10 * 8);
-        serialized |= bytes32(uint256(pool)) << (12 * 8);
+        serialized |= bytes32(uint256(uint160(pool))) << (12 * 8);
 
         return serialized;
     }
@@ -2768,7 +2768,7 @@ abstract contract PoolRegistry is ReentrancyGuard, VaultAuthorization {
     function _getPoolAddress(bytes32 poolId) internal pure returns (address) {
         // 12 byte logical shift left to remove the nonce and specialization setting. We don't need to mask,
         // since the logical shift already sets the upper bits to zero.
-        return address(uint256(poolId) >> (12 * 8));
+        return address(uint160(uint256(poolId) >> (12 * 8)));
     }
 
     /**
@@ -2797,7 +2797,7 @@ abstract contract PoolRegistry is ReentrancyGuard, VaultAuthorization {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 abstract contract GeneralPoolsBalance {
     using BalanceAllocation for bytes32;
@@ -3005,7 +3005,7 @@ abstract contract GeneralPoolsBalance {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 abstract contract MinimalSwapInfoPoolsBalance is PoolRegistry {
     using BalanceAllocation for bytes32;
@@ -3215,7 +3215,7 @@ abstract contract MinimalSwapInfoPoolsBalance is PoolRegistry {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 abstract contract TwoTokenPoolsBalance is PoolRegistry {
     using BalanceAllocation for bytes32;
@@ -3284,7 +3284,7 @@ abstract contract TwoTokenPoolsBalance is PoolRegistry {
 
         // A Two Token Pool with no registered tokens is identified by having zero addresses for tokens A and B.
         TwoTokenPoolTokens storage poolTokens = _twoTokenPoolTokens[poolId];
-        _require(poolTokens.tokenA == IERC20(0) && poolTokens.tokenB == IERC20(0), Errors.TOKENS_ALREADY_SET);
+        _require(poolTokens.tokenA == IERC20(address(0)) && poolTokens.tokenB == IERC20(address(0)), Errors.TOKENS_ALREADY_SET);
 
         // Since tokenX < tokenY, tokenX is A and tokenY is B
         poolTokens.tokenA = tokenX;
@@ -3441,7 +3441,7 @@ abstract contract TwoTokenPoolsBalance is PoolRegistry {
 
         // Both tokens will either be zero (if unregistered) or non-zero (if registered), but we keep the full check for
         // clarity.
-        if (tokenA == IERC20(0) || tokenB == IERC20(0)) {
+        if (tokenA == IERC20(address(0)) || tokenB == IERC20(address(0))) {
             return (new IERC20[](0), new bytes32[](0));
         }
 
@@ -3577,7 +3577,7 @@ abstract contract TwoTokenPoolsBalance is PoolRegistry {
         TwoTokenPoolTokens storage poolTokens = _twoTokenPoolTokens[poolId];
 
         // The zero address can never be a registered token.
-        return (token == poolTokens.tokenA || token == poolTokens.tokenB) && token != IERC20(0);
+        return (token == poolTokens.tokenA || token == poolTokens.tokenB) && token != IERC20(address(0));
     }
 
     /**
@@ -3595,7 +3595,7 @@ abstract contract TwoTokenPoolsBalance is PoolRegistry {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 abstract contract AssetManagers is
     ReentrancyGuard,
@@ -3685,7 +3685,7 @@ abstract contract AssetManagers is
 
         // Since 'cash' and 'managed' are stored as uint112, `amount` is guaranteed to also fit in 112 bits. It will
         // therefore always fit in a 256 bit integer.
-        cashDelta = int256(-amount);
+        cashDelta = int256(0 - amount);
         managedDelta = int256(amount);
     }
 
@@ -3716,7 +3716,7 @@ abstract contract AssetManagers is
         // Since 'cash' and 'managed' are stored as uint112, `amount` is guaranteed to also fit in 112 bits. It will
         // therefore always fit in a 256 bit integer.
         cashDelta = int256(amount);
-        managedDelta = int256(-amount);
+        managedDelta = int256(0 - amount);
     }
 
     /**
@@ -3758,7 +3758,7 @@ abstract contract AssetManagers is
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 abstract contract PoolTokens is ReentrancyGuard, PoolRegistry, AssetManagers {
     using BalanceAllocation for bytes32;
@@ -3774,7 +3774,7 @@ abstract contract PoolTokens is ReentrancyGuard, PoolRegistry, AssetManagers {
         // Validates token addresses and assigns Asset Managers
         for (uint256 i = 0; i < tokens.length; ++i) {
             IERC20 token = tokens[i];
-            _require(token != IERC20(0), Errors.INVALID_TOKEN);
+            _require(token != IERC20(address(0)), Errors.INVALID_TOKEN);
 
             _poolAssetManagers[poolId][token] = assetManagers[i];
         }
@@ -3882,7 +3882,7 @@ abstract contract PoolTokens is ReentrancyGuard, PoolRegistry, AssetManagers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /* solhint-disable private-vars-leading-underscore */
 
@@ -4002,7 +4002,7 @@ library FixedPoint {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -4084,7 +4084,7 @@ interface IERC20 {
 
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library for managing an enumerable variant of Solidity's
@@ -4288,7 +4288,7 @@ library EnumerableMap {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title SafeERC20
@@ -4341,7 +4341,7 @@ library SafeERC20 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library InputHelpers {
     function ensureInputLengthMatch(uint256 a, uint256 b) internal pure {
@@ -4388,7 +4388,7 @@ library InputHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // Inspired by Aave Protocol's IFlashLoanReceiver.
 
@@ -4410,7 +4410,7 @@ interface IFlashLoanRecipient {
     ) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the WETH token contract used internally for wrapping and unwrapping, to support
@@ -4422,7 +4422,7 @@ interface IWETH is IERC20 {
     function withdraw(uint256 amount) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthorizer {
     /**
@@ -4436,7 +4436,7 @@ interface IAuthorizer {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IPoolSwapStructs {
     // This is not really an interface - it just defines common structs used by other interfaces: IGeneralPool and
@@ -4477,7 +4477,7 @@ interface IPoolSwapStructs {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for adding and removing liquidity that all Pool contracts should implement. Note that this is not
@@ -4549,7 +4549,7 @@ interface IBasePool is IPoolSwapStructs {
     ) external returns (uint256[] memory amountsOut, uint256[] memory dueProtocolFeeAmounts);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Pool contracts with the MinimalSwapInfo or TwoToken specialization settings should implement this interface.
@@ -4570,7 +4570,7 @@ interface IMinimalSwapInfoPool is IBasePool {
     ) external returns (uint256 amount);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev IPools with the General specialization setting should implement this interface.
@@ -4592,7 +4592,7 @@ interface IGeneralPool is IBasePool {
     ) external returns (uint256 amount);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 abstract contract AssetHelpers {
     // solhint-disable-next-line var-name-mixedcase
@@ -4647,7 +4647,7 @@ abstract contract AssetHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 abstract contract AssetTransfersHandler is AssetHelpers {
     using SafeERC20 for IERC20;
@@ -4753,7 +4753,7 @@ abstract contract AssetTransfersHandler is AssetHelpers {
 
         uint256 excess = msg.value - amountUsed;
         if (excess > 0) {
-            msg.sender.sendValue(excess);
+            payable(msg.sender).sendValue(excess);
         }
     }
 
@@ -4789,7 +4789,7 @@ abstract contract AssetTransfersHandler is AssetHelpers {
     ) internal virtual returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * Implement User Balance interactions, which combine Internal Balance and using the Vault's ERC20 allowance.
@@ -5020,7 +5020,7 @@ abstract contract UserBalance is ReentrancyGuard, AssetTransfersHandler, VaultAu
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev To reduce the bytecode size of the Vault, most of the protocol fee logic is not here, but in the
@@ -5063,7 +5063,7 @@ abstract contract Fees is IVault {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Stores the Asset Managers (by Pool and token), and implements the top level Asset Manager and Pool interfaces,
@@ -5354,7 +5354,7 @@ abstract contract PoolBalances is Fees, ReentrancyGuard, PoolTokens, UserBalance
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * Implements the Vault's high-level swap functionality.
@@ -5862,7 +5862,7 @@ abstract contract Swaps is ReentrancyGuard, PoolBalances {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Handles Flash Loans through the Vault. Calls the `receiveFlashLoan` hook on the flash loan recipient
@@ -5883,13 +5883,13 @@ abstract contract FlashLoans is Fees, ReentrancyGuard, TemporarilyPausable {
         uint256[] memory preLoanBalances = new uint256[](tokens.length);
 
         // Used to ensure `tokens` is sorted in ascending order, which ensures token uniqueness.
-        IERC20 previousToken = IERC20(0);
+        IERC20 previousToken = IERC20(address(0));
 
         for (uint256 i = 0; i < tokens.length; ++i) {
             IERC20 token = tokens[i];
             uint256 amount = amounts[i];
 
-            _require(token > previousToken, token == IERC20(0) ? Errors.ZERO_TOKEN : Errors.UNSORTED_TOKENS);
+            _require(token > previousToken, token == IERC20(address(0)) ? Errors.ZERO_TOKEN : Errors.UNSORTED_TOKENS);
             previousToken = token;
 
             preLoanBalances[i] = token.balanceOf(address(this));
@@ -5920,7 +5920,7 @@ abstract contract FlashLoans is Fees, ReentrancyGuard, TemporarilyPausable {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This an auxiliary contract to the Vault, deployed by it during construction. It offloads some of the tasks the
@@ -5955,7 +5955,7 @@ contract ProtocolFeesCollector is Authentication, ReentrancyGuard {
     constructor(IVault _vault)
         // The ProtocolFeesCollector is a singleton, so it simply uses its own address to disambiguate action
         // identifiers.
-        Authentication(bytes32(uint256(address(this))))
+        Authentication(bytes32(uint256(uint160(address(this)))))
     {
         vault = _vault;
     }
@@ -6017,7 +6017,7 @@ contract ProtocolFeesCollector is Authentication, ReentrancyGuard {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 pragma experimental ABIEncoderV2;
 
 /**

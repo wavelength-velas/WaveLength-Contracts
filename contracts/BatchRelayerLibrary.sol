@@ -1,4 +1,4 @@
-  pragma solidity ^0.7.0;
+  pragma solidity 0.8.19;
 
 interface IERC20PermitDAI {
     /**
@@ -24,7 +24,7 @@ interface IERC20PermitDAI {
     ) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library VaultHelpers {
     /**
@@ -35,11 +35,11 @@ library VaultHelpers {
     function toPoolAddress(bytes32 poolId) internal pure returns (address) {
         // 12 byte logical shift left to remove the nonce and specialization setting. We don't need to mask,
         // since the logical shift already sets the upper bits to zero.
-        return address(uint256(poolId) >> (12 * 8));
+        return address(uint160(uint256(poolId) >> (12 * 8)));
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthorizer {
     /**
@@ -52,7 +52,7 @@ interface IAuthorizer {
     ) external view returns (bool);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -110,7 +110,7 @@ interface IERC20Permit {
     function DOMAIN_SEPARATOR() external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the TemporarilyPausable helper.
@@ -134,7 +134,7 @@ interface ITemporarilyPausable {
         );
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the SignatureValidator helper, used to support meta-transactions.
@@ -151,7 +151,7 @@ interface ISignaturesValidator {
     function getNextNonce(address user) external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This is an empty interface used to represent either ERC20-conforming token contracts or ETH (using the zero
@@ -164,7 +164,7 @@ interface IAsset {
     // solhint-disable-previous-line no-empty-blocks
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -244,7 +244,7 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IStaticATokenLM is IERC20 {
     struct SignatureParams {
@@ -485,13 +485,13 @@ interface IStaticATokenLM is IERC20 {
     function REWARD_TOKEN() external returns (IERC20);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IstETH is IERC20 {
     function submit(address referral) external payable returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable-next-line max-line-length
 // Based on https://github.com/lidofinance/lido-dao/blob/2b46615a11dee77d4d22066f942f6c6afab9b87a/contracts/0.6.12/WstETH.sol
@@ -566,7 +566,7 @@ interface IwstETH is IERC20 {
     function tokensPerStEth() external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library WeightedPoolUserData {
     // In order to preserve backwards compatibility, make sure new join and exit kinds are added at the end of the enum.
@@ -627,7 +627,7 @@ library WeightedPoolUserData {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IFlashLoanRecipient {
     /**
@@ -647,7 +647,7 @@ interface IFlashLoanRecipient {
     ) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable
 
@@ -869,7 +869,7 @@ library Errors {
     uint256 internal constant INSUFFICIENT_FLASH_LOAN_FEE_AMOUNT = 602;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Contract module that helps prevent reentrant calls to a function.
@@ -936,7 +936,7 @@ abstract contract ReentrancyGuard {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Collection of functions related to the address type
@@ -1054,7 +1054,7 @@ library Address {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow checks.
@@ -1148,7 +1148,7 @@ library Math {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library InputHelpers {
     function ensureInputLengthMatch(uint256 a, uint256 b) internal pure {
@@ -1186,7 +1186,7 @@ library InputHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for WETH9.
@@ -1198,7 +1198,7 @@ interface IWETH is IERC20 {
     function withdraw(uint256 amount) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 abstract contract AssetHelpers {
     // solhint-disable-next-line var-name-mixedcase
@@ -1253,7 +1253,7 @@ abstract contract AssetHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Full external interface for the Vault core contract - no external or public methods exist in the contract that
@@ -1999,7 +1999,7 @@ interface IVault is ISignaturesValidator, ITemporarilyPausable {
     // solhint-disable-previous-line func-name-mixedcase
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title IBalancerRelayer
@@ -2013,7 +2013,7 @@ interface IBalancerRelayer {
     function multicall(bytes[] calldata data) external payable returns (bytes[] memory results);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title Balancer Relayer
@@ -2081,12 +2081,12 @@ contract BalancerRelayer is IBalancerRelayer, ReentrancyGuard {
     function _refundETH() private {
         uint256 remainingEth = address(this).balance;
         if (remainingEth > 0) {
-            msg.sender.sendValue(remainingEth);
+            payable(msg.sender).sendValue(remainingEth);
         }
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title IBaseRelayerLibrary
@@ -2119,7 +2119,7 @@ abstract contract IBaseRelayerLibrary is AssetHelpers {
     function _getChainedReferenceValue(uint256 ref) internal virtual returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title LidoWrapping
@@ -2138,7 +2138,7 @@ abstract contract LidoWrapping is IBaseRelayerLibrary {
      */
     constructor(IERC20 wstETH) {
         // Safely disable stETH wrapping if no address has been passed for wstETH
-        _stETH = wstETH != IERC20(0) ? IwstETH(address(wstETH)).stETH() : IstETH(0);
+        _stETH = wstETH != IERC20(address(0)) ? IwstETH(address(wstETH)).stETH() : IstETH(address(0));
         _wstETH = IwstETH(address(wstETH));
     }
 
@@ -2249,7 +2249,7 @@ abstract contract LidoWrapping is IBaseRelayerLibrary {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title VaultPermit
@@ -2283,7 +2283,7 @@ abstract contract VaultPermit is IBaseRelayerLibrary {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title AaveWrapping
@@ -2352,7 +2352,7 @@ abstract contract AaveWrapping is IBaseRelayerLibrary {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IProtocolFeesCollector {
     event SwapFeePercentageChanged(uint256 newSwapFeePercentage);
@@ -2379,7 +2379,7 @@ interface IProtocolFeesCollector {
     function vault() external view returns (IVault);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title VaultActions
@@ -2643,7 +2643,7 @@ abstract contract VaultActions is IBaseRelayerLibrary {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title Base Relayer Library
@@ -2788,7 +2788,7 @@ contract BaseRelayerLibrary is IBaseRelayerLibrary {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 pragma experimental ABIEncoderV2;
 
 /**

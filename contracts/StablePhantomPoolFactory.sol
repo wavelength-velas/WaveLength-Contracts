@@ -1,4 +1,4 @@
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This is an empty interface used to represent either ERC20-conforming token contracts or ETH (using the zero
@@ -11,7 +11,7 @@ interface IAsset {
     // solhint-disable-previous-line no-empty-blocks
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthentication {
     /**
@@ -20,7 +20,7 @@ interface IAuthentication {
     function getActionId(bytes4 selector) external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthorizer {
     /**
@@ -33,7 +33,7 @@ interface IAuthorizer {
     ) external view returns (bool);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the SignatureValidator helper, used to support meta-transactions.
@@ -50,7 +50,7 @@ interface ISignaturesValidator {
     function getNextNonce(address user) external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -130,7 +130,7 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // Inspired by Aave Protocol's IFlashLoanReceiver.
 interface IFlashLoanRecipient {
@@ -151,7 +151,7 @@ interface IFlashLoanRecipient {
     ) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for WETH9.
@@ -163,7 +163,7 @@ interface IWETH is IERC20 {
     function withdraw(uint256 amount) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAssetManager {
     /**
@@ -228,7 +228,7 @@ interface IAssetManager {
     function capitalOut(bytes32 poolId, uint256 amount) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IPoolSwapStructs {
     // This is not really an interface - it just defines common structs used by other interfaces: IGeneralPool and
@@ -269,7 +269,7 @@ interface IPoolSwapStructs {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 /**
  * @dev Interface for adding and removing liquidity that all Pool contracts should implement. Note that this is not
  * the complete Pool contract interface, as it is missing the swap hooks. Pool contracts should also inherit from
@@ -342,7 +342,7 @@ interface IBasePool is IPoolSwapStructs {
     function getPoolId() external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 pragma experimental ABIEncoderV2;
 
 /**
@@ -364,7 +364,7 @@ interface IMinimalSwapInfoPool is IBasePool {
     ) external returns (uint256 amount);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev IPools with the General specialization setting should implement this interface.
@@ -386,7 +386,7 @@ interface IGeneralPool is IBasePool {
     ) external returns (uint256 amount);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library for encoding and decoding values stored inside a 256 bit word. Typically used to pack multiple values in
@@ -716,7 +716,7 @@ library WordCodec {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library StablePhantomPoolUserDataHelpers {
     function joinKind(bytes memory self) internal pure returns (StablePhantomPool.JoinKindPhantom) {
@@ -740,7 +740,7 @@ library StablePhantomPoolUserDataHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable
 
@@ -962,7 +962,7 @@ library Errors {
     uint256 internal constant INSUFFICIENT_FLASH_LOAN_FEE_AMOUNT = 602;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library used to deploy contracts with specific code. This can be used for long-term storage of immutable data as
@@ -1033,7 +1033,7 @@ library CodeDeployer {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Building block for performing access control on external functions.
@@ -1086,7 +1086,7 @@ abstract contract Authentication is IAuthentication {
     function _canPerform(bytes32 actionId, address user) internal view virtual returns (bool);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -1151,7 +1151,7 @@ library SafeMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -1471,7 +1471,7 @@ contract ERC20 is IERC20 {
     ) internal virtual {}
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Exponentiation and logarithm functions for 18 decimal fixed point numbers (both base and exponent/argument).
@@ -1968,7 +1968,7 @@ library LogExpMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library StablePoolUserData {
     // In order to preserve backwards compatibility, make sure new join and exit kinds are added at the end of the enum.
@@ -2020,7 +2020,7 @@ library StablePoolUserData {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library InputHelpers {
     function ensureInputLengthMatch(uint256 a, uint256 b) internal pure {
@@ -2058,7 +2058,7 @@ library InputHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable
 
@@ -2133,7 +2133,7 @@ function _getSortedTokenIndexes(
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /* solhint-disable private-vars-leading-underscore */
 
@@ -2253,7 +2253,7 @@ library FixedPoint {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow checks.
@@ -2347,7 +2347,7 @@ library Math {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library StableMath {
     using FixedPoint for uint256;
@@ -2853,7 +2853,7 @@ library StableMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IRateProvider {
     /**
@@ -2863,7 +2863,7 @@ interface IRateProvider {
     function getRate() external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * Price rate caches are used to avoid querying the price rate for a token every time we need to work with it. It is
@@ -2938,7 +2938,7 @@ library PriceRateCache {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the TemporarilyPausable helper.
@@ -2962,7 +2962,7 @@ interface ITemporarilyPausable {
         );
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Allows for a contract to be paused during an initial period after deployment, disabling functionality. Can be
@@ -3082,7 +3082,7 @@ abstract contract TemporarilyPausable is ITemporarilyPausable {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev https://eips.ethereum.org/EIPS/eip-712[EIP 712] is a standard for hashing and signing of typed structured data.
@@ -3168,7 +3168,7 @@ abstract contract EIP712 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -3226,7 +3226,7 @@ interface IERC20Permit {
     function DOMAIN_SEPARATOR() external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Implementation of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -3295,7 +3295,7 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title Highly opinionated token implementation
@@ -3336,7 +3336,7 @@ contract BalancerPoolToken is ERC20Permit {
      */
     function allowance(address owner, address spender) public view override returns (uint256) {
         if (spender == address(getVault())) {
-            return uint256(-1);
+            return type(uint256).max;
         } else {
             return super.allowance(owner, spender);
         }
@@ -3355,7 +3355,7 @@ contract BalancerPoolToken is ERC20Permit {
 
         _transfer(sender, recipient, amount);
 
-        if (msg.sender != sender && currentAllowance != uint256(-1)) {
+        if (msg.sender != sender && currentAllowance != type(uint256).max) {
             // Because of the previous require, we know that if msg.sender != sender then currentAllowance >= amount
             _approve(sender, msg.sender, currentAllowance - amount);
         }
@@ -3390,7 +3390,7 @@ contract BalancerPoolToken is ERC20Permit {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base authorization layer implementation for Pools.
@@ -3434,7 +3434,7 @@ abstract contract BasePoolAuthorization is Authentication {
     function _getAuthorizer() internal view virtual returns (IAuthorizer);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 // solhint-disable max-states-count
 
 /**
@@ -3491,7 +3491,7 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
         // simpler management of permissions (such as being able to manage granting the 'set fee percentage' action in
         // any Pool created by the same factory), while still making action identifiers unique among different factories
         // if the selectors match, preventing accidental errors.
-        Authentication(bytes32(uint256(msg.sender)))
+        Authentication(bytes32(uint256(uint160(msg.sender))))
         BalancerPoolToken(name, symbol, vault)
         BasePoolAuthorization(owner)
         TemporarilyPausable(pauseWindowDuration, bufferPeriodDuration)
@@ -4114,7 +4114,7 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Extension of `BasePool`, adding a handler for `IMinimalSwapInfoPool.onSwap`.
@@ -4248,7 +4248,7 @@ abstract contract BaseMinimalSwapInfoPool is IMinimalSwapInfoPool, BasePool {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Extension of `BasePool`, adding a handler for `IGeneralPool.onSwap`.
@@ -4357,7 +4357,7 @@ abstract contract BaseGeneralPool is IGeneralPool, BasePool {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract StablePool is BaseGeneralPool, BaseMinimalSwapInfoPool, IRateProvider {
     using WordCodec for bytes32;
@@ -4444,9 +4444,9 @@ contract StablePool is BaseGeneralPool, BaseMinimalSwapInfoPool, IRateProvider {
         // Immutable variables cannot be initialized inside an if statement, so we must do conditional assignments
         _token0 = tokens[0];
         _token1 = tokens[1];
-        _token2 = totalTokens > 2 ? tokens[2] : IERC20(0);
-        _token3 = totalTokens > 3 ? tokens[3] : IERC20(0);
-        _token4 = totalTokens > 4 ? tokens[4] : IERC20(0);
+        _token2 = totalTokens > 2 ? tokens[2] : IERC20(address(0));
+        _token3 = totalTokens > 3 ? tokens[3] : IERC20(address(0));
+        _token4 = totalTokens > 4 ? tokens[4] : IERC20(address(0));
 
         _scalingFactor0 = _computeScalingFactor(tokens[0]);
         _scalingFactor1 = _computeScalingFactor(tokens[1]);
@@ -5146,7 +5146,7 @@ contract StablePool is BaseGeneralPool, BaseMinimalSwapInfoPool, IRateProvider {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Full external interface for the Vault core contract - no external or public methods exist in the contract that
@@ -5892,7 +5892,7 @@ interface IVault is ISignaturesValidator, ITemporarilyPausable {
     // solhint-disable-previous-line func-name-mixedcase
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IProtocolFeesCollector {
     event SwapFeePercentageChanged(uint256 newSwapFeePercentage);
@@ -5919,7 +5919,7 @@ interface IProtocolFeesCollector {
     function vault() external view returns (IVault);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev StablePool with preminted BPT and rate providers for each token, allowing for e.g. wrapped tokens with a known
@@ -6020,7 +6020,7 @@ contract StablePhantomPool is StablePool {
         );
 
         for (uint256 i = 0; i < params.tokens.length; i++) {
-            if (params.rateProviders[i] != IRateProvider(0)) {
+            if (params.rateProviders[i] != IRateProvider(address(0))) {
                 _updateTokenRateCache(params.tokens[i], params.rateProviders[i], params.tokenRateCacheDurations[i]);
                 emit TokenRateProviderSet(params.tokens[i], params.rateProviders[i], params.tokenRateCacheDurations[i]);
             }
@@ -6045,18 +6045,18 @@ contract StablePhantomPool is StablePool {
             if (i < bptIndex) {
                 tokensAndBPTRateProviders[i] = params.rateProviders[i];
             } else if (i == bptIndex) {
-                tokensAndBPTRateProviders[i] = IRateProvider(0);
+                tokensAndBPTRateProviders[i] = IRateProvider(address(0));
             } else {
                 tokensAndBPTRateProviders[i] = params.rateProviders[i - 1];
             }
         }
 
         // Immutable variables cannot be initialized inside an if statement, so we must do conditional assignments
-        _rateProvider0 = (tokensAndBPTRateProviders.length > 0) ? tokensAndBPTRateProviders[0] : IRateProvider(0);
-        _rateProvider1 = (tokensAndBPTRateProviders.length > 1) ? tokensAndBPTRateProviders[1] : IRateProvider(0);
-        _rateProvider2 = (tokensAndBPTRateProviders.length > 2) ? tokensAndBPTRateProviders[2] : IRateProvider(0);
-        _rateProvider3 = (tokensAndBPTRateProviders.length > 3) ? tokensAndBPTRateProviders[3] : IRateProvider(0);
-        _rateProvider4 = (tokensAndBPTRateProviders.length > 4) ? tokensAndBPTRateProviders[4] : IRateProvider(0);
+        _rateProvider0 = (tokensAndBPTRateProviders.length > 0) ? tokensAndBPTRateProviders[0] : IRateProvider(address(0));
+        _rateProvider1 = (tokensAndBPTRateProviders.length > 1) ? tokensAndBPTRateProviders[1] : IRateProvider(address(0));
+        _rateProvider2 = (tokensAndBPTRateProviders.length > 2) ? tokensAndBPTRateProviders[2] : IRateProvider(address(0));
+        _rateProvider3 = (tokensAndBPTRateProviders.length > 3) ? tokensAndBPTRateProviders[3] : IRateProvider(address(0));
+        _rateProvider4 = (tokensAndBPTRateProviders.length > 4) ? tokensAndBPTRateProviders[4] : IRateProvider(address(0));
 
         _updateCachedProtocolSwapFeePercentage(params.vault);
     }
@@ -6603,7 +6603,7 @@ contract StablePhantomPool is StablePool {
             uint256 expires
         )
     {
-        _require(_getRateProvider(token) != IRateProvider(0), Errors.TOKEN_DOES_NOT_HAVE_RATE_PROVIDER);
+        _require(_getRateProvider(token) != IRateProvider(address(0)), Errors.TOKEN_DOES_NOT_HAVE_RATE_PROVIDER);
 
         rate = _tokenRateCaches[token].getRate();
         (duration, expires) = _tokenRateCaches[token].getTimestamps();
@@ -6774,7 +6774,7 @@ contract StablePhantomPool is StablePool {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base contract for Pool factories.
@@ -6801,7 +6801,7 @@ abstract contract BasePoolFactory {
     function getVault() public view returns (IVault) {
         return _vault;
     }
-    
+
     /**
      * @dev Returns the defaultPoolOwner address.
      */
@@ -6839,7 +6839,7 @@ abstract contract BasePoolFactory {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base factory for contracts whose creation code is so large that the factory cannot hold it. This happens when
@@ -7039,7 +7039,7 @@ abstract contract BaseSplitCodeFactory {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Same as `BasePoolFactory`, for Pools whose creation code is so large that the factory cannot hold it.
@@ -7070,7 +7070,7 @@ abstract contract BasePoolSplitCodeFactory is BaseSplitCodeFactory {
         return _defaultPoolOwner;
     }
 
-    
+
 
     /**
      * @dev Returns true if `pool` was created by this factory.
@@ -7089,7 +7089,7 @@ abstract contract BasePoolSplitCodeFactory is BaseSplitCodeFactory {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 /**
  * @dev Utility to create Pool factories for Pools that use the `TemporarilyPausable` contract.
  *
@@ -7136,7 +7136,7 @@ contract FactoryWidePauseWindow {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract StablePhantomPoolFactory is BasePoolSplitCodeFactory, FactoryWidePauseWindow {
     constructor(IVault vault, address defaultPoolOwner) BasePoolSplitCodeFactory(vault, type(StablePhantomPool).creationCode,defaultPoolOwner) {

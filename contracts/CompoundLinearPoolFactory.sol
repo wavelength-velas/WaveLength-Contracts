@@ -12,7 +12,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 pragma experimental ABIEncoderV2;
 
 // solhint-disable
@@ -1081,7 +1081,7 @@ contract BalancerPoolToken is ERC20Permit {
      */
     function allowance(address owner, address spender) public view override returns (uint256) {
         if (spender == address(getVault())) {
-            return uint256(-1);
+            return type(uint256).max;
         } else {
             return super.allowance(owner, spender);
         }
@@ -1100,7 +1100,7 @@ contract BalancerPoolToken is ERC20Permit {
 
         _transfer(sender, recipient, amount);
 
-        if (msg.sender != sender && currentAllowance != uint256(-1)) {
+        if (msg.sender != sender && currentAllowance != type(uint256).max) {
             // Because of the previous require, we know that if msg.sender != sender then currentAllowance >= amount
             _approve(sender, msg.sender, currentAllowance - amount);
         }
@@ -2307,7 +2307,7 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
         // simpler management of permissions (such as being able to manage granting the 'set fee percentage' action in
         // any Pool created by the same factory), while still making action identifiers unique among different factories
         // if the selectors match, preventing accidental errors.
-        Authentication(bytes32(uint256(msg.sender)))
+        Authentication(bytes32(uint256(uint160(msg.sender))))
         BalancerPoolToken(name, symbol, vault)
         BasePoolAuthorization(owner)
         TemporarilyPausable(pauseWindowDuration, bufferPeriodDuration)
@@ -5367,7 +5367,7 @@ abstract contract BaseSplitCodeFactory {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Same as `BasePoolFactory`, for Pools whose creation code is so large that the factory cannot hold it.
@@ -5398,7 +5398,7 @@ abstract contract BasePoolSplitCodeFactory is BaseSplitCodeFactory {
         return _defaultPoolOwner;
     }
 
-    
+
 
     /**
      * @dev Returns true if `pool` was created by this factory.
@@ -5686,7 +5686,7 @@ contract CompoundLinearPoolFactory is BasePoolSplitCodeFactory, FactoryWidePause
                     pauseWindowDuration,
                     bufferPeriodDuration,
                     getDefaultPoolOwner(
-                        
+
                     )
                 )
             )

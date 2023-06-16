@@ -13,7 +13,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the SignatureValidator helper, used to support meta-transactions.
@@ -30,7 +30,7 @@ interface ISignaturesValidator {
     function getNextNonce(address user) external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Utility to create Pool factories for Pools that use the `TemporarilyPausable` contract.
@@ -78,7 +78,7 @@ contract FactoryWidePauseWindow {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This is an empty interface used to represent either ERC20-conforming token contracts or ETH (using the zero
@@ -91,7 +91,7 @@ interface IAsset {
     // solhint-disable-previous-line no-empty-blocks
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthorizer {
     /**
@@ -104,7 +104,7 @@ interface IAuthorizer {
     ) external view returns (bool);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the TemporarilyPausable helper.
@@ -128,7 +128,7 @@ interface ITemporarilyPausable {
         );
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -208,7 +208,7 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IFlashLoanRecipient {
     /**
@@ -228,7 +228,7 @@ interface IFlashLoanRecipient {
     ) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for WETH9.
@@ -240,7 +240,7 @@ interface IWETH is IERC20 {
     function withdraw(uint256 amount) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAssetManager {
     /**
@@ -293,7 +293,7 @@ interface IAssetManager {
     function rebalance(bytes32 poolId, bool force) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library for encoding and decoding values stored inside a 256 bit word. Typically used to pack multiple values in
@@ -490,7 +490,7 @@ library WordCodec {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable
 
@@ -687,7 +687,7 @@ library Errors {
     uint256 internal constant INSUFFICIENT_FLASH_LOAN_FEE_AMOUNT = 602;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthentication {
     /**
@@ -696,7 +696,7 @@ interface IAuthentication {
     function getActionId(bytes4 selector) external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Building block for performing access control on external functions.
@@ -749,7 +749,7 @@ abstract contract Authentication is IAuthentication {
     function _canPerform(bytes32 actionId, address user) internal view virtual returns (bool);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -814,7 +814,7 @@ library SafeMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -1134,7 +1134,7 @@ contract ERC20 is IERC20 {
     ) internal virtual {}
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev https://eips.ethereum.org/EIPS/eip-712[EIP 712] is a standard for hashing and signing of typed structured data.
@@ -1220,7 +1220,7 @@ abstract contract EIP712 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -1278,7 +1278,7 @@ interface IERC20Permit {
     function DOMAIN_SEPARATOR() external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Implementation of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -1347,7 +1347,7 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title Highly opinionated token implementation
@@ -1385,7 +1385,7 @@ contract BalancerPoolToken is ERC20, ERC20Permit {
 
         _transfer(sender, recipient, amount);
 
-        if (msg.sender != sender && currentAllowance != uint256(-1)) {
+        if (msg.sender != sender && currentAllowance != type(uint256).max) {
             // Because of the previous require, we know that if msg.sender != sender then currentAllowance >= amount
             _approve(sender, msg.sender, currentAllowance - amount);
         }
@@ -1420,7 +1420,7 @@ contract BalancerPoolToken is ERC20, ERC20Permit {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Allows for a contract to be paused during an initial period after deployment, disabling functionality. Can be
@@ -1533,7 +1533,7 @@ abstract contract TemporarilyPausable is ITemporarilyPausable {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IPoolSwapStructs {
     // This is not really an interface - it just defines common structs used by other interfaces: IGeneralPool and
@@ -1574,7 +1574,7 @@ interface IPoolSwapStructs {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 /**
  * @dev Interface for adding and removing liquidity that all Pool contracts should implement. Note that this is not
  * the complete Pool contract interface, as it is missing the swap hooks. Pool contracts should also inherit from
@@ -1647,7 +1647,7 @@ interface IBasePool is IPoolSwapStructs {
     function getPoolId() external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev IPools with the General specialization setting should implement this interface.
@@ -1669,7 +1669,7 @@ interface IGeneralPool is IBasePool {
     ) external returns (uint256 amount);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base authorization layer implementation for Pools.
@@ -1713,7 +1713,7 @@ abstract contract BasePoolAuthorization is Authentication {
     function _getAuthorizer() internal view virtual returns (IAuthorizer);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Reference implementation for the base layer of a Pool contract that manages a single Pool with an immutable set
@@ -1788,7 +1788,7 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
         // simpler management of permissions (such as being able to manage granting the 'set fee percentage' action in
         // any Pool created by the same factory), while still making action identifiers unique among different factories
         // if the selectors match, preventing accidental errors.
-        Authentication(bytes32(uint256(msg.sender)))
+        Authentication(bytes32(uint256(uint160(msg.sender))))
         BalancerPoolToken(name, symbol)
         BasePoolAuthorization(owner)
         TemporarilyPausable(pauseWindowDuration, bufferPeriodDuration)
@@ -1816,14 +1816,14 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
         _totalTokens = totalTokens;
 
         // Immutable variables cannot be initialized inside an if statement, so we must do conditional assignments
-        _token0 = totalTokens > 0 ? tokens[0] : IERC20(0);
-        _token1 = totalTokens > 1 ? tokens[1] : IERC20(0);
-        _token2 = totalTokens > 2 ? tokens[2] : IERC20(0);
-        _token3 = totalTokens > 3 ? tokens[3] : IERC20(0);
-        _token4 = totalTokens > 4 ? tokens[4] : IERC20(0);
-        _token5 = totalTokens > 5 ? tokens[5] : IERC20(0);
-        _token6 = totalTokens > 6 ? tokens[6] : IERC20(0);
-        _token7 = totalTokens > 7 ? tokens[7] : IERC20(0);
+        _token0 = totalTokens > 0 ? tokens[0] : IERC20(address(0));
+        _token1 = totalTokens > 1 ? tokens[1] : IERC20(address(0));
+        _token2 = totalTokens > 2 ? tokens[2] : IERC20(address(0));
+        _token3 = totalTokens > 3 ? tokens[3] : IERC20(address(0));
+        _token4 = totalTokens > 4 ? tokens[4] : IERC20(address(0));
+        _token5 = totalTokens > 5 ? tokens[5] : IERC20(address(0));
+        _token6 = totalTokens > 6 ? tokens[6] : IERC20(address(0));
+        _token7 = totalTokens > 7 ? tokens[7] : IERC20(address(0));
 
         _scalingFactor0 = totalTokens > 0 ? _computeScalingFactor(tokens[0]) : 0;
         _scalingFactor1 = totalTokens > 1 ? _computeScalingFactor(tokens[1]) : 0;
@@ -2436,7 +2436,7 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Extension of `BasePool`, adding a handler for `IGeneralPool.onSwap`.
@@ -2545,7 +2545,7 @@ abstract contract BaseGeneralPool is IGeneralPool, BasePool {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 library InputHelpers {
@@ -2584,7 +2584,7 @@ library InputHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Exponentiation and logarithm functions for 18 decimal fixed point numbers (both base and exponent/argument).
@@ -3081,7 +3081,7 @@ library LogExpMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow checks.
@@ -3168,7 +3168,7 @@ library Math {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library FixedPoint {
     uint256 internal constant ONE = 1e18; // 18 decimal places
@@ -3286,7 +3286,7 @@ library FixedPoint {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract StableMath {
     using FixedPoint for uint256;
@@ -3780,7 +3780,7 @@ contract StableMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract MockStableMath is StableMath {
     function invariant(uint256 amp, uint256[] memory balances, bool roundUp) external pure returns (uint256) {
@@ -3868,7 +3868,7 @@ contract MockStableMath is StableMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Pool contracts with the MinimalSwapInfo or TwoToken specialization settings should implement this interface.
@@ -3889,7 +3889,7 @@ interface IMinimalSwapInfoPool is IBasePool {
     ) external returns (uint256 amount);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Extension of `BasePool`, adding a handler for `IMinimalSwapInfoPool.onSwap`.
@@ -3972,7 +3972,7 @@ abstract contract BaseMinimalSwapInfoPool is IMinimalSwapInfoPool, BasePool {
     ) internal view virtual returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract StablePool is BaseGeneralPool, BaseMinimalSwapInfoPool, StableMath {
     using FixedPoint for uint256;
@@ -4637,7 +4637,7 @@ contract StablePool is BaseGeneralPool, BaseMinimalSwapInfoPool, StableMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library StablePoolUserDataHelpers {
     function joinKind(bytes memory self) internal pure returns (StablePool.JoinKind) {
@@ -4685,7 +4685,7 @@ library StablePoolUserDataHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Full external interface for the Vault core contract - no external or public methods exist in the contract that
@@ -5431,7 +5431,7 @@ interface IVault is ISignaturesValidator, ITemporarilyPausable {
     // solhint-disable-previous-line func-name-mixedcase
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base contract for Pool factories.
@@ -5458,7 +5458,7 @@ abstract contract BasePoolFactory {
     function getVault() public view returns (IVault) {
         return _vault;
     }
-    
+
     /**
      * @dev Returns the defaultPoolOwner address.
      */
@@ -5496,7 +5496,7 @@ abstract contract BasePoolFactory {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IProtocolFeesCollector {
     event SwapFeePercentageChanged(uint256 newSwapFeePercentage);
@@ -5523,7 +5523,7 @@ interface IProtocolFeesCollector {
     function vault() external view returns (IVault);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 pragma experimental ABIEncoderV2;
 
 contract StablePoolFactory is BasePoolFactory, FactoryWidePauseWindow {
@@ -5543,7 +5543,7 @@ contract StablePoolFactory is BasePoolFactory, FactoryWidePauseWindow {
         uint256 swapFeePercentage
     ) external returns (address) {
         (uint256 pauseWindowDuration, uint256 bufferPeriodDuration) = getPauseConfiguration();
-                
+
         address pool = address(
             new StablePool(
                 getVault(),

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 // solhint-disable
 
@@ -697,7 +697,7 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.19;
 
 interface IRewarder {
     function onWAVEReward(
@@ -715,7 +715,7 @@ interface IRewarder {
     ) external view returns (IERC20[] memory, uint256[] memory);
 }
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.19;
 
 contract RewarderMock is IRewarder {
     using Math for uint256;

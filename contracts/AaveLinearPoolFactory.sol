@@ -12,7 +12,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 pragma experimental ABIEncoderV2;
 
 
@@ -27,7 +27,7 @@ interface IRateProvider {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 interface IPoolSwapStructs {
@@ -71,7 +71,7 @@ interface IPoolSwapStructs {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for adding and removing liquidity that all Pool contracts should implement. Note that this is not
@@ -146,7 +146,7 @@ interface IBasePool is IPoolSwapStructs {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 /**
@@ -169,7 +169,7 @@ interface IGeneralPool is IBasePool {
     ) external returns (uint256 amount);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthentication {
     /**
@@ -180,7 +180,7 @@ interface IAuthentication {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 /**
  * @dev Building block for performing access control on external functions.
  *
@@ -235,7 +235,7 @@ abstract contract Authentication is IAuthentication {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base authorization layer implementation for Pools.
@@ -280,7 +280,7 @@ abstract contract BasePoolAuthorization is Authentication {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -340,7 +340,7 @@ interface IERC20Permit {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev https://eips.ethereum.org/EIPS/eip-712[EIP 712] is a standard for hashing and signing of typed structured data.
@@ -427,7 +427,7 @@ abstract contract EIP712 {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -509,7 +509,7 @@ interface IERC20 {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -831,7 +831,7 @@ contract ERC20 is IERC20 {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Implementation of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -901,7 +901,7 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712 {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title Highly opinionated token implementation
@@ -942,7 +942,7 @@ contract BalancerPoolToken is ERC20Permit {
      */
     function allowance(address owner, address spender) public view override returns (uint256) {
         if (spender == address(getVault())) {
-            return uint256(-1);
+            return type(uint256).max;
         } else {
             return super.allowance(owner, spender);
         }
@@ -961,7 +961,7 @@ contract BalancerPoolToken is ERC20Permit {
 
         _transfer(sender, recipient, amount);
 
-        if (msg.sender != sender && currentAllowance != uint256(-1)) {
+        if (msg.sender != sender && currentAllowance != type(uint256).max) {
             // Because of the previous require, we know that if msg.sender != sender then currentAllowance >= amount
             _approve(sender, msg.sender, currentAllowance - amount);
         }
@@ -998,7 +998,7 @@ contract BalancerPoolToken is ERC20Permit {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the TemporarilyPausable helper.
@@ -1024,7 +1024,7 @@ interface ITemporarilyPausable {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Allows for a contract to be paused during an initial period after deployment, disabling functionality. Can be
@@ -1146,7 +1146,7 @@ abstract contract TemporarilyPausable is ITemporarilyPausable {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable max-states-count
 
@@ -1204,7 +1204,7 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
         // simpler management of permissions (such as being able to manage granting the 'set fee percentage' action in
         // any Pool created by the same factory), while still making action identifiers unique among different factories
         // if the selectors match, preventing accidental errors.
-        Authentication(bytes32(uint256(msg.sender)))
+        Authentication(bytes32(uint256(uint160(msg.sender))))
         BalancerPoolToken(name, symbol, vault)
         BasePoolAuthorization(owner)
         TemporarilyPausable(pauseWindowDuration, bufferPeriodDuration)
@@ -1829,7 +1829,7 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Linear Pools are designed to hold two assets: "main" and "wrapped" tokens that have an equal value underlying
@@ -2474,7 +2474,7 @@ abstract contract LinearPool is BasePool, IGeneralPool, IRateProvider {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract AaveLinearPool is LinearPool {
     ILendingPool private immutable _lendingPool;
@@ -2522,7 +2522,7 @@ contract AaveLinearPool is LinearPool {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 interface IStaticAToken {
@@ -2545,7 +2545,7 @@ interface IStaticAToken {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface ILendingPool {
     /**
@@ -2554,7 +2554,7 @@ interface ILendingPool {
     function getReserveNormalizedIncome(address asset) external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable
 
@@ -2778,7 +2778,7 @@ library Errors {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 
@@ -2858,7 +2858,7 @@ function _getSortedTokenIndexes(
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 /* solhint-disable private-vars-leading-underscore */
@@ -2982,7 +2982,7 @@ library FixedPoint {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 /**
@@ -3059,7 +3059,7 @@ library PriceRateCache {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 // These functions start with an underscore, as if they were part of a contract and not a library. At some point this
@@ -3382,7 +3382,7 @@ library LinearMath {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 library LinearPoolUserData {
@@ -3399,7 +3399,7 @@ library LinearPoolUserData {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This is an empty interface used to represent either ERC20-conforming token contracts or ETH (using the zero
@@ -3416,7 +3416,7 @@ interface IAsset {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 /* solhint-disable */
@@ -3917,7 +3917,7 @@ library LogExpMath {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 /**
@@ -4013,7 +4013,7 @@ library Math {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 library InputHelpers {
@@ -4054,7 +4054,7 @@ library InputHelpers {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library for encoding and decoding values stored inside a 256 bit word. Typically used to pack multiple values in
@@ -4385,7 +4385,7 @@ library WordCodec {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the SignatureValidator helper, used to support meta-transactions.
@@ -4404,7 +4404,7 @@ interface ISignaturesValidator {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Full external interface for the Vault core contract - no external or public methods exist in the contract that
@@ -5153,7 +5153,7 @@ interface IVault is ISignaturesValidator, ITemporarilyPausable {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 interface IAssetManager {
@@ -5226,7 +5226,7 @@ interface IAssetManager {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 /**
@@ -5293,7 +5293,7 @@ library SafeMath {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for WETH9.
@@ -5308,7 +5308,7 @@ interface IWETH is IERC20 {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthorizer {
     /**
@@ -5324,7 +5324,7 @@ interface IAuthorizer {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // Inspired by Aave Protocol's IFlashLoanReceiver.
 
@@ -5349,7 +5349,7 @@ interface IFlashLoanRecipient {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 interface IProtocolFeesCollector {
@@ -5377,7 +5377,7 @@ interface IProtocolFeesCollector {
     function vault() external view returns (IVault);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 /**
@@ -5580,7 +5580,7 @@ abstract contract BaseSplitCodeFactory {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Same as `BasePoolFactory`, for Pools whose creation code is so large that the factory cannot hold it.
@@ -5611,7 +5611,7 @@ abstract contract BasePoolSplitCodeFactory is BaseSplitCodeFactory {
         return _defaultPoolOwner;
     }
 
-    
+
 
     /**
      * @dev Returns true if `pool` was created by this factory.
@@ -5631,7 +5631,7 @@ abstract contract BasePoolSplitCodeFactory is BaseSplitCodeFactory {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Utility to create Pool factories for Pools that use the `TemporarilyPausable` contract.
@@ -5683,7 +5683,7 @@ contract FactoryWidePauseWindow {
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract AaveLinearPoolFactory is BasePoolSplitCodeFactory, FactoryWidePauseWindow {
     constructor(IVault vault, address defaultPoolOwner) BasePoolSplitCodeFactory(vault, type(AaveLinearPool).creationCode, defaultPoolOwner) {
@@ -5733,7 +5733,7 @@ contract AaveLinearPoolFactory is BasePoolSplitCodeFactory, FactoryWidePauseWind
 
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 /**

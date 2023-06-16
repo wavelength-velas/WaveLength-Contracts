@@ -1,6 +1,6 @@
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -80,7 +80,7 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for querying historical data from a Pool that can be used as a Price Oracle.
@@ -162,7 +162,7 @@ interface IPriceOracle {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library Buffer {
     // The buffer is a circular storage structure with 1024 slots.
@@ -198,7 +198,7 @@ library Buffer {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IPoolPriceOracle {
     /**
@@ -223,7 +223,7 @@ interface IPoolPriceOracle {
     function getTotalSamples() external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This module allows Pools to access historical pricing information.
@@ -459,7 +459,7 @@ contract PoolPriceOracle is IPoolPriceOracle {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthentication {
     /**
@@ -468,7 +468,7 @@ interface IAuthentication {
     function getActionId(bytes4 selector) external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthorizer {
     /**
@@ -481,7 +481,7 @@ interface IAuthorizer {
     ) external view returns (bool);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This is an empty interface used to represent either ERC20-conforming token contracts or ETH (using the zero
@@ -494,7 +494,7 @@ interface IAsset {
     // solhint-disable-previous-line no-empty-blocks
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the SignatureValidator helper, used to support meta-transactions.
@@ -511,7 +511,7 @@ interface ISignaturesValidator {
     function getNextNonce(address user) external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library for encoding and decoding values stored inside a 256 bit word. Typically used to pack multiple values in
@@ -779,7 +779,7 @@ library WordCodec {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This library provides functions to help manipulating samples for Pool Price Oracles. It handles updates,
@@ -978,7 +978,7 @@ library Samples {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract MockSamples {
     using Samples for bytes32;
@@ -1031,7 +1031,7 @@ contract MockSamples {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // Inspired by Aave Protocol's IFlashLoanReceiver.
 
@@ -1053,7 +1053,7 @@ interface IFlashLoanRecipient {
     ) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for WETH9.
@@ -1065,7 +1065,7 @@ interface IWETH is IERC20 {
     function withdraw(uint256 amount) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable
 
@@ -1269,7 +1269,7 @@ library Errors {
     uint256 internal constant INSUFFICIENT_FLASH_LOAN_FEE_AMOUNT = 602;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Contract module that helps prevent reentrant calls to a function.
@@ -1336,7 +1336,7 @@ abstract contract ReentrancyGuard {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library used to deploy contracts with specific code. This can be used for long-term storage of immutable data as
@@ -1407,7 +1407,7 @@ library CodeDeployer {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base factory for contracts whose creation code is so large that the factory cannot hold it. This happens when
@@ -1606,7 +1606,7 @@ abstract contract BaseSplitCodeFactory {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -1671,7 +1671,7 @@ library SafeMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAssetManager {
     /**
@@ -1736,7 +1736,7 @@ interface IAssetManager {
     function capitalOut(bytes32 poolId, uint256 amount) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -2056,7 +2056,7 @@ contract ERC20 is IERC20 {
     ) internal virtual {}
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Building block for performing access control on external functions.
@@ -2109,7 +2109,7 @@ abstract contract Authentication is IAuthentication {
     function _canPerform(bytes32 actionId, address user) internal view virtual returns (bool);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev https://eips.ethereum.org/EIPS/eip-712[EIP 712] is a standard for hashing and signing of typed structured data.
@@ -2195,7 +2195,7 @@ abstract contract EIP712 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -2253,7 +2253,7 @@ interface IERC20Permit {
     function DOMAIN_SEPARATOR() external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Implementation of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -2322,7 +2322,7 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title Highly opinionated token implementation
@@ -2360,7 +2360,7 @@ contract BalancerPoolToken is ERC20, ERC20Permit {
 
         _transfer(sender, recipient, amount);
 
-        if (msg.sender != sender && currentAllowance != uint256(-1)) {
+        if (msg.sender != sender && currentAllowance != type(uint256).max) {
             // Because of the previous require, we know that if msg.sender != sender then currentAllowance >= amount
             _approve(sender, msg.sender, currentAllowance - amount);
         }
@@ -2395,7 +2395,7 @@ contract BalancerPoolToken is ERC20, ERC20Permit {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow checks.
@@ -2482,7 +2482,7 @@ library Math {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract MockPoolPriceOracle is MockSamples, PoolPriceOracle {
     using Samples for bytes32;
@@ -2543,7 +2543,7 @@ contract MockPoolPriceOracle is MockSamples, PoolPriceOracle {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /* solhint-disable */
 
@@ -3042,7 +3042,7 @@ library LogExpMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library for encoding and decoding values stored inside a 256 bit word. Typically used to pack multiple values in
@@ -3083,7 +3083,7 @@ library LogCompression {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract MockLogCompression {
     function toLowResLog(uint256 value) external pure returns (int256) {
@@ -3095,7 +3095,7 @@ contract MockLogCompression {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library InputHelpers {
     function ensureInputLengthMatch(uint256 a, uint256 b) internal pure {
@@ -3133,7 +3133,7 @@ library InputHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /* solhint-disable private-vars-leading-underscore */
 
@@ -3253,7 +3253,7 @@ library FixedPoint {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract WeightedOracleMath {
     using FixedPoint for uint256;
@@ -3307,7 +3307,7 @@ contract WeightedOracleMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract MockWeightedOracleMath is WeightedOracleMath, MockLogCompression {
     function calcLogSpotPrice(
@@ -3328,7 +3328,7 @@ contract MockWeightedOracleMath is WeightedOracleMath, MockLogCompression {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This module provides an interface to store seemingly unrelated pieces of information, in particular used by
@@ -3442,7 +3442,7 @@ library WeightedPool2TokensMiscData {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library for compressing and uncompresing numbers by using smaller types.
@@ -3483,7 +3483,7 @@ library WeightCompression {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the TemporarilyPausable helper.
@@ -3507,7 +3507,7 @@ interface ITemporarilyPausable {
         );
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Allows for a contract to be paused during an initial period after deployment, disabling functionality. Can be
@@ -3620,7 +3620,7 @@ abstract contract TemporarilyPausable is ITemporarilyPausable {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Full external interface for the Vault core contract - no external or public methods exist in the contract that
@@ -4366,7 +4366,7 @@ interface IVault is ISignaturesValidator, ITemporarilyPausable {
     // solhint-disable-previous-line func-name-mixedcase
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base contract for Pool factories.
@@ -4410,7 +4410,7 @@ abstract contract BasePoolFactory {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IPoolSwapStructs {
     // This is not really an interface - it just defines common structs used by other interfaces: IGeneralPool and
@@ -4451,7 +4451,7 @@ interface IPoolSwapStructs {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IProtocolFeesCollector {
     event SwapFeePercentageChanged(uint256 newSwapFeePercentage);
@@ -4478,7 +4478,7 @@ interface IProtocolFeesCollector {
     function vault() external view returns (IVault);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for adding and removing liquidity that all Pool contracts should implement. Note that this is not
@@ -4552,7 +4552,7 @@ interface IBasePool is IPoolSwapStructs {
     function getPoolId() external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base authorization layer implementation for Pools.
@@ -4596,7 +4596,7 @@ abstract contract BasePoolAuthorization is Authentication {
     function _getAuthorizer() internal view virtual returns (IAuthorizer);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable max-states-count
 
@@ -4655,7 +4655,7 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
         // simpler management of permissions (such as being able to manage granting the 'set fee percentage' action in
         // any Pool created by the same factory), while still making action identifiers unique among different factories
         // if the selectors match, preventing accidental errors.
-        Authentication(bytes32(uint256(msg.sender)))
+        Authentication(bytes32(uint256(uint160(msg.sender))))
         BalancerPoolToken(name, symbol)
         BasePoolAuthorization(owner)
         TemporarilyPausable(pauseWindowDuration, bufferPeriodDuration)
@@ -5268,7 +5268,7 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev IPools with the General specialization setting should implement this interface.
@@ -5290,7 +5290,7 @@ interface IGeneralPool is IBasePool {
     ) external returns (uint256 amount);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Extension of `BasePool`, adding a handler for `IGeneralPool.onSwap`.
@@ -5399,7 +5399,7 @@ abstract contract BaseGeneralPool is IGeneralPool, BasePool {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Pool contracts with the MinimalSwapInfo or TwoToken specialization settings should implement this interface.
@@ -5421,7 +5421,7 @@ interface IMinimalSwapInfoPool is IBasePool {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Extension of `BasePool`, adding a handler for `IMinimalSwapInfoPool.onSwap`.
@@ -5504,7 +5504,7 @@ abstract contract BaseMinimalSwapInfoPool is IMinimalSwapInfoPool, BasePool {
     ) internal virtual returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /* solhint-disable private-vars-leading-underscore */
 
@@ -5848,7 +5848,7 @@ contract WeightedMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract MockWeightedMath is WeightedMath {
     function invariant(uint256[] memory normalizedWeights, uint256[] memory balances) external pure returns (uint256) {
@@ -5941,7 +5941,7 @@ contract MockWeightedMath is WeightedMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base class for WeightedPools containing swap, join and exit logic, but leaving storage and management of
@@ -6437,7 +6437,7 @@ abstract contract BaseWeightedPool is BaseMinimalSwapInfoPool, WeightedMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Basic Weighted Pool with immutable weights.
@@ -6592,24 +6592,24 @@ contract WeightedPool is BaseWeightedPool {
         // Immutable variables cannot be initialized inside an if statement, so we must do conditional assignments
         _token0 = tokens[0];
         _token1 = tokens[1];
-        _token2 = numTokens > 2 ? tokens[2] : IERC20(0);
-        _token3 = numTokens > 3 ? tokens[3] : IERC20(0);
-        _token4 = numTokens > 4 ? tokens[4] : IERC20(0);
-        _token5 = numTokens > 5 ? tokens[5] : IERC20(0);
-        _token6 = numTokens > 6 ? tokens[6] : IERC20(0);
-        _token7 = numTokens > 7 ? tokens[7] : IERC20(0);
-        _token8 = numTokens > 8 ? tokens[8] : IERC20(0);
-        _token9 = numTokens > 9 ? tokens[9] : IERC20(0);
-        _token10 = numTokens > 10 ? tokens[10] : IERC20(0);
-        _token11 = numTokens > 11 ? tokens[11] : IERC20(0);
-        _token12 = numTokens > 12 ? tokens[12] : IERC20(0);
-        _token13 = numTokens > 13 ? tokens[13] : IERC20(0);
-        _token14 = numTokens > 14 ? tokens[14] : IERC20(0);
-        _token15 = numTokens > 15 ? tokens[15] : IERC20(0);
-        _token16 = numTokens > 16 ? tokens[16] : IERC20(0);
-        _token17 = numTokens > 17 ? tokens[17] : IERC20(0);
-        _token18 = numTokens > 18 ? tokens[18] : IERC20(0);
-        _token19 = numTokens > 19 ? tokens[19] : IERC20(0);
+        _token2 = numTokens > 2 ? tokens[2] : IERC20(address(0));
+        _token3 = numTokens > 3 ? tokens[3] : IERC20(address(0));
+        _token4 = numTokens > 4 ? tokens[4] : IERC20(address(0));
+        _token5 = numTokens > 5 ? tokens[5] : IERC20(address(0));
+        _token6 = numTokens > 6 ? tokens[6] : IERC20(address(0));
+        _token7 = numTokens > 7 ? tokens[7] : IERC20(address(0));
+        _token8 = numTokens > 8 ? tokens[8] : IERC20(address(0));
+        _token9 = numTokens > 9 ? tokens[9] : IERC20(address(0));
+        _token10 = numTokens > 10 ? tokens[10] : IERC20(address(0));
+        _token11 = numTokens > 11 ? tokens[11] : IERC20(address(0));
+        _token12 = numTokens > 12 ? tokens[12] : IERC20(address(0));
+        _token13 = numTokens > 13 ? tokens[13] : IERC20(address(0));
+        _token14 = numTokens > 14 ? tokens[14] : IERC20(address(0));
+        _token15 = numTokens > 15 ? tokens[15] : IERC20(address(0));
+        _token16 = numTokens > 16 ? tokens[16] : IERC20(address(0));
+        _token17 = numTokens > 17 ? tokens[17] : IERC20(address(0));
+        _token18 = numTokens > 18 ? tokens[18] : IERC20(address(0));
+        _token19 = numTokens > 19 ? tokens[19] : IERC20(address(0));
 
         _scalingFactor0 = _computeScalingFactor(tokens[0]);
         _scalingFactor1 = _computeScalingFactor(tokens[1]);
@@ -6763,16 +6763,16 @@ contract WeightedPool is BaseWeightedPool {
             if (totalTokens > 14) { scalingFactors[14] = _scalingFactor14; } else { return scalingFactors; }
             if (totalTokens > 15) { scalingFactors[15] = _scalingFactor15; } else { return scalingFactors; }
             if (totalTokens > 16) { scalingFactors[16] = _scalingFactor16; } else { return scalingFactors; }
-            if (totalTokens > 17) { scalingFactors[17] = _scalingFactor17; } else { return scalingFactors; }       
+            if (totalTokens > 17) { scalingFactors[17] = _scalingFactor17; } else { return scalingFactors; }
             if (totalTokens > 18) { scalingFactors[18] = _scalingFactor18; } else { return scalingFactors; }
-            if (totalTokens > 19) { scalingFactors[19] = _scalingFactor19; } else { return scalingFactors; }       
+            if (totalTokens > 19) { scalingFactors[19] = _scalingFactor19; } else { return scalingFactors; }
         }
 
         return scalingFactors;
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library WeightedPoolUserDataHelpers {
     function joinKind(bytes memory self) internal pure returns (BaseWeightedPool.JoinKind) {
@@ -6821,7 +6821,7 @@ library WeightedPoolUserDataHelpers {
 }
 
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Same as `BasePoolFactory`, for Pools whose creation code is so large that the factory cannot hold it.
@@ -6852,7 +6852,7 @@ abstract contract BasePoolSplitCodeFactory is BaseSplitCodeFactory {
         return _defaultPoolOwner;
     }
 
-    
+
 
     /**
      * @dev Returns true if `pool` was created by this factory.
@@ -6871,7 +6871,7 @@ abstract contract BasePoolSplitCodeFactory is BaseSplitCodeFactory {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Utility to create Pool factories for Pools that use the `TemporarilyPausable` contract.
@@ -6919,7 +6919,7 @@ contract FactoryWidePauseWindow {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract WeightedPoolNoAMFactory is BasePoolSplitCodeFactory, FactoryWidePauseWindow {
     constructor(IVault vault, address defaultPoolOwner) BasePoolSplitCodeFactory(vault, type(WeightedPool).creationCode , defaultPoolOwner) {
@@ -6957,7 +6957,7 @@ contract WeightedPoolNoAMFactory is BasePoolSplitCodeFactory, FactoryWidePauseWi
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract WeightedPoolFactory is BasePoolSplitCodeFactory, FactoryWidePauseWindow {
     constructor(IVault vault, address defaultPoolOwner) BasePoolSplitCodeFactory(vault, type(WeightedPool).creationCode, defaultPoolOwner) {
@@ -6996,7 +6996,7 @@ contract WeightedPoolFactory is BasePoolSplitCodeFactory, FactoryWidePauseWindow
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract WeightedPool2Tokens is
     IMinimalSwapInfoPool,
@@ -7071,7 +7071,7 @@ contract WeightedPool2Tokens is
         // simpler management of permissions (such as being able to manage granting the 'set fee percentage' action in
         // any Pool created by the same factory), while still making action identifiers unique among different factories
         // if the selectors match, preventing accidental errors.
-        Authentication(bytes32(uint256(msg.sender)))
+        Authentication(bytes32(uint256(uint160(msg.sender))))
         BalancerPoolToken(params.name, params.symbol)
         BasePoolAuthorization(params.owner)
         TemporarilyPausable(params.pauseWindowDuration, params.bufferPeriodDuration)
@@ -8188,7 +8188,7 @@ contract WeightedPool2Tokens is
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract MockWeightedPool2Tokens is WeightedPool2Tokens, MockPoolPriceOracle, MockWeightedOracleMath {
     using WeightedPool2TokensMiscData for bytes32;
@@ -8229,7 +8229,7 @@ contract MockWeightedPool2Tokens is WeightedPool2Tokens, MockPoolPriceOracle, Mo
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Weighted Pool with mutable weights, designed to support V2 Liquidity Bootstrapping
@@ -8322,8 +8322,8 @@ contract LiquidityBootstrappingPool is BaseWeightedPool, ReentrancyGuard {
         // Immutable variables cannot be initialized inside an if statement, so we must do conditional assignments
         _token0 = tokens[0];
         _token1 = tokens[1];
-        _token2 = totalTokens > 2 ? tokens[2] : IERC20(0);
-        _token3 = totalTokens > 3 ? tokens[3] : IERC20(0);
+        _token2 = totalTokens > 2 ? tokens[2] : IERC20(address(0));
+        _token3 = totalTokens > 3 ? tokens[3] : IERC20(address(0));
 
         _scalingFactor0 = _computeScalingFactor(tokens[0]);
         _scalingFactor1 = _computeScalingFactor(tokens[1]);
@@ -8664,7 +8664,7 @@ contract LiquidityBootstrappingPool is BaseWeightedPool, ReentrancyGuard {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev The original Liquidity Bootstrapping Pool computes accumulated swap fees from invariant growth, which
@@ -8706,9 +8706,8 @@ contract NoProtocolFeeLiquidityBootstrappingPool is LiquidityBootstrappingPool {
         address recipient,
         uint256[] memory balances,
         uint256 lastChangeBlock,
-        uint256,
         bytes memory userData
-    ) public virtual override returns (uint256[] memory, uint256[] memory) {
+    ) public returns (uint256[] memory, uint256[] memory) {
         return super.onJoinPool(poolId, sender, recipient, balances, lastChangeBlock, 0, userData);
     }
 
@@ -8718,14 +8717,13 @@ contract NoProtocolFeeLiquidityBootstrappingPool is LiquidityBootstrappingPool {
         address recipient,
         uint256[] memory balances,
         uint256 lastChangeBlock,
-        uint256,
         bytes memory userData
-    ) public virtual override returns (uint256[] memory, uint256[] memory) {
+    ) public returns (uint256[] memory, uint256[] memory) {
         return super.onExitPool(poolId, sender, recipient, balances, lastChangeBlock, 0, userData);
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract LiquidityBootstrappingPoolFactory is BasePoolSplitCodeFactory, FactoryWidePauseWindow {
     constructor(IVault vault, address defaultPoolOwner) BasePoolSplitCodeFactory(vault, type(LiquidityBootstrappingPool).creationCode, defaultPoolOwner ) {
@@ -8763,7 +8761,7 @@ contract LiquidityBootstrappingPoolFactory is BasePoolSplitCodeFactory, FactoryW
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 pragma experimental ABIEncoderV2;
 
 contract NoProtocolFeeLiquidityBootstrappingPoolFactory is
@@ -8777,7 +8775,7 @@ contract NoProtocolFeeLiquidityBootstrappingPoolFactory is
 
     constructor(IVault vault, address defaultPoolOwner)
         // This factory is a singleton, so it simply uses its own address to disambiguate action identifiers.
-        Authentication(bytes32(uint256(address(this))))
+        Authentication(bytes32(uint256(uint160(address(this)))))
         BasePoolSplitCodeFactory(vault, type(NoProtocolFeeLiquidityBootstrappingPool).creationCode, defaultPoolOwner)
     {
         // solhint-disable-previous-line no-empty-blocks

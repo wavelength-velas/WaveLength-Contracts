@@ -1,4 +1,4 @@
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthentication {
     /**
@@ -7,7 +7,7 @@ interface IAuthentication {
     function getActionId(bytes4 selector) external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable
 
@@ -186,7 +186,7 @@ library Errors {
     uint256 internal constant INSUFFICIENT_FLASH_LOAN_FEE_AMOUNT = 602;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This is an empty interface used to represent either ERC20-conforming token contracts or ETH (using the zero
@@ -199,7 +199,7 @@ interface IAsset {
     // solhint-disable-previous-line no-empty-blocks
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the SignatureValidator helper, used to support meta-transactions.
@@ -216,7 +216,7 @@ interface ISignaturesValidator {
     function getNextNonce(address user) external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the TemporarilyPausable helper.
@@ -240,7 +240,7 @@ interface ITemporarilyPausable {
         );
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -320,7 +320,7 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the WETH token contract used internally for wrapping and unwrapping, to support
@@ -332,7 +332,7 @@ interface IWETH is IERC20 {
     function withdraw(uint256 amount) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // Inspired by Aave Protocol's IFlashLoanReceiver.
 
@@ -354,7 +354,7 @@ interface IFlashLoanRecipient {
     ) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library InputHelpers {
     function ensureInputLengthMatch(uint256 a, uint256 b) internal pure {
@@ -401,7 +401,7 @@ library InputHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Contract module that helps prevent reentrant calls to a function.
@@ -468,7 +468,7 @@ abstract contract ReentrancyGuard {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthorizer {
     /**
@@ -481,7 +481,7 @@ interface IAuthorizer {
     ) external view returns (bool);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title SafeERC20
@@ -534,7 +534,7 @@ library SafeERC20 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Building block for performing access control on external functions.
@@ -1331,7 +1331,7 @@ interface IVault is ISignaturesValidator, ITemporarilyPausable {
     // solhint-disable-previous-line func-name-mixedcase
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 pragma experimental ABIEncoderV2;
 
 
@@ -1368,7 +1368,7 @@ contract ProtocolFeesCollector is Authentication, ReentrancyGuard {
     constructor(IVault _vault)
         // The ProtocolFeesCollector is a singleton, so it simply uses its own address to disambiguate action
         // identifiers.
-        Authentication(bytes32(uint256(address(this))))
+        Authentication(bytes32(uint256(uint160(address(this)))))
     {
         vault = _vault;
     }

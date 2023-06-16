@@ -1,4 +1,4 @@
-pragma solidity >=0.5.0;
+pragma solidity 0.8.19;
 pragma experimental ABIEncoderV2;
 
 /// @title Multicall2 - Aggregate results from multiple read-only function calls

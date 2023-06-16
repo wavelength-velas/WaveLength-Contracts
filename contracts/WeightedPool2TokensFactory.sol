@@ -12,7 +12,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library for encoding and decoding values stored inside a 256 bit word. Typically used to pack multiple values in
@@ -207,7 +207,7 @@ library WordCodec {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthentication {
     /**
@@ -216,7 +216,7 @@ interface IAuthentication {
     function getActionId(bytes4 selector) external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library Buffer {
     // The buffer is a circular storage structure with 1024 slots.
@@ -252,7 +252,7 @@ library Buffer {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IWeightedPoolPriceOracle {
     /**
@@ -277,7 +277,7 @@ interface IWeightedPoolPriceOracle {
     function getTotalSamples() external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable
 
@@ -461,7 +461,7 @@ library Errors {
     uint256 internal constant INSUFFICIENT_FLASH_LOAN_FEE_AMOUNT = 602;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow checks.
@@ -540,7 +540,7 @@ library Math {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -605,7 +605,7 @@ library SafeMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Exponentiation and logarithm functions for 18 decimal fixed point numbers (both base and exponent/argument).
@@ -1102,7 +1102,7 @@ library LogExpMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /* solhint-disable private-vars-leading-underscore */
 
@@ -1222,7 +1222,7 @@ library FixedPoint {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the TemporarilyPausable helper.
@@ -1246,7 +1246,7 @@ interface ITemporarilyPausable {
         );
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Allows for a contract to be paused during an initial period after deployment, disabling functionality. Can be
@@ -1359,7 +1359,7 @@ abstract contract TemporarilyPausable is ITemporarilyPausable {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the SignatureValidator helper, used to support meta-transactions.
@@ -1376,7 +1376,7 @@ interface ISignaturesValidator {
     function getNextNonce(address user) external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthorizer {
     /**
@@ -1389,7 +1389,7 @@ interface IAuthorizer {
     ) external view returns (bool);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This is an empty interface used to represent either ERC20-conforming token contracts or ETH (using the zero
@@ -1402,7 +1402,7 @@ interface IAsset {
     // solhint-disable-previous-line no-empty-blocks
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -1482,7 +1482,7 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -1807,7 +1807,7 @@ contract ERC20 is IERC20 {
     ) internal virtual {}
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev https://eips.ethereum.org/EIPS/eip-712[EIP 712] is a standard for hashing and signing of typed structured data.
@@ -1893,7 +1893,7 @@ abstract contract EIP712 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -1951,7 +1951,7 @@ interface IERC20Permit {
     function DOMAIN_SEPARATOR() external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title Highly opinionated token implementation
@@ -2044,7 +2044,7 @@ contract BalancerPoolToken is IERC20, IERC20Permit, EIP712 {
 
         _move(sender, recipient, amount);
 
-        if (msg.sender != sender && currentAllowance != uint256(-1)) {
+        if (msg.sender != sender && currentAllowance != type(uint256).max) {
             // Because of the previous require, we know that if msg.sender != sender then currentAllowance >= amount
             _setAllowance(sender, msg.sender, currentAllowance - amount);
         }
@@ -2150,7 +2150,7 @@ contract BalancerPoolToken is IERC20, IERC20Permit, EIP712 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library InputHelpers {
     function ensureInputLengthMatch(uint256 a, uint256 b) internal pure {
@@ -2197,7 +2197,7 @@ library InputHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /* solhint-disable private-vars-leading-underscore */
 
@@ -2280,7 +2280,7 @@ contract WeightedOracleMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 /* solhint-disable private-vars-leading-underscore */
 
 contract WeightedMath {
@@ -2624,7 +2624,7 @@ contract WeightedMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This module provides an interface to store seemingly unrelated pieces of information, in particular used by
@@ -2738,7 +2738,7 @@ library WeightedPool2TokensMiscData {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IFlashLoanRecipient {
     /**
@@ -2758,7 +2758,7 @@ interface IFlashLoanRecipient {
     ) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the WETH token contract used internally for wrapping and unwrapping, to support
@@ -2770,7 +2770,7 @@ interface IWETH is IERC20 {
     function withdraw(uint256 amount) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title SafeERC20
@@ -2823,7 +2823,7 @@ library SafeERC20 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Utility to create Pool factories for Pools that use the `TemporarilyPausable` contract.
@@ -2871,7 +2871,7 @@ contract FactoryWidePauseWindow {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Full external interface for the Vault core contract - no external or public methods exist in the contract that
@@ -3617,7 +3617,7 @@ interface IVault is ISignaturesValidator, ITemporarilyPausable {
     // solhint-disable-previous-line func-name-mixedcase
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base contract for Pool factories.
@@ -3644,7 +3644,7 @@ abstract contract BasePoolFactory {
     function getVault() public view returns (IVault) {
         return _vault;
     }
-    
+
     /**
      * @dev Returns the defaultPoolOwner address.
      */
@@ -3682,7 +3682,7 @@ abstract contract BasePoolFactory {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 
 /**
@@ -3736,7 +3736,7 @@ abstract contract Authentication is IAuthentication {
     function _canPerform(bytes32 actionId, address user) internal view virtual returns (bool);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Contract module that helps prevent reentrant calls to a function.
@@ -3803,7 +3803,7 @@ abstract contract ReentrancyGuard {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This an auxiliary contract to the Vault, deployed by it during construction. It offloads some of the tasks the
@@ -3838,7 +3838,7 @@ contract ProtocolFeesCollector is Authentication, ReentrancyGuard {
     constructor(IVault _vault)
         // The ProtocolFeesCollector is a singleton, so it simply uses its own address to disambiguate action
         // identifiers.
-        Authentication(bytes32(uint256(address(this))))
+        Authentication(bytes32(uint256(uint160(address(this)))))
     {
         vault = _vault;
     }
@@ -3900,7 +3900,7 @@ contract ProtocolFeesCollector is Authentication, ReentrancyGuard {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IPoolSwapStructs {
     // This is not really an interface - it just defines common structs used by other interfaces: IGeneralPool and
@@ -3941,7 +3941,7 @@ interface IPoolSwapStructs {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for querying historical data from a Pool that can be used as a Price Oracle.
@@ -4023,7 +4023,7 @@ interface IPriceOracle {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This library provides functions to help manipulating samples for Pool Price Oracles. It handles updates,
@@ -4222,7 +4222,7 @@ library Samples {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This module allows Pools to access historical pricing information.
@@ -4458,7 +4458,7 @@ contract PoolPriceOracle is IWeightedPoolPriceOracle {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for adding and removing liquidity that all Pool contracts should implement. Note that this is not
@@ -4530,7 +4530,7 @@ interface IBasePool is IPoolSwapStructs {
     ) external returns (uint256[] memory amountsOut, uint256[] memory dueProtocolFeeAmounts);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Pool contracts with the MinimalSwapInfo or TwoToken specialization settings should implement this interface.
@@ -4551,7 +4551,7 @@ interface IMinimalSwapInfoPool is IBasePool {
     ) external returns (uint256 amount);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base authorization layer implementation for Pools.
@@ -4598,7 +4598,7 @@ abstract contract BasePoolAuthorization is Authentication {
     function _getAuthorizer() internal view virtual returns (IAuthorizer);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Reference implementation for the base layer of a Pool contract that manages a single Pool with an immutable set
@@ -4672,7 +4672,7 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
         // simpler management of permissions (such as being able to manage granting the 'set fee percentage' action in
         // any Pool created by the same factory), while still making action identifiers unique among different factories
         // if the selectors match, preventing accidental errors.
-        Authentication(bytes32(uint256(msg.sender)))
+        Authentication(bytes32(uint256(uint160(msg.sender))))
         BalancerPoolToken(name, symbol)
         BasePoolAuthorization(owner)
         TemporarilyPausable(pauseWindowDuration, bufferPeriodDuration)
@@ -4700,14 +4700,14 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
         _totalTokens = tokens.length;
 
         // Immutable variables cannot be initialized inside an if statement, so we must do conditional assignments
-        _token0 = tokens.length > 0 ? tokens[0] : IERC20(0);
-        _token1 = tokens.length > 1 ? tokens[1] : IERC20(0);
-        _token2 = tokens.length > 2 ? tokens[2] : IERC20(0);
-        _token3 = tokens.length > 3 ? tokens[3] : IERC20(0);
-        _token4 = tokens.length > 4 ? tokens[4] : IERC20(0);
-        _token5 = tokens.length > 5 ? tokens[5] : IERC20(0);
-        _token6 = tokens.length > 6 ? tokens[6] : IERC20(0);
-        _token7 = tokens.length > 7 ? tokens[7] : IERC20(0);
+        _token0 = tokens.length > 0 ? tokens[0] : IERC20(address(0));
+        _token1 = tokens.length > 1 ? tokens[1] : IERC20(address(0));
+        _token2 = tokens.length > 2 ? tokens[2] : IERC20(address(0));
+        _token3 = tokens.length > 3 ? tokens[3] : IERC20(address(0));
+        _token4 = tokens.length > 4 ? tokens[4] : IERC20(address(0));
+        _token5 = tokens.length > 5 ? tokens[5] : IERC20(address(0));
+        _token6 = tokens.length > 6 ? tokens[6] : IERC20(address(0));
+        _token7 = tokens.length > 7 ? tokens[7] : IERC20(address(0));
 
         _scalingFactor0 = tokens.length > 0 ? _computeScalingFactor(tokens[0]) : 0;
         _scalingFactor1 = tokens.length > 1 ? _computeScalingFactor(tokens[1]) : 0;
@@ -5275,7 +5275,7 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 /**
  * @dev Extension of `BasePool`, adding a handler for `IMinimalSwapInfoPool.onSwap`.
  *
@@ -5380,7 +5380,7 @@ abstract contract BaseMinimalSwapInfoPool is IMinimalSwapInfoPool, BasePool {
     ) internal view virtual returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library WeightedPoolUserDataHelpers {
     function joinKind(bytes memory self) internal pure returns (WeightedPool.JoinKind) {
@@ -5428,7 +5428,7 @@ library WeightedPoolUserDataHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract WeightedPool is BaseMinimalSwapInfoPool, WeightedMath {
     using FixedPoint for uint256;
@@ -5956,7 +5956,7 @@ contract WeightedPool is BaseMinimalSwapInfoPool, WeightedMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract WeightedPool2Tokens is
     IMinimalSwapInfoPool,
@@ -6031,7 +6031,7 @@ contract WeightedPool2Tokens is
         // simpler management of permissions (such as being able to manage granting the 'set fee percentage' action in
         // any Pool created by the same factory), while still making action identifiers unique among different factories
         // if the selectors match, preventing accidental errors.
-        Authentication(bytes32(uint256(msg.sender)))
+        Authentication(bytes32(uint256(uint160(msg.sender))))
         BalancerPoolToken(params.name, params.symbol)
         BasePoolAuthorization(params.owner)
         TemporarilyPausable(params.pauseWindowDuration, params.bufferPeriodDuration)
@@ -7142,7 +7142,7 @@ contract WeightedPool2Tokens is
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 pragma experimental ABIEncoderV2;
 
 contract WeightedPool2TokensFactory is BasePoolFactory, FactoryWidePauseWindow {

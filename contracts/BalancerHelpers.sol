@@ -1,4 +1,4 @@
-  pragma solidity ^0.7.0;
+  pragma solidity 0.8.19;
 
 library VaultHelpers {
     /**
@@ -9,11 +9,11 @@ library VaultHelpers {
     function toPoolAddress(bytes32 poolId) internal pure returns (address) {
         // 12 byte logical shift left to remove the nonce and specialization setting. We don't need to mask,
         // since the logical shift already sets the upper bits to zero.
-        return address(uint256(poolId) >> (12 * 8));
+        return address(uint160(uint256(poolId)) >> (12 * 8));
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IERC20PermitDAI {
     /**
@@ -39,7 +39,7 @@ interface IERC20PermitDAI {
     ) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev https://eips.ethereum.org/EIPS/eip-712[EIP 712] is a standard for hashing and signing of typed structured data.
@@ -125,7 +125,7 @@ abstract contract EIP712 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library for encoding and decoding values stored inside a 256 bit word. Typically used to pack multiple values in
@@ -447,7 +447,7 @@ library WordCodec {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthorizer {
     /**
@@ -460,7 +460,7 @@ interface IAuthorizer {
     ) external view returns (bool);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the TemporarilyPausable helper.
@@ -484,7 +484,7 @@ interface ITemporarilyPausable {
         );
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the SignatureValidator helper, used to support meta-transactions.
@@ -501,7 +501,7 @@ interface ISignaturesValidator {
     function getNextNonce(address user) external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev This is an empty interface used to represent either ERC20-conforming token contracts or ETH (using the zero
@@ -514,7 +514,7 @@ interface IAsset {
     // solhint-disable-previous-line no-empty-blocks
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAssetManager {
     /**
@@ -579,7 +579,7 @@ interface IAssetManager {
     function capitalOut(bytes32 poolId, uint256 amount) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -659,7 +659,7 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title StETH token wrapper with static balances.
@@ -731,7 +731,7 @@ interface IwstETH {
     function tokensPerStEth() external view returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IProtocolFeesCollector {
     event SwapFeePercentageChanged(uint256 newSwapFeePercentage);
@@ -758,7 +758,7 @@ interface IProtocolFeesCollector {
     function vault() external view returns (IVault);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // Inspired by Aave Protocol's IFlashLoanReceiver.
 
@@ -780,7 +780,7 @@ interface IFlashLoanRecipient {
     ) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for WETH9.
@@ -792,7 +792,7 @@ interface IWETH is IERC20 {
     function withdraw(uint256 amount) external;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -1112,7 +1112,7 @@ contract ERC20 is IERC20 {
     ) internal virtual {}
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Extension of {ERC20} that allows token holders to destroy both their own
@@ -1150,7 +1150,7 @@ abstract contract ERC20Burnable is ERC20 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract MockWstETH is ERC20, IwstETH {
     using FixedPoint for uint256;
@@ -1193,7 +1193,7 @@ contract MockWstETH is ERC20, IwstETH {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 abstract contract AssetHelpers {
     // solhint-disable-next-line var-name-mixedcase
@@ -1248,7 +1248,7 @@ abstract contract AssetHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable
 
@@ -1465,7 +1465,7 @@ library Errors {
     uint256 internal constant INSUFFICIENT_FLASH_LOAN_FEE_AMOUNT = 602;
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library for managing
@@ -1609,7 +1609,7 @@ library EnumerableSet {
     struct Bytes32Set {
         // Storage of set values
         bytes32[] _values;
-        // Position of the value in the `values` array, plus 1 because index 0 
+        // Position of the value in the `values` array, plus 1 because index 0
         // means a value is not in the set.
         mapping(bytes32 => uint256) _indexes;
     }
@@ -1617,7 +1617,7 @@ library EnumerableSet {
     /**
      * @dev Add a value to a set. O(1).
      *
-     * Returns true if the value was added to the set, that is if it was not 
+     * Returns true if the value was added to the set, that is if it was not
      * already present.
      */
     function add(Bytes32Set storage set, bytes32 value) internal returns (bool) {
@@ -1717,7 +1717,7 @@ library EnumerableSet {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Contract module that allows children to implement role-based access
@@ -1767,7 +1767,7 @@ abstract contract AccessControl {
 
     bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;
     address public constant GLOBAL_ROLE_ADMIN = address(0);
-    
+
     /**
      * @dev Emitted when `newAdminRole` is set as ``role``'s admin role, replacing `previousAdminRole`
      *
@@ -1817,7 +1817,7 @@ abstract contract AccessControl {
      * or in specific `where`
      */
     function hasRole(bytes32 role, address account, address where) public view virtual returns (bool) {
-        return _roles[role].globalMembers.contains(account) || 
+        return _roles[role].globalMembers.contains(account) ||
             _roles[role].membersByContract[where].contains(account);
     }
 
@@ -1896,7 +1896,7 @@ abstract contract AccessControl {
         for (uint256 i = 0; i < where.length; i++) {
             _grantRole(role, account, where[i]);
         }
-        
+
     }
 
     /**
@@ -1912,7 +1912,7 @@ abstract contract AccessControl {
     function grantRoleGlobally(bytes32 role, address account) public virtual {
         _require(hasRole(_roles[role].adminRole, msg.sender, GLOBAL_ROLE_ADMIN), Errors.GRANT_SENDER_NOT_ADMIN);
         _grantRoleGlobally(role, account);
-        
+
     }
 
     /**
@@ -1984,7 +1984,7 @@ abstract contract AccessControl {
         _revokeRoleGlobally(role, account);
     }
 
-    
+
 
     /**
      * @dev Grants `role` to `account`, globally for all contracts
@@ -2035,7 +2035,7 @@ abstract contract AccessControl {
                 emit RoleRevoked(role, account, msg.sender, where[i]);
             }
         }
-        
+
     }
 
     function _revokeRoleGlobally(bytes32 role, address account) private {
@@ -2045,7 +2045,7 @@ abstract contract AccessControl {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract TestWETH is AccessControl, IWETH {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -2077,7 +2077,7 @@ contract TestWETH is AccessControl, IWETH {
     function withdraw(uint256 wad) public override {
         require(balanceOf[msg.sender] >= wad, "INSUFFICIENT_BALANCE");
         balanceOf[msg.sender] -= wad;
-        msg.sender.transfer(wad);
+        payable(msg.sender).transfer(wad);
         emit Withdrawal(msg.sender, wad);
     }
 
@@ -2109,7 +2109,7 @@ contract TestWETH is AccessControl, IWETH {
     ) public override returns (bool) {
         require(balanceOf[src] >= wad, "INSUFFICIENT_BALANCE");
 
-        if (src != msg.sender && allowance[src][msg.sender] != uint256(-1)) {
+        if (src != msg.sender && allowance[src][msg.sender] != type(uint256).max) {
             require(allowance[src][msg.sender] >= wad, "INSUFFICIENT_ALLOWANCE");
             allowance[src][msg.sender] -= wad;
         }
@@ -2123,7 +2123,7 @@ contract TestWETH is AccessControl, IWETH {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Contract module that helps prevent reentrant calls to a function.
@@ -2190,7 +2190,7 @@ abstract contract ReentrancyGuard {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Collection of functions related to the address type
@@ -2308,7 +2308,7 @@ library Address {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IAuthentication {
     /**
@@ -2317,7 +2317,7 @@ interface IAuthentication {
     function getActionId(bytes4 selector) external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Building block for performing access control on external functions.
@@ -2370,7 +2370,7 @@ abstract contract Authentication is IAuthentication {
     function _canPerform(bytes32 actionId, address user) internal view virtual returns (bool);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -2435,7 +2435,7 @@ library SafeMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Allows for a contract to be paused during an initial period after deployment, disabling functionality. Can be
@@ -2555,7 +2555,7 @@ abstract contract TemporarilyPausable is ITemporarilyPausable {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract RelayerAssetHelpers {
     using Address for address payable;
@@ -2590,7 +2590,7 @@ contract RelayerAssetHelpers {
     function _sweepETH() internal {
         uint256 remainingEth = address(this).balance;
         if (remainingEth > 0) {
-            msg.sender.sendValue(remainingEth);
+            payable(msg.sender).sendValue(remainingEth);
         }
     }
 
@@ -2628,7 +2628,7 @@ contract RelayerAssetHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract RelayerAssetHelpersMock is RelayerAssetHelpers {
     constructor(IVault vault) RelayerAssetHelpers(vault) {}
@@ -2662,7 +2662,7 @@ contract RelayerAssetHelpersMock is RelayerAssetHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /* solhint-disable */
 
@@ -3161,7 +3161,7 @@ library LogExpMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library InputHelpers {
     function ensureInputLengthMatch(uint256 a, uint256 b) internal pure {
@@ -3199,7 +3199,7 @@ library InputHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library FixedPoint {
     uint256 internal constant ONE = 1e18; // 18 decimal places
@@ -3317,7 +3317,7 @@ library FixedPoint {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow checks.
@@ -3411,7 +3411,7 @@ library Math {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Full external interface for the Vault core contract - no external or public methods exist in the contract that
@@ -4157,7 +4157,7 @@ interface IVault is ISignaturesValidator, ITemporarilyPausable {
     // solhint-disable-previous-line func-name-mixedcase
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title IBaseRelayerLibrary
@@ -4176,7 +4176,7 @@ abstract contract IBaseRelayerLibrary is AssetHelpers {
     function _getChainedReferenceValue(uint256 ref) internal virtual returns (uint256);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title VaultPermit
@@ -4210,7 +4210,7 @@ abstract contract VaultPermit is IBaseRelayerLibrary {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title Base Relayer Library
@@ -4313,7 +4313,7 @@ contract BaseRelayerLibrary is IBaseRelayerLibrary {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title VaultActions
@@ -4579,7 +4579,7 @@ abstract contract VaultActions is IBaseRelayerLibrary {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title Batch Relayer Library
@@ -4592,7 +4592,7 @@ contract BatchRelayerLibrary is BaseRelayerLibrary, VaultActions, VaultPermit {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract MockBatchRelayerLibrary is BatchRelayerLibrary {
     event ChainedReferenceValueRead(uint256 value);
@@ -4608,7 +4608,7 @@ contract MockBatchRelayerLibrary is BatchRelayerLibrary {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 contract LidoRelayer is RelayerAssetHelpers, ReentrancyGuard {
     // solhint-enable max-line-length
@@ -4804,7 +4804,7 @@ contract LidoRelayer is RelayerAssetHelpers, ReentrancyGuard {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 interface IPoolSwapStructs {
     // This is not really an interface - it just defines common structs used by other interfaces: IGeneralPool and
@@ -4845,7 +4845,7 @@ interface IPoolSwapStructs {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -4903,7 +4903,7 @@ interface IERC20Permit {
     function DOMAIN_SEPARATOR() external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Implementation of the ERC20 Permit extension allowing approvals to be made via signatures, as defined in
@@ -4972,7 +4972,7 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712 {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title Highly opinionated token implementation
@@ -5013,7 +5013,7 @@ contract BalancerPoolToken is ERC20Permit {
      */
     function allowance(address owner, address spender) public view override returns (uint256) {
         if (spender == address(getVault())) {
-            return uint256(-1);
+            return type(uint256).max;
         } else {
             return super.allowance(owner, spender);
         }
@@ -5032,7 +5032,7 @@ contract BalancerPoolToken is ERC20Permit {
 
         _transfer(sender, recipient, amount);
 
-        if (msg.sender != sender && currentAllowance != uint256(-1)) {
+        if (msg.sender != sender && currentAllowance != type(uint256).max) {
             // Because of the previous require, we know that if msg.sender != sender then currentAllowance >= amount
             _approve(sender, msg.sender, currentAllowance - amount);
         }
@@ -5067,7 +5067,7 @@ contract BalancerPoolToken is ERC20Permit {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for adding and removing liquidity that all Pool contracts should implement. Note that this is not
@@ -5141,7 +5141,7 @@ interface IBasePool is IPoolSwapStructs {
     function getPoolId() external view returns (bytes32);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base authorization layer implementation for Pools.
@@ -5185,7 +5185,7 @@ abstract contract BasePoolAuthorization is Authentication {
     function _getAuthorizer() internal view virtual returns (IAuthorizer);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 // solhint-disable max-states-count
 
@@ -5243,7 +5243,7 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
         // simpler management of permissions (such as being able to manage granting the 'set fee percentage' action in
         // any Pool created by the same factory), while still making action identifiers unique among different factories
         // if the selectors match, preventing accidental errors.
-        Authentication(bytes32(uint256(msg.sender)))
+        Authentication(bytes32(uint256(uint160(msg.sender))))
         BalancerPoolToken(name, symbol, vault)
         BasePoolAuthorization(owner)
         TemporarilyPausable(pauseWindowDuration, bufferPeriodDuration)
@@ -5859,7 +5859,7 @@ abstract contract BasePool is IBasePool, BasePoolAuthorization, BalancerPoolToke
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Pool contracts with the MinimalSwapInfo or TwoToken specialization settings should implement this interface.
@@ -5880,7 +5880,7 @@ interface IMinimalSwapInfoPool is IBasePool {
     ) external returns (uint256 amount);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library WeightedMath {
     using FixedPoint for uint256;
@@ -6312,7 +6312,7 @@ library WeightedMath {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Extension of `BasePool`, adding a handler for `IMinimalSwapInfoPool.onSwap`.
@@ -6446,7 +6446,7 @@ abstract contract BaseMinimalSwapInfoPool is IMinimalSwapInfoPool, BasePool {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title IBalancerRelayer
@@ -6458,7 +6458,7 @@ interface IBalancerRelayer {
     function multicall(bytes[] calldata data) external payable returns (bytes[] memory results);
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @title Balancer Relayer
@@ -6522,12 +6522,12 @@ contract BalancerRelayer is IBalancerRelayer, ReentrancyGuard {
     function _refundETH() private {
         uint256 remainingEth = address(this).balance;
         if (remainingEth > 0) {
-            msg.sender.sendValue(remainingEth);
+            payable(msg.sender).sendValue(remainingEth);
         }
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Base class for WeightedPools containing swap, join and exit logic, but leaving storage and management of
@@ -7069,7 +7069,7 @@ abstract contract BaseWeightedPool is BaseMinimalSwapInfoPool {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library WeightedPoolUserDataHelpers {
     function joinKind(bytes memory self) internal pure returns (BaseWeightedPool.JoinKind) {
@@ -7121,7 +7121,7 @@ library WeightedPoolUserDataHelpers {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 
 library BalanceAllocation {
     using Math for uint256;
@@ -7381,7 +7381,7 @@ library BalanceAllocation {
     }
 }
 
-pragma solidity ^0.7.0;
+pragma solidity 0.8.19;
 pragma experimental ABIEncoderV2;
 
 /**

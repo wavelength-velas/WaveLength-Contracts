@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -402,8 +402,6 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         _require(tokenInfoUser.numberNFT != 0, Errors.NOT_OWNER_VEWAVE);
         // Get the current user's information for the specified tokenId
         UserInfo storage user = userInfo[_pid][msg.sender][_tokenId];
-        // Get the current user's information for the specified pid and tokenId
-        // UserInfoAnotherToken storage userAnotherToken = userInfoAnotherToken[_pid][msg.sender][_tokenId];
         // Get the current user's LP token amount
         uint256 amount = user.amount;
         delete userInfo[_pid][msg.sender][_tokenId];

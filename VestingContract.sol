@@ -12,7 +12,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -92,7 +92,7 @@ interface IERC20 {
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Collection of functions related to the address type
@@ -307,7 +307,7 @@ library Address {
     }
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @title SafeERC20
@@ -401,7 +401,7 @@ library SafeERC20 {
     }
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Library for managing
@@ -756,7 +756,7 @@ library EnumerableSet {
     }
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the optional metadata functions from the ERC20 standard.
@@ -780,7 +780,7 @@ interface IERC20Metadata is IERC20 {
     function decimals() external view returns (uint8);
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Provides information about the current execution context, including the
@@ -802,7 +802,7 @@ abstract contract Context {
     }
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -1152,7 +1152,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     ) internal virtual {}
 }
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -1220,15 +1220,15 @@ abstract contract Ownable is Context {
     }
 }
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.19;
 
 contract VestingContract is Ownable {
     using SafeERC20 for IERC20;
     using EnumerableSet for EnumerableSet.AddressSet;
 
     struct UserInfo {
-        uint256 amount; 
-        uint256 rewardDebt; 
+        uint256 amount;
+        uint256 rewardDebt;
     }
 
     struct PoolInfo {
@@ -1248,10 +1248,10 @@ contract VestingContract is Ownable {
     uint256 public constant POOL_PERCENTAGE = 1000;
 
     PoolInfo[] public poolInfo;
-    
+
     IERC20 public wave;
 
-    mapping(uint256 => mapping(address => UserInfo)) public userInfo; 
+    mapping(uint256 => mapping(address => UserInfo)) public userInfo;
 
     uint256 public totalAllocPoint = 0;
 
@@ -1349,7 +1349,7 @@ contract VestingContract is Ownable {
         uint256 _pid,
         uint256 _allocPoint
     ) public onlyOwner {
-    
+
         // we re-adjust the total allocation points
         totalAllocPoint =
             totalAllocPoint -
@@ -1387,7 +1387,7 @@ contract VestingContract is Ownable {
                 accWVLXPerShare +
                 ((wvlxRewardsForPool * ACC_WVLX_PRECISION) / lpSupply);
         }
- 
+
         pending =
             (user.amount * accWVLXPerShare) /
             ACC_WVLX_PRECISION -

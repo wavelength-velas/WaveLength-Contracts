@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
@@ -687,6 +687,8 @@ contract ve is IERC721, IERC721Metadata {
 
     function abstain(uint256 _tokenId) external onlyVoter {
         voted[_tokenId] = false;
+
+        emit Abstain(_tokenId);
     }
 
     function attach(uint256 _tokenId) external onlyVoter {

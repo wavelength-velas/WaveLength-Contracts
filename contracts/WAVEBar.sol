@@ -1,4 +1,4 @@
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -83,7 +83,7 @@ interface IERC20 {
 
 
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Interface for the optional metadata functions from the ERC20 standard.
@@ -112,7 +112,7 @@ interface IERC20Metadata is IERC20 {
 
 
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Provides information about the current execution context, including the
@@ -139,7 +139,7 @@ abstract contract Context {
 
 
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 
 
@@ -496,7 +496,7 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 
 
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 /**
  * @dev Collection of functions related to the address type
@@ -716,7 +716,7 @@ library Address {
 
 
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.19;
 
 
 /**
@@ -816,7 +816,7 @@ library SafeERC20 {
 
 
 
-pragma solidity 0.8.7;
+pragma solidity 0.8.19;
 
 
 

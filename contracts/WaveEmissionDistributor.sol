@@ -61,6 +61,11 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     mapping(uint256 => mapping(address => mapping(uint256 => TokenInfo))) public tokenInfoCheck; // mapping form poolId => user Address => Token Info
     mapping(uint256 => mapping(address => mapping(uint256 => UserInfo))) public userInfo; // mapping form poolId => user Address => User Info
 
+    mapping(uint256 => uint256) public totalTokensDepositedAnotherPool; // mapping form poolId => totalTokensDeposited
+
+
+
+
     uint256 public totalPidsAnotherToken; // total number of another token pools
     uint256 public totalPids; // total number of pools
     uint256 public totalToken; // total number of tokens
@@ -245,7 +250,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         PoolInfoAnotherToken storage poolAnotherToken = poolInfoAnotherToken[_pid];
         if (!poolAnotherToken.isClosed) {
             IERC20(poolAnotherToken.tokenReward).safeTransferFrom(msg.sender, address(this), _amount);
-
+            totalTokensDepositedAnotherPool[_pid] = _amount;
             emit DepositAnotherToken(msg.sender, _pid, _amount, address(this));
         }
     }
@@ -385,6 +390,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
             // If there are any eligible AnotherToken rewards, transfer them to the user
             if (eligibleAnotherToken > 0) {
                 safeAnotherTokenTransfer(_pid, msg.sender, eligibleAnotherToken);
+                totalTokensDepositedAnotherPool[_pid] = totalTokensDepositedAnotherPool[_pid] - eligibleAnotherToken; 
             }
 
             // Emit an event to log the harvest
@@ -623,7 +629,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
 
                 poolAnotherToken.accAnotherTokenPerShare =
                     poolAnotherToken.accAnotherTokenPerShare +
-                    ((anotherTokenRewardsForPool * ACC_ANOTHERTOKEN_PRECISION) / anotherTokenSupply);
+                    ((anotherTokenRewardsForPool * ACC_ANOTHERTOKEN_PRECISION) / totalTokensDepositedAnotherPool[_pid]);
             }
             poolAnotherToken.lastRewardBlock = block.number;
             poolInfoAnotherToken[_pid] = poolAnotherToken;

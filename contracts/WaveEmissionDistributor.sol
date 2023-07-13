@@ -591,7 +591,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
             // we calculate the new amount of accumulated anotherToken per veWAVE
             accAnotherTokenPerShare =
                 accAnotherTokenPerShare +
-                ((anotherTokenRewardsForPool * ACC_ANOTHERTOKEN_PRECISION) / anotherTokenSupply);
+                ((anotherTokenRewardsForPool * ACC_ANOTHERTOKEN_PRECISION) / totalAmountLockedWave);
         }
         // Calculate the pending AnotherToken rewards for the user based on their staked LP tokens and subtracting any rewards they are not eligible for or have already claimed
         pending =
@@ -623,7 +623,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
 
                 poolAnotherToken.accAnotherTokenPerShare =
                     poolAnotherToken.accAnotherTokenPerShare +
-                    ((anotherTokenRewardsForPool * ACC_ANOTHERTOKEN_PRECISION) / anotherTokenSupply);
+                    ((anotherTokenRewardsForPool * ACC_ANOTHERTOKEN_PRECISION) / totalAmountLockedWave);
             }
             poolAnotherToken.lastRewardBlock = block.number;
             poolInfoAnotherToken[_pid] = poolAnotherToken;

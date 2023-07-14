@@ -643,7 +643,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
     function safeWAVETransfer(address _to, uint256 _amount) internal {
         // Check the balance of WAVE in the pool
         uint256 waveBalance = wave.balanceOf(address(this));
-        require(waveBalance >= 0, "Not enough WAVE for now! Try Later!");
+        require(waveBalance >= _amount, "Not enough WAVE for now! Try Later!");
         // If the requested amount is more than the balance, transfer the entire balance
         if (_amount > waveBalance) {
             wave.safeTransfer(_to, waveBalance);
@@ -661,7 +661,7 @@ contract WaveEmissionDistributor is ERC20("VEWAVE EMISSION DISTRIBUTOR", "edveWA
         PoolInfoAnotherToken memory pool = poolInfoAnotherToken[_pid];
         // Check the balance of anotherToken in the pool
         uint256 anotherTokenBalance = IERC20(pool.tokenReward).balanceOf(address(this));
-        require(anotherTokenBalance >= 0, "Not enough anotherToken for now! Try Later!");
+        require(anotherTokenBalance >= _amount, "Not enough anotherToken for now! Try Later!");
         // If the requested amount is more than the balance, transfer the entire balance
         if (_amount > anotherTokenBalance) {
             IERC20(pool.tokenReward).safeTransfer(_to, anotherTokenBalance);
